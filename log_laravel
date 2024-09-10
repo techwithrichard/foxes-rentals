@@ -1,0 +1,25 @@
+Could not open input file: /home/famaezpe/rental/artisan
+
+  2023-06-05 11:35:31 Running ['artisan' command:tester] .......... 322ms DONE
+  ⇂ '/opt/alt/php81/usr/bin/php' 'artisan' command:tester > '/dev/null' 2>&1  
+
+
+  2023-06-05 11:40:07 Running ['artisan' command:tester] .......... 294ms DONE
+  ⇂ '/opt/alt/php81/usr/bin/php' 'artisan' command:tester > '/dev/null' 2>&1  
+
+
+  2023-06-05 11:45:49 Running ['artisan' command:tester] .......... 255ms DONE
+  ⇂ '/opt/alt/php81/usr/bin/php' 'artisan' command:tester > '/dev/null' 2>&1  
+
+
+  2023-06-05 11:50:09 Running ['artisan' command:tester] .......... 309ms DONE
+  ⇂ '/opt/alt/php81/usr/bin/php' 'artisan' command:tester > '/dev/null' 2>&1  
+
+
+  2023-06-05 11:55:21 Running ['artisan' command:tester] .......... 295ms DONE
+  ⇂ '/opt/alt/php81/usr/bin/php' 'artisan' command:tester > '/dev/null' 2>&1  
+
+
+  2023-06-05 12:00:02 Running ['artisan' command:tester] .......... 382ms DONE
+  ⇂ '/opt/alt/php81/usr/bin/php' 'artisan' command:tester > '/dev/null' 2>&1  
+
