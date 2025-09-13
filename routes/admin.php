@@ -1,5 +1,8 @@
 <?php
 
+// Include enhanced admin routes
+require_once __DIR__ . '/enhanced-admin.php';
+
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\ArchivedTenantsController;
 use App\Http\Controllers\Admin\BackupController;

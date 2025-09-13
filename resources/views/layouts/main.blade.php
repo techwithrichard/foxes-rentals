@@ -43,7 +43,7 @@
     <!-- main @s -->
     <div class="nk-main ">
         <!-- sidebar @s -->
-    @include('admin.includes.sidebar')
+    @include('admin.includes.enhanced-sidebar')
     <!-- sidebar @e -->
         <!-- wrap @s -->
         <div class="nk-wrap ">
