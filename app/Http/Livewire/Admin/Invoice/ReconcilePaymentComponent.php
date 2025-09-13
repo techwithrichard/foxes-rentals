@@ -45,26 +45,31 @@ class ReconcilePaymentComponent extends Component
 
     public function mount(): void
     {
+        try {
+            // Ensure we have the transaction data
+            if (!$this->transaction) {
+                $this->transaction = C2bRequest::findOrFail($this->transactionId);
+            }
 
-//        $this->transaction = C2bRequest::findOrFail($this->transactionId);
-        $this->tenants = User::query()
-            ->role('tenant')
-//            ->select(['name', 'email', 'id'])
-            ->get()
-            ->map(function ($tenant) {
-                return [
-                    'value' => $tenant->id,
-                    'label' => $tenant->name,
-                    'description' => $tenant->email,
-                ];
-            });
+            $this->tenants = User::query()
+                ->role('tenant')
+                ->get()
+                ->map(function ($tenant) {
+                    return [
+                        'value' => $tenant->id,
+                        'label' => $tenant->name,
+                        'description' => $tenant->email,
+                    ];
+                });
 
-        //get tenant_id from lease whose lease_id is equal to the lease_id of the transaction
-
-        $lease = Lease::where('lease_id', $this->transaction->BillRefNumber)->first();
-        $this->selectedTenant = $lease?->tenant_id;
-
-
+            //get tenant_id from lease whose lease_id is equal to the lease_id of the transaction
+            if ($this->transaction && $this->transaction->BillRefNumber) {
+                $lease = Lease::where('lease_id', $this->transaction->BillRefNumber)->first();
+                $this->selectedTenant = $lease?->tenant_id;
+            }
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error loading transaction data: ' . $e->getMessage());
+        }
     }
 
     public function render(): View|\Illuminate\Foundation\Application|Factory|Application

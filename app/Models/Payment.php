@@ -19,6 +19,7 @@ class Payment extends Model
 
     protected $casts = [
         'paid_at' => 'date',
+        'verified_at' => 'datetime',
         'landlord_commission' => 'float',
     ];
 
@@ -57,6 +58,12 @@ class Payment extends Model
     public function tenant(): BelongsTo
     {
         return $this->belongsTo(User::class, 'tenant_id', 'id');
+    }
+
+    public function verifiedBy(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'verified_by', 'id')
+            ->withDefault(['name' => 'System']);
     }
 
 

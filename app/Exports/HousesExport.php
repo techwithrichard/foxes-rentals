@@ -48,9 +48,9 @@ class HousesExport implements
             $house->type,
             $house->house_status,
             $house->landlord->name,
-            $house->property->address->address,
-            $house->property->address->city,
-            $house->property->address->state,
+            $house->property->address?->address ?? 'N/A',
+            $house->property->address?->city ?? 'N/A',
+            $house->property->address?->state ?? 'N/A',
             $house->rent,
             $house->commission / 100,
         ];

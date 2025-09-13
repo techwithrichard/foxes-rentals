@@ -268,6 +268,30 @@
             });
 
         });
+
+        // Function to delete payment
+        function deletePayment(paymentId) {
+            if (confirm('{{ __('Are you sure you want to delete this payment entry ?')}}')) {
+                $.ajax({
+                    url: '/admin/payments/' + paymentId,
+                    type: 'DELETE',
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Show success message
+                            alert(response.message);
+                            // Refresh the table
+                            $('#tenants-list').DataTable().ajax.reload();
+                        }
+                    },
+                    error: function(xhr) {
+                        alert('{{ __('An error occurred while deleting the payment.')}}');
+                    }
+                });
+            }
+        }
     </script>
 
 @endpush

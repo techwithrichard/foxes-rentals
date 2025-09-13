@@ -4,7 +4,7 @@ return [
 
     'consumer_key' => env('MPESA_CONSUMER_KEY', 'YOUR_CONSUMER_KEY'),
     'consumer_secret' => env('MPESA_CONSUMER_SECRET', 'YOUR_CONSUMER_SECRET'),
-    'business_shortcode' => env('MPESA_SHORTCODE', 600986),
+    'business_shortcode' => env('MPESA_SHORTCODE', 174379),
     'paybill' => env('MPESA_PAYBILL', 174379),
     'passkey' => env('MPESA_PASSKEY', 'YOUR_PASSKEY'),
     'confirmation_url' => env('MPESA_CONFIRMATION_URL', 'YOUR_CONFIRMATION_URL'),
@@ -18,7 +18,7 @@ return [
         '196.201.213.114',
         '196.201.214.207',
         '196.201.214.208',
-        '196. 201.213.44',
+        '196.201.213.44',
         '196.201.212.127',
         '196.201.212.138',
         '196.201.212.129',

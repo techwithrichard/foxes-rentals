@@ -52,111 +52,78 @@
 
                     @endif
                     <div class="nk-block">
-                        <div class="card card-bordered card-preview">
+                        <div class="nk-block-head">
+                            <div class="nk-block-between">
+                                <div class="nk-block-head-content">
+                                    <h5 class="nk-block-title">{{ __('Houses List')}}</h5>
+                                    <p>{{ __('Manage all houses in the system')}}</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card card-preview">
                             <div class="card-inner">
-
-                                <div class="row g-1 mb-2">
-                                    <div class="col-md-2">
+                                <div class="row g-1 mb-3">
+                                    <div class="col-md-3">
                                         <div class="form-group">
-                                            <div class="form-control-wrap ">
+                                            <div class="form-control-wrap">
                                                 <div class="form-control-select">
                                                     <select class="form-control" id="house-status-filter">
                                                         <option value="">{{ __('Filter Status')}}</option>
-                                                        <option
-                                                            value="{{ \App\Enums\HouseStatusEnum::VACANT->value }}">
-                                                            {{ __('Vacant')}}
-                                                        </option>
-
-                                                        <option
-                                                            value="{{ \App\Enums\HouseStatusEnum::OCCUPIED->value }}">
-                                                            {{ __('Rented')}}
-                                                        </option>
-                                                        <option
-                                                            value="{{ \App\Enums\HouseStatusEnum::UNDER_MAINTENANCE->value }}">
-                                                            {{ __('Under Maintenance')}}
-                                                        </option>
-
+                                                        <option value="vacant">{{ __('Vacant')}}</option>
+                                                        <option value="occupied">{{ __('Occupied')}}</option>
+                                                        <option value="under_maintenance">{{ __('Under Maintenance')}}</option>
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
                                         <div class="form-group">
-                                            <div class="form-control-wrap ">
+                                            <div class="form-control-wrap">
                                                 <div class="form-control-select">
                                                     <select class="form-control" id="property-filter">
                                                         <option value="">{{ __('Filter By Building')}}</option>
-                                                        @foreach($properties as $key => $name)
-                                                            <option value="{{ $key}}">
-                                                                {{ $name }}
-                                                            </option>
+                                                        @foreach($properties as $id => $name)
+                                                            <option value="{{ $id }}">{{ $name }}</option>
                                                         @endforeach
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
-                                    <div class="col-md-3 ms-auto">
+                                    <div class="col-md-4 ms-auto">
                                         <div class="form-group">
-
-                                            <div class="form-control-wrap ">
-                                                <input type="search" class="form-control" id="search-input"
-                                                       placeholder="{{ __('Type in to search')}}">
+                                            <div class="form-control-wrap">
+                                                <input type="search" class="form-control" id="search-input" placeholder="{{ __('Type in to search')}}">
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
-
-
-                                <table class="datatable table dt-responsive nowrap nk-tb-list nk-tb-ulist is-compact"
-                                       id="tenants-list">
-
-                                    {{--                                <table class="datatable nowrap" id="tenants-list">--}}
-                                    <thead>
-                                    <tr class="nk-tb-item nk-tb-head">
-                                        <th data-priority="2" class="nk-tb-col nk-tb-col-check">
-                                            #
-                                        </th>
-                                        <th data-priority="1" class="nk-tb-col">
-                                            <span class="sub-text">{{ __('Unit Name')}}</span>
-                                        </th>
-                                        <th class="nk-tb-col">
-                                            <span class="sub-text">{{ __('Property')}}</span>
-                                        </th>
-                                        <th class="nk-tb-col">
-                                            <span class="sub-text">{{ __('Type')}}</span>
-                                        </th>
-                                        <th data-priority="3" class="nk-tb-col">
-                                            <span
-                                                class="sub-text">{{ __('Status')}}</span>
-                                        </th>
-
-                                        <th class="nk-tb-col">
-                                            {{ __('Rent Details')}}
-                                        </th>
-                                        <th class="nk-tb-col">
-                                            {{ __('Landlord')}}
-                                        </th>
-
-                                        <th class="nk-tb-col">
-                                            {{ __('Tenant')}}
-                                        </th>
-
-                                        <th data-priority="1" class="nk-tb-col nk-tb-col-tools text-end">
-                                        </th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-
-
-                                    </tbody>
-                                </table>
+                                <div class="table-responsive">
+                                    <table class="datatable table dt-responsive nowrap nk-tb-list nk-tb-ulist is-compact" id="tenants-list">
+                                        <thead>
+                                            <tr class="nk-tb-item nk-tb-head">
+                                                <th class="nk-tb-col">
+                                                    <div class="custom-control custom-control-sm custom-checkbox">
+                                                        <input type="checkbox" class="custom-control-input" id="select-all-houses">
+                                                        <label class="custom-control-label" for="select-all-houses"></label>
+                                                    </div>
+                                                </th>
+                                                <th class="nk-tb-col">{{ __('#')}}</th>
+                                                <th class="nk-tb-col">{{ __('House Name')}}</th>
+                                                <th class="nk-tb-col">{{ __('Property')}}</th>
+                                                <th class="nk-tb-col">{{ __('Type')}}</th>
+                                                <th class="nk-tb-col">{{ __('Status')}}</th>
+                                                <th class="nk-tb-col">{{ __('Rent Status')}}</th>
+                                                <th class="nk-tb-col">{{ __('Landlord')}}</th>
+                                                <th class="nk-tb-col">{{ __('Tenant')}}</th>
+                                                <th class="nk-tb-col nk-tb-col-tools">{{ __('Actions')}}</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
                             </div>
-                        </div><!-- .card-preview -->
+                        </div>
                     </div><!-- .nk-block -->
                 </div>
             </div>
@@ -166,6 +133,9 @@
     <div class="modal fade" tabindex="-1" id="modalDeleteHouse" wire:ignore.self>
         @livewire('admin.house.delete-house-component')
     </div>
+
+    <!-- Bulk Delete Component -->
+    @livewire('admin.house.bulk-delete-houses-component')
 
 
 @endsection
@@ -246,6 +216,18 @@
                         // $(row).find('td:eq(6)').addClass('nk-tb-col');
                     },
                     columns: [
+                        {
+                            data: 'id',
+                            name: 'id',
+                            orderable: false,
+                            searchable: false,
+                            render: function (data, type, row) {
+                                return '<div class="custom-control custom-control-sm custom-checkbox">' +
+                                    '<input type="checkbox" class="custom-control-input house-checkbox" id="house-' + data + '" value="' + data + '">' +
+                                    '<label class="custom-control-label" for="house-' + data + '"></label>' +
+                                    '</div>';
+                            }
+                        },
                         {data: 'DT_RowIndex', name: 'DT_RowIndex', orderable: false, searchable: false},
                         {data: 'name', name: 'name', searchable: true},
                         {data: 'property', name: 'property.name', searchable: true},
@@ -283,6 +265,54 @@
             window.livewire.on('refreshTable', () => {
                 $('#modalDeleteHouse').modal('hide');
                 oTable.ajax.reload(null, false);
+            });
+
+            // Select All functionality
+            $('#select-all-houses').on('change', function () {
+                const isChecked = $(this).is(':checked');
+                $('.house-checkbox').prop('checked', isChecked);
+                updateSelectedHouses();
+            });
+
+            // Individual checkbox functionality
+            $(document).on('change', '.house-checkbox', function () {
+                updateSelectedHouses();
+                updateSelectAllState();
+            });
+
+            // Update selected houses count
+            function updateSelectedHouses() {
+                const selectedHouses = $('.house-checkbox:checked').map(function () {
+                    return $(this).val();
+                }).get();
+                
+                window.livewire.emit('updateSelectedHouses', selectedHouses);
+            }
+
+            // Update select all checkbox state
+            function updateSelectAllState() {
+                const totalCheckboxes = $('.house-checkbox').length;
+                const checkedCheckboxes = $('.house-checkbox:checked').length;
+                
+                if (checkedCheckboxes === 0) {
+                    $('#select-all-houses').prop('indeterminate', false).prop('checked', false);
+                } else if (checkedCheckboxes === totalCheckboxes) {
+                    $('#select-all-houses').prop('indeterminate', false).prop('checked', true);
+                } else {
+                    $('#select-all-houses').prop('indeterminate', true);
+                }
+            }
+
+            // Livewire events for select all
+            window.livewire.on('selectAllHouses', () => {
+                $('.house-checkbox').prop('checked', true);
+                updateSelectedHouses();
+            });
+
+            window.livewire.on('deselectAllHouses', () => {
+                $('.house-checkbox').prop('checked', false);
+                $('#select-all-houses').prop('checked', false).prop('indeterminate', false);
+                updateSelectedHouses();
             });
 
 

@@ -72,19 +72,33 @@ class HomeController extends Controller
 
         $amount = $invoice->balance_due;
         $phone = $invoice->tenant?->phone;
-        $reference = $invoice->lease_reference ?? 'Invoice-' . $invoice->invoice_id;
+        $reference = $invoice->id; // Use invoice UUID as reference for better reconciliation
+        $displayReference = $invoice->lease_reference ?? 'Invoice-' . $invoice->invoice_id; // For display purposes
 
-        $response = MPesaHelper::stkPush($phone, $amount, $reference);
+        $response = MPesaHelper::stkPush($phone, $amount, $reference, $invoice->tenant_id, $invoiceId);
 
 
         if ($response['status'] == 'success') {
-            return view('tenant.payments.mpesa_success', compact('amount', 'reference'));
+            return view('tenant.payments.mpesa_success', compact('amount', 'displayReference'));
         }
 
 
         $errorMessage = $response['errorMessage'] ?? 'Failed to initiate payment';
 
-        return view('tenant.payments.mpesa_error', compact('errorMessage', 'amount', 'reference'));
+        // Prepare paybill fallback information
+        $paybillNumber = config('mpesa.paybill');
+        $accountNumber = $invoice->getAccountNumber(); // Use lease reference (e.g., CsBvzmgAmM)
+        $amountToPay = ceil($amount); // Round up to next whole number
+
+        return view('tenant.payments.mpesa_error', compact(
+            'errorMessage', 
+            'amount', 
+            'displayReference',
+            'paybillNumber',
+            'accountNumber',
+            'amountToPay',
+            'invoice'
+        ));
 
 
     }

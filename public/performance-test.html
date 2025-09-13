@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Foxes Rental - Performance Test</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+        }
+        
+        .content {
+            padding: 30px;
+        }
+        
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 10px;
+            background: #f9f9f9;
+        }
+        
+        .test-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        
+        .test-button {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            margin: 5px;
+            transition: transform 0.2s;
+        }
+        
+        .test-button:hover {
+            transform: translateY(-2px);
+        }
+        
+        .test-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .results {
+            margin-top: 20px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-label {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .result-value {
+            color: #667eea;
+            font-weight: 500;
+        }
+        
+        .status {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 0.8em;
+            font-weight: 600;
+        }
+        
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+        
+        .status.warning {
+            background: #fff3cd;
+            color: #856404;
+        }
+        
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .recommendations {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        
+        .recommendations h4 {
+            color: #333;
+            margin-bottom: 15px;
+        }
+        
+        .recommendations ul {
+            list-style: none;
+        }
+        
+        .recommendations li {
+            padding: 5px 0;
+            position: relative;
+            padding-left: 20px;
+        }
+        
+        .recommendations li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 Performance Test</h1>
+            <p>Foxes Rental Management System</p>
+        </div>
+        
+        <div class="content">
+            <!-- Page Load Test -->
+            <div class="test-section">
+                <h3>📄 Page Load Performance</h3>
+                <p>Test the loading speed of different pages in your application.</p>
+                <button class="test-button" onclick="testPageLoad()">Test Page Load</button>
+                <div class="progress-bar" id="pageLoadProgress" style="display: none;">
+                    <div class="progress-fill" id="pageLoadFill"></div>
+                </div>
+                <div class="results" id="pageLoadResults" style="display: none;"></div>
+            </div>
+            
+            <!-- API Performance Test -->
+            <div class="test-section">
+                <h3>🌐 API Performance</h3>
+                <p>Test the response time of API endpoints.</p>
+                <button class="test-button" onclick="testApiPerformance()">Test API Endpoints</button>
+                <div class="progress-bar" id="apiProgress" style="display: none;">
+                    <div class="progress-fill" id="apiFill"></div>
+                </div>
+                <div class="results" id="apiResults" style="display: none;"></div>
+            </div>
+            
+            <!-- Resource Performance Test -->
+            <div class="test-section">
+                <h3>📦 Resource Performance</h3>
+                <p>Test the loading speed of CSS, JavaScript, and image resources.</p>
+                <button class="test-button" onclick="testResourcePerformance()">Test Resources</button>
+                <div class="progress-bar" id="resourceProgress" style="display: none;">
+                    <div class="progress-fill" id="resourceFill"></div>
+                </div>
+                <div class="results" id="resourceResults" style="display: none;"></div>
+            </div>
+            
+            <!-- Browser Performance Test -->
+            <div class="test-section">
+                <h3>💻 Browser Performance</h3>
+                <p>Test browser-specific performance metrics.</p>
+                <button class="test-button" onclick="testBrowserPerformance()">Test Browser Performance</button>
+                <div class="results" id="browserResults" style="display: none;"></div>
+            </div>
+            
+            <!-- Recommendations -->
+            <div class="recommendations">
+                <h4>💡 Performance Recommendations</h4>
+                <ul>
+                    <li>Enable gzip compression for static assets</li>
+                    <li>Use a Content Delivery Network (CDN)</li>
+                    <li>Optimize images and use WebP format</li>
+                    <li>Minify CSS and JavaScript files</li>
+                    <li>Enable browser caching</li>
+                    <li>Use lazy loading for images</li>
+                    <li>Implement database query optimization</li>
+                    <li>Use Redis for caching</li>
+                    <li>Enable OPcache for PHP</li>
+                    <li>Use HTTP/2 protocol</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Page Load Performance Test
+        async function testPageLoad() {
+            const button = event.target;
+            const progressBar = document.getElementById('pageLoadProgress');
+            const progressFill = document.getElementById('pageLoadFill');
+            const resultsDiv = document.getElementById('pageLoadResults');
+            
+            button.disabled = true;
+            button.innerHTML = '<span class="loading"></span> Testing...';
+            progressBar.style.display = 'block';
+            resultsDiv.style.display = 'block';
+            
+            const pages = [
+                { url: '/', name: 'Homepage' },
+                { url: '/login', name: 'Login Page' },
+                { url: '/properties', name: 'Properties' },
+                { url: '/admin', name: 'Admin Dashboard' }
+            ];
+            
+            const results = [];
+            
+            for (let i = 0; i < pages.length; i++) {
+                const page = pages[i];
+                const progress = ((i + 1) / pages.length) * 100;
+                progressFill.style.width = progress + '%';
+                
+                try {
+                    const startTime = performance.now();
+                    const response = await fetch(page.url, { method: 'HEAD' });
+                    const endTime = performance.now();
+                    
+                    const loadTime = endTime - startTime;
+                    const status = response.ok ? 'success' : 'error';
+                    
+                    results.push({
+                        name: page.name,
+                        url: page.url,
+                        time: Math.round(loadTime),
+                        status: status,
+                        httpStatus: response.status
+                    });
+                } catch (error) {
+                    results.push({
+                        name: page.name,
+                        url: page.url,
+                        time: 0,
+                        status: 'error',
+                        error: error.message
+                    });
+                }
+            }
+            
+            displayResults(resultsDiv, results, 'Page Load Results');
+            
+            button.disabled = false;
+            button.textContent = 'Test Page Load';
+            progressBar.style.display = 'none';
+        }
+        
+        // API Performance Test
+        async function testApiPerformance() {
+            const button = event.target;
+            const progressBar = document.getElementById('apiProgress');
+            const progressFill = document.getElementById('apiFill');
+            const resultsDiv = document.getElementById('apiResults');
+            
+            button.disabled = true;
+            button.innerHTML = '<span class="loading"></span> Testing...';
+            progressBar.style.display = 'block';
+            resultsDiv.style.display = 'block';
+            
+            const endpoints = [
+                { url: '/api/properties', name: 'Properties API' },
+                { url: '/api/users', name: 'Users API' },
+                { url: '/api/tenants', name: 'Tenants API' },
+                { url: '/api/payments', name: 'Payments API' }
+            ];
+            
+            const results = [];
+            
+            for (let i = 0; i < endpoints.length; i++) {
+                const endpoint = endpoints[i];
+                const progress = ((i + 1) / endpoints.length) * 100;
+                progressFill.style.width = progress + '%';
+                
+                try {
+                    const startTime = performance.now();
+                    const response = await fetch(endpoint.url);
+                    const endTime = performance.now();
+                    
+                    const responseTime = endTime - startTime;
+                    const status = response.ok ? 'success' : 'error';
+                    
+                    results.push({
+                        name: endpoint.name,
+                        url: endpoint.url,
+                        time: Math.round(responseTime),
+                        status: status,
+                        httpStatus: response.status
+                    });
+                } catch (error) {
+                    results.push({
+                        name: endpoint.name,
+                        url: endpoint.url,
+                        time: 0,
+                        status: 'error',
+                        error: error.message
+                    });
+                }
+            }
+            
+            displayResults(resultsDiv, results, 'API Performance Results');
+            
+            button.disabled = false;
+            button.textContent = 'Test API Endpoints';
+            progressBar.style.display = 'none';
+        }
+        
+        // Resource Performance Test
+        async function testResourcePerformance() {
+            const button = event.target;
+            const progressBar = document.getElementById('resourceProgress');
+            const progressFill = document.getElementById('resourceFill');
+            const resultsDiv = document.getElementById('resourceResults');
+            
+            button.disabled = true;
+            button.innerHTML = '<span class="loading"></span> Testing...';
+            progressBar.style.display = 'block';
+            resultsDiv.style.display = 'block';
+            
+            const resources = [
+                { url: '/assets/css/dashlite.min.css', name: 'Main CSS' },
+                { url: '/assets/js/dashlite.min.js', name: 'Main JavaScript' },
+                { url: '/images/logo.png', name: 'Logo Image' },
+                { url: '/favicon.ico', name: 'Favicon' }
+            ];
+            
+            const results = [];
+            
+            for (let i = 0; i < resources.length; i++) {
+                const resource = resources[i];
+                const progress = ((i + 1) / resources.length) * 100;
+                progressFill.style.width = progress + '%';
+                
+                try {
+                    const startTime = performance.now();
+                    const response = await fetch(resource.url);
+                    const endTime = performance.now();
+                    
+                    const loadTime = endTime - startTime;
+                    const status = response.ok ? 'success' : 'error';
+                    const size = response.headers.get('content-length') || 'Unknown';
+                    
+                    results.push({
+                        name: resource.name,
+                        url: resource.url,
+                        time: Math.round(loadTime),
+                        size: size,
+                        status: status,
+                        httpStatus: response.status
+                    });
+                } catch (error) {
+                    results.push({
+                        name: resource.name,
+                        url: resource.url,
+                        time: 0,
+                        size: 'Unknown',
+                        status: 'error',
+                        error: error.message
+                    });
+                }
+            }
+            
+            displayResults(resultsDiv, results, 'Resource Performance Results');
+            
+            button.disabled = false;
+            button.textContent = 'Test Resources';
+            progressBar.style.display = 'none';
+        }
+        
+        // Browser Performance Test
+        function testBrowserPerformance() {
+            const button = event.target;
+            const resultsDiv = document.getElementById('browserResults');
+            
+            button.disabled = true;
+            button.innerHTML = '<span class="loading"></span> Testing...';
+            resultsDiv.style.display = 'block';
+            
+            // Use setTimeout to simulate async operation
+            setTimeout(() => {
+                const results = [];
+                
+                // Memory usage
+                if (performance.memory) {
+                    results.push({
+                        name: 'Memory Used',
+                        value: Math.round(performance.memory.usedJSHeapSize / 1024 / 1024) + ' MB'
+                    });
+                    results.push({
+                        name: 'Memory Limit',
+                        value: Math.round(performance.memory.totalJSHeapSize / 1024 / 1024) + ' MB'
+                    });
+                }
+                
+                // Connection info
+                if (navigator.connection) {
+                    results.push({
+                        name: 'Connection Type',
+                        value: navigator.connection.effectiveType || 'Unknown'
+                    });
+                    results.push({
+                        name: 'Downlink Speed',
+                        value: navigator.connection.downlink + ' Mbps'
+                    });
+                }
+                
+                // Browser info
+                results.push({
+                    name: 'User Agent',
+                    value: navigator.userAgent.split(' ')[0]
+                });
+                
+                results.push({
+                    name: 'Screen Resolution',
+                    value: screen.width + 'x' + screen.height
+                });
+                
+                results.push({
+                    name: 'Viewport Size',
+                    value: window.innerWidth + 'x' + window.innerHeight
+                });
+                
+                // Performance timing
+                if (performance.timing) {
+                    const loadTime = performance.timing.loadEventEnd - performance.timing.navigationStart;
+                    results.push({
+                        name: 'Page Load Time',
+                        value: loadTime + ' ms'
+                    });
+                }
+                
+                displayBrowserResults(resultsDiv, results, 'Browser Performance Results');
+                
+                button.disabled = false;
+                button.textContent = 'Test Browser Performance';
+            }, 1000);
+        }
+        
+        // Display results helper function
+        function displayResults(container, results, title) {
+            let html = `<h4>${title}</h4>`;
+            
+            results.forEach(result => {
+                const statusClass = result.status === 'success' ? 'success' : 'error';
+                const statusText = result.status === 'success' ? 'OK' : 'ERROR';
+                
+                html += `
+                    <div class="result-item">
+                        <div>
+                            <div class="result-label">${result.name}</div>
+                            <div style="font-size: 0.9em; color: #666;">${result.url}</div>
+                        </div>
+                        <div>
+                            <span class="result-value">${result.time}ms</span>
+                            <span class="status ${statusClass}">${statusText}</span>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        // Display browser results helper function
+        function displayBrowserResults(container, results, title) {
+            let html = `<h4>${title}</h4>`;
+            
+            results.forEach(result => {
+                html += `
+                    <div class="result-item">
+                        <div class="result-label">${result.name}</div>
+                        <div class="result-value">${result.value}</div>
+                    </div>
+                `;
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Performance Test Tool Loaded');
+            
+            // Display initial browser info
+            const browserInfo = {
+                userAgent: navigator.userAgent,
+                language: navigator.language,
+                platform: navigator.platform,
+                cookieEnabled: navigator.cookieEnabled,
+                onLine: navigator.onLine
+            };
+            
+            console.log('Browser Info:', browserInfo);
+        });
+    </script>
+</body>
+</html>
+

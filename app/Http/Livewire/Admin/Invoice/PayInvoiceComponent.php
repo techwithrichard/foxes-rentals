@@ -7,6 +7,7 @@ use App\Events\InvoicePaidEvent;
 use App\Models\Invoice;
 use App\Models\Payment;
 use App\Models\PaymentMethod;
+use App\Services\EnhancedPaymentService;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Jantinnerezo\LivewireAlert\LivewireAlert;
@@ -16,12 +17,9 @@ use Livewire\WithFileUploads;
 class PayInvoiceComponent extends Component
 {
     use LivewireAlert;
-
     use WithFileUploads;
 
     public $invoice;
-
-
     public $amount;
     public $paid_at;
     public $payment_method = 'CASH';
@@ -30,6 +28,7 @@ class PayInvoiceComponent extends Component
     public $receipt;
     public $payment_status = PaymentStatusEnum::PENDING;
 
+    protected $enhancedPaymentService;
 
     protected $listeners = ['payInvoice'];
 
@@ -41,9 +40,21 @@ class PayInvoiceComponent extends Component
         'receipt' => 'nullable|file|max:4096|mimes:jpeg,png,jpg,pdf',
     ];
 
+    public function mount()
+    {
+        $this->enhancedPaymentService = app(EnhancedPaymentService::class);
+    }
+
     public function render()
     {
-        $paymentMethods = PaymentMethod::pluck('name');
+        // Get payment methods from database or use default enhanced methods
+        $paymentMethods = PaymentMethod::pluck('name')->toArray();
+        
+        // If no payment methods in database, use enhanced service methods
+        if (empty($paymentMethods)) {
+            $paymentMethods = array_keys($this->enhancedPaymentService->getAvailablePaymentMethods());
+        }
+        
         return view('livewire.admin.invoice.pay-invoice-component', compact('paymentMethods'));
     }
 
@@ -56,52 +67,41 @@ class PayInvoiceComponent extends Component
 
     public function submit()
     {
-
-//        dd($this->invoice);
         $this->validate();
 
-        //if receipt is uploaded,store it in storage
-        if ($this->receipt) {
-            $receipt = Storage::url(Storage::putFile('public/receipts', $this->receipt));
-        } else {
+        try {
+            // Store receipt if uploaded
             $receipt = null;
-        }
-        DB::transaction(function () use ($receipt) {
+            if ($this->receipt) {
+                $receipt = Storage::url(Storage::putFile('public/receipts', $this->receipt));
+            }
 
-
-            Payment::create([
+            // Prepare payment data with enhanced synchronization
+            $paymentData = [
                 'amount' => $this->amount,
                 'paid_at' => $this->paid_at,
                 'payment_method' => $this->payment_method,
                 'reference_number' => $this->reference_number,
-                'tenant_id' => $this->invoice->tenant_id,
-                'payment_receipt' => $receipt,
                 'invoice_id' => $this->invoice->id,
                 'recorded_by' => auth()->id(),
-                'landlord_id' => $this->invoice->landlord_id,
-                'commission' => $this->invoice->commission,
-                'property_id' => $this->invoice->property_id,
-                'house_id' => $this->invoice->house_id,
                 'status' => $this->payment_status,
+                'payment_receipt' => $receipt,
+                'verified_at' => $this->payment_status === PaymentStatusEnum::PAID ? now() : null,
+                'verified_by' => $this->payment_status === PaymentStatusEnum::PAID ? auth()->id() : null,
+            ];
 
-            ]);
+            // Use enhanced payment service to ensure invoice synchronization
+            $this->enhancedPaymentService->createPayment($paymentData);
 
-            //if payment_status is paid,update invoice status to paid
-            if ($this->payment_status == PaymentStatusEnum::PAID) {
-//                dd('Pay invoice');
-                $this->invoice->pay($this->amount);
-                InvoicePaidEvent::dispatch($this->invoice);
-            }
+            $this->alert('success', __('Payment recorded successfully with enhanced invoice synchronization!'));
+            $this->emit('refreshTable');
+            $this->dispatchBrowserEvent('file-pond-clear', ['id' => $this->id]);
 
+            $this->reset(['amount', 'paid_at', 'payment_method', 'reference_number', 'recorded_by', 'receipt']);
 
-        });
-
-        $this->alert('success', __('Payment recorded successfully!'));
-        $this->emit('refreshTable');
-        $this->dispatchBrowserEvent('file-pond-clear', ['id' => $this->id]);
-
-        $this->reset(['amount', 'paid_at', 'payment_method', 'reference_number', 'recorded_by', 'receipt']);
-
+        } catch (\Exception $e) {
+            $this->alert('error', __('Error recording payment: ') . $e->getMessage());
+        }
     }
 
 }

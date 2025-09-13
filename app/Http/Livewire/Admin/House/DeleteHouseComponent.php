@@ -31,22 +31,19 @@ class DeleteHouseComponent extends Component
 
     public function submit()
     {
-
-        //get lease associated with house and delete them
+        //get lease associated with house and soft delete them
         $lease = Lease::where('house_id', $this->house_id)->first();
         $house = House::findOrFail($this->house_id);
 
-
         DB::transaction(
             function () use ($lease, $house) {
-                $lease?->delete();
-                $house->delete();
+                $lease?->delete(); // Soft delete lease
+                $house->delete(); // Soft delete house
             }
         );
 
-        $this->alert('success', __('House deleted successfully'));
+        $this->alert('success', __('House moved to deleted records successfully'));
         $this->emit('refreshTable');
         $this->reset('house_id');
-
     }
 }

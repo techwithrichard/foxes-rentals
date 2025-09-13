@@ -34,16 +34,21 @@
                                                 <li>1 Go to the M-PESA menu</li>
                                                 <li>2 Select Lipa na M-PESA</li>
                                                 <li>3 Select the Paybill option</li>
-                                                <li>4 Enter business number <strong>4107273</strong></li>
-                                                <li>5 Enter your account number <strong>{{ $reference }}</strong></li>
-                                                <li>6 Enter the
-                                                    amount <strong>{{ number_format(ceil($amount)) }}</strong></li>
+                                                <li>4 Enter business number <strong>{{ $paybillNumber }}</strong></li>
+                                                <li>5 Enter your account number <strong>{{ $accountNumber }}</strong></li>
+                                                <li>6 Enter the amount <strong>{{ number_format($amountToPay) }}</strong></li>
                                                 <li>7 Enter PIN and press OK to send</li>
-                                                <li>8 You will receive a confirmation SMS with your payment reference
-                                                    number.
-                                                </li>
+                                                <li>8 You will receive a confirmation SMS with your payment reference number.</li>
                                             </ol>
                                             </p>
+                                            
+                                            <div class="alert alert-info mt-3">
+                                                <h6><strong>Important Payment Details:</strong></h6>
+                                                <p class="mb-1"><strong>Paybill Number:</strong> {{ $paybillNumber }}</p>
+                                                <p class="mb-1"><strong>Account Number:</strong> {{ $accountNumber }}</p>
+                                                <p class="mb-1"><strong>Amount:</strong> Ksh {{ number_format($amountToPay) }}</p>
+                                                <p class="mb-0"><strong>Invoice Reference:</strong> {{ $displayReference }}</p>
+                                            </div>
                                         </div>
 
                                     </div>

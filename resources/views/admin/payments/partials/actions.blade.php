@@ -32,18 +32,10 @@
 
                         <li>
                             <a href="javascript:void(0);"
-                               onclick="$('#delete-payment-{{$payment->id}}').submit();">
+                               onclick="deletePayment({{$payment->id}})">
                                 <em class="icon ni ni-delete text-danger"></em>
                                 <span class="text-danger">{{ __('Delete Payment')}}</span>
                             </a>
-
-                            <form action="{{ route('admin.payments.destroy',$payment->id) }}"
-                                  id="delete-payment-{{$payment->id}}"
-                                  onsubmit="return confirm('{{ __('Are you sure you want to delete this payment entry ?')}}')"
-                                  method="POST">
-                                @csrf
-                                @method('DELETE')--}}
-                            </form>
                         </li>
 
                 </ul>

@@ -24,15 +24,27 @@ use App\Http\Controllers\Admin\PropertyController;
 Route::get('/', function () {
     //if SHOW_WELCOME_PAGE is true
     if (config('app.show_landing_page')) {
-        return view('web.index');
+        // Get featured properties for the landing page
+        $featuredProperties = \App\Models\Property::with(['address', 'landlord', 'houses'])
+            ->where('status', 'active')
+            ->where('is_vacant', true)
+            ->limit(8)
+            ->get();
+            
+        return view('web.index', compact('featuredProperties'));
     }
     return redirect('/login');
 });
 
-// Route to display properties for rent
-Route::get('/rent-properties', [PropertyController::class, 'index'])->name('properties.index');
+// Frontend Property Routes
+Route::prefix('properties')->name('frontend.properties.')->group(function () {
+    Route::get('/', [App\Http\Controllers\Frontend\PropertyController::class, 'index'])->name('index');
+    Route::get('/search', [App\Http\Controllers\Frontend\PropertyController::class, 'search'])->name('search');
+    Route::get('/{id}', [App\Http\Controllers\Frontend\PropertyController::class, 'show'])->name('show');
+});
 
-// Route to display details of a specific property
+// Legacy routes for backward compatibility
+Route::get('/rent-properties', [PropertyController::class, 'index'])->name('properties.index');
 Route::get('/rent-properties/{id}', [PropertyController::class, 'show'])->name('properties.show');
 
 // Route to display properties for sale

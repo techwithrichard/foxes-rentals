@@ -1,14 +1,11 @@
-@extends('layouts.web_layout')
-
-@section('content')
 <div class="header-main header-main-s1 is-sticky is-transparent on-dark">
     <div class="container header-container">
         <div class="header-wrap">
             <div class="header-logo">
-                <a href="/" class="logo-link">
-                    <img class="logo-light logo-img" src="{{ asset('app/images/logo.png')}}"
+                <a href="{{ url('/') }}" class="logo-link">
+                    <img class="logo-light logo-img" src="{{ asset('assets/images/logo.png')}}"
                          alt="logo">
-                    <img class="logo-dark logo-img" src="{{ asset('app/images/logo-dark.png')}}" alt="logo-dark">
+                    <img class="logo-dark logo-img" src="{{ asset('assets/images/logo-dark.png')}}" alt="logo-dark">
                 </a>
             </div>
             <div class="header-toggle">
@@ -43,5 +40,3 @@
         </div>
     </div>
 </div>
-
-@endsection

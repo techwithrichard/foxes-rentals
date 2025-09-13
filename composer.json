@@ -20,7 +20,6 @@
         "league/omnipay": "^3.2",
         "livewire/livewire": "^2.10",
         "maatwebsite/excel": "^3.1",
-        "mpdf/mpdf": "^8.1",
         "omnipay/paypal": "^3.0",
         "spatie/laravel-activitylog": "^4.7",
         "spatie/laravel-backup": "^8.1",

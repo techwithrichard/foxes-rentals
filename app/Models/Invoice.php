@@ -103,6 +103,36 @@ class Invoice extends Model
     {
         $this->paid_amount += $amount;
         $this->save();
+        $this->updateStatus(); // Update status after payment
+    }
+
+    /**
+     * Add bills to invoice and update status
+     */
+    public function addBills(array $bills)
+    {
+        $existingBills = $this->bills ?? [];
+        $totalBillsAmount = 0;
+        
+        foreach ($bills as $bill) {
+            $existingBills[] = $bill;
+            $totalBillsAmount += $bill['amount'];
+        }
+        
+        $this->bills = $existingBills;
+        $this->bills_amount += $totalBillsAmount;
+        $this->save();
+        $this->updateStatus(); // Update status after adding bills
+        
+        return $this;
+    }
+
+    /**
+     * Add a single bill to invoice
+     */
+    public function addBill(string $name, float $amount)
+    {
+        return $this->addBills([['name' => $name, 'amount' => $amount]]);
     }
 
     //update invoice status after reversing payment
@@ -122,6 +152,58 @@ class Invoice extends Model
             $this->status = PaymentStatusEnum::OVER_PAID->value;
         }
         $this->save();
+    }
+
+    /**
+     * Get account number for paybill payments
+     * Uses lease_reference for unique, secure account numbers
+     */
+    public function getAccountNumber(): string
+    {
+        return $this->lease_reference ?? 'INV' . str_pad($this->invoice_id, 6, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Find invoice by account number (lease reference or fallback to invoice_id)
+     */
+    public static function findByAccountNumber(string $accountNumber): ?self
+    {
+        // First try to find by lease_reference (preferred method)
+        if ($accountNumber && !str_starts_with($accountNumber, 'INV')) {
+            $invoice = self::where('lease_reference', $accountNumber)->first();
+            if ($invoice) {
+                return $invoice;
+            }
+        }
+        
+        // Fallback: try INV format
+        if (str_starts_with($accountNumber, 'INV')) {
+            $invoiceId = (int) substr($accountNumber, 3);
+            return self::where('invoice_id', $invoiceId)->first();
+        }
+        
+        // Fallback: try to find by invoice_id directly
+        if (is_numeric($accountNumber)) {
+            return self::where('invoice_id', (int) $accountNumber)->first();
+        }
+        
+        return null;
+    }
+
+    /**
+     * @deprecated Use getAccountNumber() instead
+     */
+    public function getShortAccountNumber(): string
+    {
+        return $this->getAccountNumber();
+    }
+
+    /**
+     * @deprecated Use findByAccountNumber() instead
+     */
+    public static function findByShortAccountNumber(string $accountNumber): ?self
+    {
+        return self::findByAccountNumber($accountNumber);
     }
 
 

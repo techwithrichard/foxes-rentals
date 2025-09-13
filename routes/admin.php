@@ -18,6 +18,7 @@ use App\Http\Controllers\Admin\MpesaHistoryController;
 use App\Http\Controllers\Admin\OverpaymentsController;
 use App\Http\Controllers\Admin\PaymentProofController;
 use App\Http\Controllers\Admin\PaymentsController;
+use App\Http\Controllers\Admin\PaymentVerificationController;
 use App\Http\Controllers\Admin\ProfileController;
 use App\Http\Controllers\Admin\PropertyController;
 use App\Http\Controllers\Admin\RentInvoiceController;
@@ -77,6 +78,24 @@ Route::middleware(['auth'])
         Route::get('vouchers/{id}/print', [VouchersController::class, 'print'])
             ->name('vouchers.print');
         Route::resource('vouchers', VouchersController::class);
+
+        // Deleted Records Management
+        Route::controller(\App\Http\Controllers\Admin\DeletedRecordsController::class)->group(function () {
+            Route::get('deleted-records', 'index')->name('deleted-records.index');
+            Route::get('deleted-records/houses', 'houses')->name('deleted-records.houses');
+            Route::get('deleted-records/leases', 'leases')->name('deleted-records.leases');
+            Route::get('deleted-records/tenants', 'tenants')->name('deleted-records.tenants');
+            
+            // Restore routes
+            Route::post('deleted-records/houses/{id}/restore', 'restoreHouse')->name('deleted-records.houses.restore');
+            Route::post('deleted-records/leases/{id}/restore', 'restoreLease')->name('deleted-records.leases.restore');
+            Route::post('deleted-records/tenants/{id}/restore', 'restoreTenant')->name('deleted-records.tenants.restore');
+            
+            // Permanent delete routes (admin only)
+            Route::delete('deleted-records/houses/{id}/permanent-delete', 'permanentlyDeleteHouse')->name('deleted-records.houses.permanent-delete');
+            Route::delete('deleted-records/leases/{id}/permanent-delete', 'permanentlyDeleteLease')->name('deleted-records.leases.permanent-delete');
+            Route::delete('deleted-records/tenants/{id}/permanent-delete', 'permanentlyDeleteTenant')->name('deleted-records.tenants.permanent-delete');
+        });
         Route::resource('landlord-remittance', LandlordRemittancesController::class);
         Route::resource('expenses', ExpensesController::class);
         Route::resource('payments-proof', PaymentProofController::class);
@@ -92,6 +111,19 @@ Route::middleware(['auth'])
         Route::get('payments/list', [PaymentsController::class, 'index'])->name('payments.list');
         Route::get('payments/outstanding', [PaymentsController::class, 'outstanding'])->name('payments.outstanding');
         Route::get('payments/in-arrears', [PaymentsController::class, 'in_arrears'])->name('payments.in_arrears');
+        Route::delete('payments/{id}', [PaymentsController::class, 'destroy'])->name('payments.destroy');
+
+        // Payment Verification System
+        Route::controller(PaymentVerificationController::class)->group(function () {
+            Route::get('payment-verification', 'index')->name('payment-verification.index');
+            Route::get('payment-verification/unverified', 'unverifiedPayments')->name('payment-verification.unverified');
+            Route::get('payment-verification/create', 'create')->name('payment-verification.create');
+            Route::post('payment-verification', 'store')->name('payment-verification.store');
+            Route::post('payment-verification/search', 'searchTransaction')->name('payment-verification.search');
+            Route::post('payment-verification/{id}/verify', 'verifyPayment')->name('payment-verification.verify');
+            Route::get('payment-verification/tenant-invoices', 'getTenantInvoices')->name('payment-verification.tenant-invoices');
+            Route::get('payment-verification/statistics', 'statistics')->name('payment-verification.statistics');
+        });
 
 
         //settings

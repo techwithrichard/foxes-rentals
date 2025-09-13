@@ -9,12 +9,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
+use Illuminate\Database\Eloquent\SoftDeletes;
 use Spatie\Activitylog\LogOptions;
 use Spatie\Activitylog\Traits\LogsActivity;
 
 class Property extends Model
 {
-    use HasUuids, LogsActivity;
+    use HasUuids, LogsActivity, SoftDeletes;
 
     protected $casts = [
         'is_multi_unit' => 'boolean',
@@ -37,7 +38,7 @@ class Property extends Model
 
     public function houses(): HasMany
     {
-        return $this->hasMany(House::class);
+        return $this->hasMany(House::class)->withTrashed();
     }
 
 

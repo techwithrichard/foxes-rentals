@@ -37,7 +37,7 @@ class PropertiesController extends Controller
                     return view('landlord.properties.details', compact('property'));
                 })
                 ->addColumn('address', function ($property) {
-                    return $property->address->city . ', ' . $property->address->state;
+                    return $property->address ? $property->address->city . ', ' . $property->address->state : 'N/A';
                 })
                 ->rawColumns(['actions', 'status', 'details'])
                 ->make(true);

@@ -16,7 +16,7 @@
                                     <label class="form-label" for="full-name">{{ __('Full Name')}}</label>
                                     <div class="form-control-wrap">
                                         <input type="text" class="form-control @error('name') is-invalid @enderror"
-                                               id="full-name" wire:model.defer="name">
+                                               id="full-name" wire:model="name">
                                         @error('name')
                                         <span class="invalid-feedback">{{ $message }}</span>
                                         @enderror
@@ -39,7 +39,7 @@
                                     <label class="form-label" for="phone">{{ __('Phone Number')}}</label>
                                     <div class="form-control-wrap">
                                         <input type="tel" class="form-control @error('phone') is-invalid @enderror"
-                                               id="phone" wire:model.defer="phone">
+                                               id="phone" wire:model="phone">
                                         @error('phone')
                                         <span class="invalid-feedback">{{ $message }}</span>
                                         @enderror
@@ -53,7 +53,7 @@
                                     <div class="form-control-wrap">
                                         <div class="form-control-select">
                                             <select class="form-control" id="occupation_status"
-                                                    wire:model.defer="occupation_status">
+                                                    wire:model="occupation_status">
                                                 <option value="">{{ __('Occupation Status')}}</option>
                                                 <option value="Employed">{{ __('Employed')}}</option>
                                                 <option value="Self Employed">{{ __('Self Employed')}}</option>
@@ -74,7 +74,7 @@
                                     <div class="form-control-wrap">
                                         <input type="text"
                                                class="form-control @error('occupation_place') is-invalid @enderror"
-                                               id="occupation_place" wire:model.defer="occupation_place">
+                                               id="occupation_place" wire:model="occupation_place">
                                         @error('occupation_place')
                                         <span class="invalid-feedback">{{ $message }}</span>
                                         @enderror
@@ -88,7 +88,7 @@
                                     <div class="form-control-wrap">
                                         <input type="text"
                                                class="form-control @error('identity_no') is-invalid @enderror"
-                                               id="identity_no" wire:model.defer="identity_no">
+                                               id="identity_no" wire:model="identity_no">
                                         @error('identity_no')
                                         <span class="invalid-feedback">{{ $message }}</span>
                                         @enderror
@@ -108,7 +108,7 @@
 
                                         <input type="file"
                                                class="form-control @error('identity_document') is-invalid @enderror"
-                                               id="nid" wire:model.defer="identity_document">
+                                               id="nid" wire:model="identity_document">
 
                                         @error('identity_document')
                                         <span class="invalid-feedback">{{ $message }}</span>
@@ -150,7 +150,7 @@
                                 <div class="form-group">
                                     <label class="form-label">{{ __('Contact Name')}}</label>
                                     <input type="text" class="form-control" id="height"
-                                           wire:model.defer="emergency_name">
+                                           wire:model="emergency_name">
                                 </div>
                             </div>
                             <!--col-->
@@ -160,7 +160,7 @@
                                     <input type="email"
                                            class="form-control  @error('emergency_email') is-invalid @enderror"
                                            id="weight"
-                                           wire:model.defer="emergency_email">
+                                           wire:model="emergency_email">
                                     @error('emergency_email')
                                     <span class="invalid-feedback">{{ $message }}</span>
                                     @enderror
@@ -171,7 +171,7 @@
                                 <div class="form-group">
                                     <label class="form-label">{{ __('Contact Phone Number')}}</label>
                                     <input type="text" class="form-control" id="bp"
-                                           wire:model.defer="emergency_contact">
+                                           wire:model="emergency_contact">
                                 </div>
                             </div>
                             <!--col-->
@@ -179,7 +179,7 @@
                                 <div class="form-group">
                                     <label class="form-label">{{ __('Relationship With Tenant')}}</label>
                                     <input type="text" class="form-control" id="pulse"
-                                           wire:model.defer="emergency_relationship">
+                                           wire:model="emergency_relationship">
                                 </div>
                             </div>
                             <!--col-->
@@ -204,7 +204,7 @@
                                 <div class="form-group">
                                     <label class="form-label">{{ __('Kin Name')}}</label>
                                     <input type="text" class="form-control" id="height"
-                                           wire:model.defer="kin_name">
+                                           wire:model="kin_name">
                                 </div>
                             </div>
                             <!--col-->
@@ -212,7 +212,7 @@
                                 <div class="form-group">
                                     <label class="form-label">{{ __('Kin Phone Number')}}</label>
                                     <input type="tel" class="form-control" id="weight"
-                                           wire:model.defer="kin_phone">
+                                           wire:model="kin_phone">
                                 </div>
                             </div>
                             <!--col-->
@@ -220,7 +220,7 @@
                                 <div class="form-group">
                                     <label class="form-label">{{ __('Kin Identity Number')}}</label>
                                     <input type="text" class="form-control" id="bp"
-                                           wire:model.defer="kin_identity">
+                                           wire:model="kin_identity">
                                 </div>
                             </div>
                             <!--col-->
@@ -228,7 +228,7 @@
                                 <div class="form-group">
                                     <label class="form-label">{{ __('Relationship With Tenant')}}</label>
                                     <input type="text" class="form-control" id="pulse"
-                                           wire:model.defer="kin_relationship">
+                                           wire:model="kin_relationship">
                                 </div>
                             </div>
                             <!--col-->

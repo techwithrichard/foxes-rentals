@@ -156,13 +156,14 @@
             <td style="text-align: right;">{{ setting('currency_symbol').' '.number_format($invoice->amount,2) }}</td>
         </tr>
 
-        @foreach($invoice->bills as $item)
+        @forelse($invoice->bills ?? [] as $item)
             <tr class="item">
                 <td>{{ $item['name'] }}</td>
                 <td style="text-align: right;">{{ setting('currency_symbol').' '.number_format($item['amount'],2) }}</td>
             </tr>
-
-        @endforeach
+        @empty
+            {{-- No bills to display --}}
+        @endforelse
 
         <tr class="item last">
             <td>&nbsp;</td>

@@ -21,7 +21,10 @@ class TenantsController extends Controller
             $tenants = User::query()
                 ->withoutTrashed()
                 ->role('tenant')
-                ->with('leases.property', 'leases.house')
+                ->with([
+                    'leases.property:id,name',
+                    'leases.house:id,name,property_id'
+                ])
                 ->latest('id');
 
             return DataTables::of($tenants)

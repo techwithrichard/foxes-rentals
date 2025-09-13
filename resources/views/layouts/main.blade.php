@@ -6,6 +6,7 @@
 
     <meta name="author" content="Softnio">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="description"
           content="A powerful and conceptual apps base dashboard template that especially build for developers and programmers.">
     <!-- Fav Icon  -->
@@ -66,6 +67,16 @@
 <!-- JavaScript -->
 <script src="{{ asset('assets/js/bundle.js')}}"></script>
 <script src="{{ asset('assets/js/scripts.js')}}"></script>
+
+<script>
+    // Setup CSRF token for AJAX requests
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    });
+</script>
+
 @livewireScripts
 <x-livewire-alert::scripts/>
 

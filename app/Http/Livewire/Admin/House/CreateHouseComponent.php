@@ -47,7 +47,8 @@ class CreateHouseComponent extends Component
     public function render(): Factory|View|Application
     {
         $types = HouseType::pluck('name');
-        $properties = Property::where('is_multi_unit', 1)->pluck('name', 'id');
+        // Allow houses to be added to any property, not just multi-unit ones
+        $properties = Property::pluck('name', 'id');
         $landlords = User::role('landlord')->select('id', 'name', 'email')->get();
         return view('livewire.admin.house.create-house-component', compact('types', 'properties', 'landlords'));
     }

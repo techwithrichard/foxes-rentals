@@ -22,7 +22,7 @@ class ModifyInvoiceComponent extends Component
             ->with('tenant:id,name,email,phone,address', 'property:id,name', 'house:id,name')
             ->findOrFail($this->invoice_id);
 
-        $this->current_bills = $this->invoice->bills;
+        $this->current_bills = $this->invoice->bills ?? [];
 
     }
 
@@ -38,24 +38,19 @@ class ModifyInvoiceComponent extends Component
             'bill_amount' => 'required|numeric|min:1',
         ]);
 
-        //Existing bills
-        $existing_bills = $this->invoice->bills;
+        // Use the new addBill method which automatically updates status
+        $this->invoice->addBill($this->bill_description, $this->bill_amount);
 
-        $new_bill = [
-            'name' => $this->bill_description,
-            'amount' => $this->bill_amount,
-        ];
+        // Clear form fields
+        $this->bill_description = '';
+        $this->bill_amount = '';
 
-        $existing_bills[] = $new_bill;
+        // Refresh the current bills
+        $this->current_bills = $this->invoice->fresh()->bills ?? [];
 
-        //update invoice with new bills,and also change the bill amount
-        $this->invoice->update([
-            'bills' => $existing_bills,
-            'bills_amount' => $this->invoice->bills_amount + $this->bill_amount,
-        ]);
-
+        session()->flash('success', 'Bill added successfully! Invoice status updated.');
+        
         return redirect()->route('admin.rent-invoice.edit', $this->invoice_id);
-
     }
 
     public function removeInvoiceBill($index)

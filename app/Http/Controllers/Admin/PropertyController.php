@@ -13,17 +13,14 @@ class PropertyController extends Controller
 
     public function index()
     {
-        // added
-
-    $landlord = auth()->user(); //get current logged landlord
-    $properties = $landlord->properties->latest()->get();
-
-    // end of new added
         abort_unless(auth()->user()->can('view property'), 403);
         if (\request()->ajax()) {
             $properties = Property::query()
-                ->with('lease.tenant:id,name', 'landlord:id,name')
-                ->with('address')
+                ->with([
+                    'lease.tenant:id,name',
+                    'landlord:id,name',
+                    'address'
+                ])
                 ->select('properties.*')
                 ->withCount('houses')
                 ->latest('id');
@@ -52,7 +49,7 @@ class PropertyController extends Controller
                     return $property->landlord->name ?? 'N/A';
                 })
                 ->addColumn('address', function ($property) {
-                    return $property->address->city . ', ' . $property->address->state;
+                    return $property->address ? $property->address->city . ', ' . $property->address->state : 'N/A';
                 })
                 ->rawColumns(['actions', 'status', 'details'])
                 ->make(true);
@@ -105,11 +102,12 @@ class PropertyController extends Controller
 
         //transaction
         DB::transaction(function () use ($property) {
+            // Soft delete related records first
             $property->leases()->delete();
             $property->houses()->delete();
+            // Then soft delete the property itself
             $property->delete();
         });
-
 
         return redirect()->back()->with('success', __('Property deleted successfully'));
     }

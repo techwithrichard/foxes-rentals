@@ -1,0 +1,95 @@
+# Foxes Rental Management System - Environment Configuration
+
+# Application Settings
+APP_NAME="Foxes Rental Management System"
+APP_ENV=local
+APP_KEY=
+APP_DEBUG=true
+APP_URL=composer installhttp://localhost:8000
+
+# Logging
+LOG_CHANNEL=stack
+LOG_DEPRECATIONS_CHANNEL=null
+LOG_LEVEL=debug
+
+# Database Configuration
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=foxes_rentals
+DB_USERNAME=root
+DB_PASSWORD=
+
+# Cache & Session
+BROADCAST_DRIVER=log
+CACHE_DRIVER=file
+FILESYSTEM_DISK=local
+QUEUE_CONNECTION=sync
+SESSION_DRIVER=file
+SESSION_LIFETIME=120
+
+# Redis (if needed)
+REDIS_HOST=127.0.0.1
+REDIS_PASSWORD=null
+REDIS_PORT=6379
+
+# Mail Configuration
+MAIL_MAILER=smtp
+MAIL_HOST=localhost
+MAIL_PORT=1025
+MAIL_USERNAME=null
+MAIL_PASSWORD=null
+MAIL_ENCRYPTION=null
+MAIL_FROM_ADDRESS="hello@example.com"
+MAIL_FROM_NAME="${APP_NAME}"
+
+# MPesa Configuration (REQUIRED - Please provide your values)
+MPESA_CONSUMER_KEY=YOUR_CONSUMER_KEY
+MPESA_CONSUMER_SECRET=YOUR_CONSUMER_SECRET
+MPESA_SHORTCODE=174379
+MPESA_PAYBILL=174379
+MPESA_PASSKEY=YOUR_PASSKEY
+MPESA_CONFIRMATION_URL=https://48cca189188c.ngrok-free.app/api/callback/confirmation
+MPESA_VALIDATION_URL=https://48cca189188c.ngrok-free.app/api/callback/validation
+MPESA_STK_CALLBACK_URL=https://48cca189188c.ngrok-free.app/api/callback/stk_callback
+MPESA_UNIQUE_TOKEN=8jKU1x6dHrYpAQ7L
+MPESA_ENV=sandbox
+
+# SMS Configuration (TextSMS Gateway)
+SMS_API_KEY=e157fde83608790bc6cbbabd6aaf58b0
+SMS_PARTNER_ID=8048
+SMS_SHORTCODE=PV_Tech
+
+# Twilio Configuration (if using Twilio for SMS)
+TWILIO_SID=
+TWILIO_AUTH_TOKEN=
+TWILIO_VERIFY_SID=
+
+# PayPal Configuration (if using PayPal)
+PAYPAL_CLIENT_ID=
+PAYPAL_CLIENT_SECRET=
+PAYPAL_MODE=sandbox
+
+# Application Settings
+SHOW_LANDING_PAGE=true
+
+# AWS Configuration (if using AWS services)
+AWS_ACCESS_KEY_ID=
+AWS_SECRET_ACCESS_KEY=
+AWS_DEFAULT_REGION=us-east-1
+AWS_BUCKET=
+
+# Pusher Configuration (if using real-time features)
+PUSHER_APP_ID=
+PUSHER_APP_KEY=
+PUSHER_APP_SECRET=
+PUSHER_HOST=
+PUSHER_PORT=443
+PUSHER_SCHEME=https
+PUSHER_APP_CLUSTER=mt1
+
+VITE_PUSHER_APP_KEY="${PUSHER_APP_KEY}"
+VITE_PUSHER_HOST="${PUSHER_HOST}"
+VITE_PUSHER_PORT="${PUSHER_PORT}"
+VITE_PUSHER_SCHEME="${PUSHER_SCHEME}"
+VITE_PUSHER_APP_CLUSTER="${PUSHER_APP_CLUSTER}"

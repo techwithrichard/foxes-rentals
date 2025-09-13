@@ -95,10 +95,10 @@
 
             @endif
 
-            @if(session('$error'))
+            @if(session('error'))
                 <div class="col-12">
                     <div class="alert alert-danger">
-                        {{ session('$error') }}
+                        {{ session('error') }}
                     </div>
                 </div>
             @endif

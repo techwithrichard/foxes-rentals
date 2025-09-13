@@ -114,5 +114,12 @@
 
 @push('scripts')
     <script src="{{ asset('assets/js/virtual-select.min.js') }}"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('Reconcile page loaded');
+            console.log('VirtualSelect available:', typeof VirtualSelect !== 'undefined');
+            console.log('Transaction data:', @json($transaction));
+        });
+    </script>
 @endpush
 

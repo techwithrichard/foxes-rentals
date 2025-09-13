@@ -350,7 +350,7 @@
 
 
                     <!-- Administration -->
-                    <li class="nk-menu-item has-sub {{ active(['admin.settings.*','admin.backups.*','admin.activity-log.index']) }}">
+                    <li class="nk-menu-item has-sub {{ active(['admin.settings.*','admin.backups.*','admin.activity-log.index','admin.deleted-records.*']) }}">
                         <a href="#" class="nk-menu-link nk-menu-toggle">
                             <span class="nk-menu-icon"><em class="icon ni ni-setting"></em></span>
                             <span class="nk-menu-text">{{ __('Administration')}}</span>
@@ -361,6 +361,13 @@
                                 <li class="nk-menu-item {{ active('admin.settings.*') }}">
                                     <a href="{{ route('admin.settings.index') }}" class="nk-menu-link">
                                         <span class="nk-menu-text">{{ __('Settings')}}</span></a>
+                                </li>
+                            @endcan
+
+                            @can('view deleted records')
+                                <li class="nk-menu-item {{ active('admin.deleted-records.*') }}">
+                                    <a href="{{ route('admin.deleted-records.index') }}" class="nk-menu-link">
+                                        <span class="nk-menu-text">{{ __('Deleted Records')}}</span></a>
                                 </li>
                             @endcan
 

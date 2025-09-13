@@ -64,5 +64,17 @@ class PaymentsController extends Controller
 
     }
 
+    public function destroy($id)
+    {
+        abort_unless(auth()->user()->can('delete payment'), 403);
+        
+        $payment = Payment::findOrFail($id);
+        $payment->delete();
+        
+        return response()->json([
+            'success' => true,
+            'message' => __('Payment deleted successfully.')
+        ]);
+    }
 
 }
