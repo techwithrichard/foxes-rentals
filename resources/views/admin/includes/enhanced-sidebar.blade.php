@@ -30,37 +30,318 @@
                         </a>
                     </li>
 
-                    <!-- User Management - First Priority -->
+                    <!-- User Management - Comprehensive Grand Menu -->
                     @can('manage users')
-                        <li class="nk-menu-item has-sub {{ active(['admin.users-management.*','admin.users.advanced.*','admin.roles-management.*','admin.user-activity.*']) }}">
+                        <li class="nk-menu-item has-sub {{ active(['admin.user-management.*','admin.users-management.*','admin.users.advanced.*','admin.landlords.*','admin.tenants.*','admin.roles-management.*','admin.user-activity.*']) }}">
                             <a href="#" class="nk-menu-link nk-menu-toggle">
                                 <span class="nk-menu-icon"><em class="icon ni ni-user-check"></em></span>
                                 <span class="nk-menu-text">{{ __('User Management')}}</span>
                             </a>
                             <ul class="nk-menu-sub">
-                                <li class="nk-menu-item {{ active(['admin.users-management.*']) }}">
-                                    <a href="{{ route('admin.users-management.index') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">{{ __('Basic Users')}}</span>
+                                <!-- All Users Dashboard -->
+                                <li class="nk-menu-item {{ active(['admin.user-management.dashboard']) }}">
+                                    <a href="{{ route('admin.user-management.dashboard') }}" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-dashboard"></em></span>
+                                        <span class="nk-menu-text">{{ __('All Users')}}</span>
                                     </a>
                                 </li>
-                                <li class="nk-menu-item {{ active(['admin.users.advanced.*']) }}">
-                                    <a href="{{ route('admin.users.advanced.index') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">{{ __('Advanced Users')}}</span>
+
+                                <!-- Landlord Management -->
+                                <li class="nk-menu-item has-sub {{ active(['admin.landlords.*','admin.user-management.landlords.*']) }}">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-user-circle"></em></span>
+                                        <span class="nk-menu-text">{{ __('Landlord Management')}}</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        @can('view landlord')
+                                            <li class="nk-menu-item {{ active(['admin.landlords.index']) }}">
+                                                <a href="{{ route('admin.landlords.index') }}" class="nk-menu-link">
+                                                    <span class="nk-menu-text">{{ __('All Landlords')}}</span>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('create landlord')
+                                            <li class="nk-menu-item {{ active(['admin.landlords.create']) }}">
+                                                <a href="{{ route('admin.landlords.create') }}" class="nk-menu-link">
+                                                    <span class="nk-menu-text">{{ __('Add Landlord')}}</span>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        <li class="nk-menu-item {{ active(['admin.user-management.landlords.properties']) }}">
+                                            <a href="{{ route('admin.user-management.landlords.properties') }}" class="nk-menu-link">
+                                                <span class="nk-menu-text">{{ __('Landlord Properties')}}</span>
+                                            </a>
+                                        </li>
+                                        <li class="nk-menu-item {{ active(['admin.user-management.landlords.payments']) }}">
+                                            <a href="{{ route('admin.user-management.landlords.payments') }}" class="nk-menu-link">
+                                                <span class="nk-menu-text">{{ __('Landlord Payments')}}</span>
+                                            </a>
+                                        </li>
+                                        <li class="nk-menu-item {{ active(['admin.user-management.landlords.reports']) }}">
+                                            <a href="{{ route('admin.user-management.landlords.reports') }}" class="nk-menu-link">
+                                                <span class="nk-menu-text">{{ __('Landlord Reports')}}</span>
+                                            </a>
+                                        </li>
+                                        <li class="nk-menu-item {{ active(['admin.user-management.landlords.activity']) }}">
+                                            <a href="{{ route('admin.user-management.landlords.activity') }}" class="nk-menu-link">
+                                                <span class="nk-menu-text">{{ __('Landlord Activity')}}</span>
+                                            </a>
+                                        </li>
+                                    </ul><!-- .nk-menu-sub -->
+                                </li><!-- .nk-menu-item -->
+
+                                <!-- Tenant Management -->
+                                <li class="nk-menu-item has-sub {{ active(['admin.tenants.*','admin.archived-tenants.*','admin.user-management.tenants.*']) }}">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-users"></em></span>
+                                        <span class="nk-menu-text">{{ __('Tenant Management')}}</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        @can('view tenant')
+                                            <li class="nk-menu-item {{ active(['admin.tenants.index']) }}">
+                                                <a href="{{ route('admin.tenants.index') }}" class="nk-menu-link">
+                                                    <span class="nk-menu-text">{{ __('All Tenants')}}</span>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('create tenant')
+                                            <li class="nk-menu-item {{ active(['admin.tenants.create']) }}">
+                                                <a href="{{ route('admin.tenants.create') }}" class="nk-menu-link">
+                                                    <span class="nk-menu-text">{{ __('Add Tenant')}}</span>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        <li class="nk-menu-item {{ active(['admin.user-management.tenants.active']) }}">
+                                            <a href="{{ route('admin.user-management.tenants.active') }}" class="nk-menu-link">
+                                                <span class="nk-menu-text">{{ __('Active Tenants')}}</span>
+                                            </a>
+                                        </li>
+                                        @can('view archived tenant')
+                                            <li class="nk-menu-item {{ active(['admin.archived-tenants.index']) }}">
+                                                <a href="{{ route('admin.archived-tenants.index') }}" class="nk-menu-link">
+                                                    <span class="nk-menu-text">{{ __('Archived Tenants')}}</span>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        <li class="nk-menu-item {{ active(['admin.user-management.tenants.leases']) }}">
+                                            <a href="{{ route('admin.user-management.tenants.leases') }}" class="nk-menu-link">
+                                                <span class="nk-menu-text">{{ __('Tenant Leases')}}</span>
+                                            </a>
+                                        </li>
+                                        <li class="nk-menu-item {{ active(['admin.user-management.tenants.payments']) }}">
+                                            <a href="{{ route('admin.user-management.tenants.payments') }}" class="nk-menu-link">
+                                                <span class="nk-menu-text">{{ __('Tenant Payments')}}</span>
+                                            </a>
+                                        </li>
+                                        <li class="nk-menu-item {{ active(['admin.user-management.tenants.activity']) }}">
+                                            <a href="{{ route('admin.user-management.tenants.activity') }}" class="nk-menu-link">
+                                                <span class="nk-menu-text">{{ __('Tenant Activity')}}</span>
+                                            </a>
+                                        </li>
+                                    </ul><!-- .nk-menu-sub -->
+                                </li><!-- .nk-menu-item -->
+
+                                <!-- Create User -->
+                                <li class="nk-menu-item {{ active(['admin.users-management.create','admin.user-management.create']) }}">
+                                    <a href="{{ route('admin.users-management.create') }}" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-plus"></em></span>
+                                        <span class="nk-menu-text">{{ __('Create User')}}</span>
                                     </a>
                                 </li>
-                                <li class="nk-menu-item {{ active(['admin.roles-management.*']) }}">
-                                    <a href="{{ route('admin.roles-management.index') }}" class="nk-menu-link">
+
+                                <!-- Roles & Permissions -->
+                                <li class="nk-menu-item has-sub {{ active(['admin.roles-management.*','admin.user-roles.*','admin.settings.roles.*','admin.settings.permissions.*']) }}">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-shield-check"></em></span>
                                         <span class="nk-menu-text">{{ __('Roles & Permissions')}}</span>
                                     </a>
-                                </li>
+                                    <ul class="nk-menu-sub">
+                                        <li class="nk-menu-item {{ active(['admin.roles-management.index']) }}">
+                                            <a href="{{ route('admin.roles-management.index') }}" class="nk-menu-link">
+                                                <span class="nk-menu-text">{{ __('All Roles')}}</span>
+                                            </a>
+                                        </li>
+                                        <li class="nk-menu-item {{ active(['admin.roles-management.create']) }}">
+                                            <a href="{{ route('admin.roles-management.create') }}" class="nk-menu-link">
+                                                <span class="nk-menu-text">{{ __('Create Role')}}</span>
+                                            </a>
+                                        </li>
+                                        <li class="nk-menu-item {{ active(['admin.settings.permissions.index']) }}">
+                                            <a href="{{ route('admin.settings.permissions.index') }}" class="nk-menu-link">
+                                                <span class="nk-menu-text">{{ __('All Permissions')}}</span>
+                                            </a>
+                                        </li>
+                                        <li class="nk-menu-item {{ active(['admin.settings.permissions.create']) }}">
+                                            <a href="{{ route('admin.settings.permissions.create') }}" class="nk-menu-link">
+                                                <span class="nk-menu-text">{{ __('Create Permission')}}</span>
+                                            </a>
+                                        </li>
+                                        <li class="nk-menu-item {{ active(['admin.user-roles.index']) }}">
+                                            <a href="{{ route('admin.user-roles.index') }}" class="nk-menu-link">
+                                                <span class="nk-menu-text">{{ __('Role Assignments')}}</span>
+                                            </a>
+                                        </li>
+                                    </ul><!-- .nk-menu-sub -->
+                                </li><!-- .nk-menu-item -->
+
+
+                                <!-- User Activity Logs -->
                                 <li class="nk-menu-item {{ active(['admin.user-activity.*']) }}">
                                     <a href="{{ route('admin.user-activity.index') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">{{ __('User Activity')}}</span>
+                                        <span class="nk-menu-icon"><em class="icon ni ni-activity"></em></span>
+                                        <span class="nk-menu-text">{{ __('User Activity Logs')}}</span>
                                     </a>
                                 </li>
-                                <li class="nk-menu-item {{ active(['admin.user-roles.*']) }}">
-                                    <a href="{{ route('admin.user-roles.index') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">{{ __('Role Assignments')}}</span>
+
+                                <!-- User Settings -->
+                                <li class="nk-menu-item {{ active(['admin.user-management.settings']) }}">
+                                    <a href="{{ route('admin.user-management.settings') }}" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-setting"></em></span>
+                                        <span class="nk-menu-text">{{ __('User Settings')}}</span>
+                                    </a>
+                                </li>
+                            </ul><!-- .nk-menu-sub -->
+                        </li><!-- .nk-menu-item -->
+                    @endcan
+
+                    <!-- Analytics - Comprehensive Analytics Menu -->
+                    @can('view reports')
+                        <li class="nk-menu-item has-sub {{ active(['admin.analytics.*','admin.reports.*']) }}">
+                            <a href="#" class="nk-menu-link nk-menu-toggle">
+                                <span class="nk-menu-icon"><em class="icon ni ni-chart-bar"></em></span>
+                                <span class="nk-menu-text">{{ __('Analytics')}}</span>
+                            </a>
+                            <ul class="nk-menu-sub">
+                                <!-- Analytics Dashboard -->
+                                <li class="nk-menu-item {{ active(['admin.analytics.dashboard']) }}">
+                                    <a href="{{ route('admin.analytics.dashboard') }}" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-dashboard"></em></span>
+                                        <span class="nk-menu-text">{{ __('Analytics Dashboard')}}</span>
+                                    </a>
+                                </li>
+
+                                <!-- User Analytics -->
+                                <li class="nk-menu-item {{ active(['admin.analytics.users']) }}">
+                                    <a href="{{ route('admin.analytics.users') }}" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-users"></em></span>
+                                        <span class="nk-menu-text">{{ __('User Analytics')}}</span>
+                                    </a>
+                                </li>
+
+                                <!-- Financial Analytics -->
+                                <li class="nk-menu-item has-sub {{ active(['admin.analytics.financial','admin.reports.*']) }}">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-tranx"></em></span>
+                                        <span class="nk-menu-text">{{ __('Financial Analytics')}}</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        <li class="nk-menu-item {{ active(['admin.analytics.financial']) }}">
+                                            <a href="{{ route('admin.analytics.financial') }}" class="nk-menu-link">
+                                                <span class="nk-menu-text">{{ __('Financial Overview')}}</span>
+                                            </a>
+                                        </li>
+                                        @can('view landlord income report')
+                                            <li class="nk-menu-item {{ active(['admin.reports.landlord_income']) }}">
+                                                <a href="{{ route('admin.reports.landlord_income') }}" class="nk-menu-link">
+                                                    <span class="nk-menu-text">{{ __('Landlord Income')}}</span>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('view property income report')
+                                            <li class="nk-menu-item {{ active(['admin.reports.property_income']) }}">
+                                                <a href="{{ route('admin.reports.property_income') }}" class="nk-menu-link">
+                                                    <span class="nk-menu-text">{{ __('Property Income')}}</span>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('view company income report')
+                                            <li class="nk-menu-item {{ active(['admin.reports.company_income']) }}">
+                                                <a href="{{ route('admin.reports.company_income') }}" class="nk-menu-link">
+                                                    <span class="nk-menu-text">{{ __('Company Commission')}}</span>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('view landlord expenses report')
+                                            <li class="nk-menu-item {{ active(['admin.reports.landlord_expenses']) }}">
+                                                <a href="{{ route('admin.reports.landlord_expenses') }}" class="nk-menu-link">
+                                                    <span class="nk-menu-text">{{ __('Landlord Expenses')}}</span>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('view company expenses report')
+                                            <li class="nk-menu-item {{ active(['admin.reports.company_expenses']) }}">
+                                                <a href="{{ route('admin.reports.company_expenses') }}" class="nk-menu-link">
+                                                    <span class="nk-menu-text">{{ __('Company Expenses')}}</span>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('view outstanding payments report')
+                                            <li class="nk-menu-item {{ active(['admin.reports.outstanding_payments']) }}">
+                                                <a href="{{ route('admin.reports.outstanding_payments') }}" class="nk-menu-link">
+                                                    <span class="nk-menu-text">{{ __('Outstanding Payments')}}</span>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                    </ul><!-- .nk-menu-sub -->
+                                </li><!-- .nk-menu-item -->
+
+                                <!-- Property Analytics -->
+                                <li class="nk-menu-item has-sub {{ active(['admin.analytics.properties','admin.reports.maintenance','admin.reports.occupancy','admin.reports.expiring_leases']) }}">
+                                    <a href="#" class="nk-menu-link nk-menu-toggle">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-building"></em></span>
+                                        <span class="nk-menu-text">{{ __('Property Analytics')}}</span>
+                                    </a>
+                                    <ul class="nk-menu-sub">
+                                        <li class="nk-menu-item {{ active(['admin.analytics.properties']) }}">
+                                            <a href="{{ route('admin.analytics.properties') }}" class="nk-menu-link">
+                                                <span class="nk-menu-text">{{ __('Property Overview')}}</span>
+                                            </a>
+                                        </li>
+                                        @can('view occupancy reports')
+                                            <li class="nk-menu-item {{ active(['admin.reports.occupancy']) }}">
+                                                <a href="{{ route('admin.reports.occupancy') }}" class="nk-menu-link">
+                                                    <span class="nk-menu-text">{{ __('Occupancy Reports')}}</span>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('view maintenance reports')
+                                            <li class="nk-menu-item {{ active(['admin.reports.maintenance']) }}">
+                                                <a href="{{ route('admin.reports.maintenance') }}" class="nk-menu-link">
+                                                    <span class="nk-menu-text">{{ __('Maintenance Reports')}}</span>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                        @can('view expiring leases report')
+                                            <li class="nk-menu-item {{ active(['admin.reports.expiring_leases']) }}">
+                                                <a href="{{ route('admin.reports.expiring_leases') }}" class="nk-menu-link">
+                                                    <span class="nk-menu-text">{{ __('Expiring Leases')}}</span>
+                                                </a>
+                                            </li>
+                                        @endcan
+                                    </ul><!-- .nk-menu-sub -->
+                                </li><!-- .nk-menu-item -->
+
+                                <!-- Performance Analytics -->
+                                <li class="nk-menu-item {{ active(['admin.analytics.performance']) }}">
+                                    <a href="{{ route('admin.analytics.performance') }}" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-speedometer"></em></span>
+                                        <span class="nk-menu-text">{{ __('Performance Analytics')}}</span>
+                                    </a>
+                                </li>
+
+                                <!-- System Analytics -->
+                                <li class="nk-menu-item {{ active(['admin.analytics.system']) }}">
+                                    <a href="{{ route('admin.analytics.system') }}" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-server"></em></span>
+                                        <span class="nk-menu-text">{{ __('System Analytics')}}</span>
+                                    </a>
+                                </li>
+
+                                <!-- Export Analytics -->
+                                <li class="nk-menu-item {{ active(['admin.analytics.export']) }}">
+                                    <a href="{{ route('admin.analytics.export') }}" class="nk-menu-link">
+                                        <span class="nk-menu-icon"><em class="icon ni ni-download"></em></span>
+                                        <span class="nk-menu-text">{{ __('Export Data')}}</span>
                                     </a>
                                 </li>
                             </ul><!-- .nk-menu-sub -->
@@ -218,63 +499,6 @@
                         </ul><!-- .nk-menu-sub -->
                     </li><!-- .nk-menu-item -->
 
-                    <!-- Tenant Management -->
-                    <li class="nk-menu-item has-sub {{ active(['admin.tenants.*','admin.archived-tenants.index']) }}">
-                        <a href="#" class="nk-menu-link nk-menu-toggle">
-                            <span class="nk-menu-icon"><em class="icon ni ni-users"></em></span>
-                            <span class="nk-menu-text">{{ __('Tenant Management')}}</span>
-                        </a>
-                        <ul class="nk-menu-sub">
-                            @can('create tenant')
-                                <li class="nk-menu-item {{ active('admin.tenants.create') }}">
-                                    <a href="{{ route('admin.tenants.create') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">{{ __('Add Tenant')}}</span>
-                                    </a>
-                                </li>
-                            @endcan
-
-                            @can('view tenant')
-                                <li class="nk-menu-item {{ active(['admin.tenants.index','admin.tenants.edit','admin.tenants.show']) }}">
-                                    <a href="{{ route('admin.tenants.index') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">{{ __('All Tenants')}}</span>
-                                    </a>
-                                </li>
-                            @endcan
-
-                            @can('view archived tenant')
-                                <li class="nk-menu-item {{ active('admin.archived-tenants.index') }}">
-                                    <a href="{{ route('admin.archived-tenants.index') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">{{ __('Archived Tenants')}}</span>
-                                    </a>
-                                </li>
-                            @endcan
-                        </ul><!-- .nk-menu-sub -->
-                    </li><!-- .nk-menu-item -->
-
-                    <!-- Landlord Management -->
-                    <li class="nk-menu-item has-sub {{ active(['admin.landlords.*']) }}">
-                        <a href="#" class="nk-menu-link nk-menu-toggle">
-                            <span class="nk-menu-icon"><em class="icon ni ni-user-circle"></em></span>
-                            <span class="nk-menu-text">{{ __('Landlord Management')}}</span>
-                        </a>
-                        <ul class="nk-menu-sub">
-                            @can('create landlord')
-                                <li class="nk-menu-item {{ active('admin.landlords.create') }}">
-                                    <a href="{{ route('admin.landlords.create') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">{{ __('Add Landlord')}}</span>
-                                    </a>
-                                </li>
-                            @endcan
-
-                            @can('view landlord')
-                                <li class="nk-menu-item {{ active('admin.landlords.index') }}">
-                                    <a href="{{ route('admin.landlords.index') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">{{ __('Landlords Listing')}}</span>
-                                    </a>
-                                </li>
-                            @endcan
-                        </ul><!-- .nk-menu-sub -->
-                    </li><!-- .nk-menu-item -->
 
                     <!-- Lease Management -->
                     <li class="nk-menu-item has-sub {{ active(['admin.leases.*','admin.leases-history.*']) }}">
@@ -451,86 +675,6 @@
                         </ul><!-- .nk-menu-sub -->
                     </li><!-- .nk-menu-item -->
 
-                    <!-- Reports -->
-                    <li class="nk-menu-item has-sub {{ active(['admin.reports.*']) }}">
-                        <a href="#" class="nk-menu-link nk-menu-toggle">
-                            <span class="nk-menu-icon"><em class="icon ni ni-tranx"></em></span>
-                            <span class="nk-menu-text">{{ __('Reports')}}</span>
-                        </a>
-                        <ul class="nk-menu-sub">
-                            @can('view landlord income report')
-                                <li class="nk-menu-item {{ active('admin.reports.landlord_income') }}">
-                                    <a href="{{ route('admin.reports.landlord_income') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">{{ __('Landlord Income')}}</span>
-                                    </a>
-                                </li>
-                            @endcan
-
-                            @can('view property income report')
-                                <li class="nk-menu-item {{ active('admin.reports.property_income') }}">
-                                    <a href="{{ route('admin.reports.property_income') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">{{ __('Property Income')}}</span>
-                                    </a>
-                                </li>
-                            @endcan
-
-                            @can('view company income report')
-                                <li class="nk-menu-item {{ active('admin.reports.company_income') }} ">
-                                    <a href="{{ route('admin.reports.company_income') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">{{ __('Company Commission')}}</span>
-                                    </a>
-                                </li>
-                            @endcan
-
-                            @can('view landlord expenses report')
-                                <li class="nk-menu-item {{ active('admin.reports.landlord_expenses') }}">
-                                    <a href="{{ route('admin.reports.landlord_expenses') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">{{ __('Landlord Expenses')}}</span>
-                                    </a>
-                                </li>
-                            @endcan
-
-                            @can('view company expenses report')
-                                <li class="nk-menu-item {{ active('admin.reports.company_expenses') }}">
-                                    <a href="{{ route('admin.reports.company_expenses') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">{{ __('Company Expenses')}}</span>
-                                    </a>
-                                </li>
-                            @endcan
-
-                            @can('view expiring leases report')
-                                <li class="nk-menu-item {{ active('admin.reports.expiring_leases') }}">
-                                    <a href="{{ route('admin.reports.expiring_leases') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">{{ __('Expiring Leases')}}</span>
-                                    </a>
-                                </li>
-                            @endcan
-
-                            @can('view outstanding payments report')
-                                <li class="nk-menu-item {{ active('admin.reports.outstanding_payments') }}">
-                                    <a href="{{ route('admin.reports.outstanding_payments') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">{{ __('Outstanding Payments')}}</span>
-                                    </a>
-                                </li>
-                            @endcan
-
-                            @can('view maintenance reports')
-                                <li class="nk-menu-item {{ active('admin.reports.maintenance') }}">
-                                    <a href="{{ route('admin.reports.maintenance') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">{{ __('Maintenance Reports')}}</span>
-                                    </a>
-                                </li>
-                            @endcan
-
-                            @can('view occupancy reports')
-                                <li class="nk-menu-item {{ active('admin.reports.occupancy') }}">
-                                    <a href="{{ route('admin.reports.occupancy') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">{{ __('Occupancy Reports')}}</span>
-                                    </a>
-                                </li>
-                            @endcan
-                        </ul><!-- .nk-menu-sub -->
-                    </li><!-- .nk-menu-item -->
 
                     <!-- Settings -->
                     @can('view settings')
@@ -560,20 +704,6 @@
                                         <span class="nk-menu-text">{{ __('System Settings')}}</span>
                                     </a>
                                 </li>
-                                @can('manage_roles')
-                                    <li class="nk-menu-item {{ active(['admin.settings.roles.*']) }}">
-                                        <a href="{{ route('admin.settings.roles.index') }}" class="nk-menu-link">
-                                            <span class="nk-menu-text">{{ __('Roles Management')}}</span>
-                                        </a>
-                                    </li>
-                                @endcan
-                                @can('manage_permissions')
-                                    <li class="nk-menu-item {{ active(['admin.settings.permissions.*']) }}">
-                                        <a href="{{ route('admin.settings.permissions.index') }}" class="nk-menu-link">
-                                            <span class="nk-menu-text">{{ __('Permissions Management')}}</span>
-                                        </a>
-                                    </li>
-                                @endcan
                             </ul><!-- .nk-menu-sub -->
                         </li><!-- .nk-menu-item -->
                     @endcan

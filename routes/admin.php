@@ -3,6 +3,12 @@
 // Include enhanced admin routes
 require_once __DIR__ . '/enhanced-admin.php';
 
+// Include user management routes
+require_once __DIR__ . '/user-management.php';
+
+// Include analytics routes
+require_once __DIR__ . '/analytics.php';
+
 use App\Http\Controllers\Admin\ActivityLogController;
 use App\Http\Controllers\Admin\ArchivedTenantsController;
 use App\Http\Controllers\Admin\BackupController;
