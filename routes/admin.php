@@ -60,6 +60,41 @@ Route::middleware(['auth'])
         });
         Route::resource('properties', PropertyController::class);
         Route::resource('houses', HouseController::class);
+        
+        // Enhanced Property Management Routes
+        Route::prefix('property-dashboard')->name('property-dashboard.')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\PropertyDashboardController::class, 'index'])->name('index');
+            Route::get('/analytics', [App\Http\Controllers\Admin\PropertyDashboardController::class, 'analytics'])->name('analytics');
+            Route::get('/metrics', [App\Http\Controllers\Admin\PropertyDashboardController::class, 'metrics'])->name('metrics');
+        });
+        
+        Route::prefix('properties-for-rent')->name('properties-for-rent.')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\PropertiesForRentController::class, 'index'])->name('index');
+            Route::get('/vacant', [App\Http\Controllers\Admin\PropertiesForRentController::class, 'vacant'])->name('vacant');
+            Route::get('/applications', [App\Http\Controllers\Admin\PropertiesForRentController::class, 'applications'])->name('applications');
+            Route::get('/active-rentals', [App\Http\Controllers\Admin\PropertiesForRentController::class, 'activeRentals'])->name('active-rentals');
+        });
+        
+        Route::prefix('properties-for-sale')->name('properties-for-sale.')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\PropertiesForSaleController::class, 'index'])->name('index');
+            Route::get('/active-listings', [App\Http\Controllers\Admin\PropertiesForSaleController::class, 'activeListings'])->name('active-listings');
+            Route::get('/pending-sales', [App\Http\Controllers\Admin\PropertiesForSaleController::class, 'pendingSales'])->name('pending-sales');
+            Route::get('/offers', [App\Http\Controllers\Admin\PropertiesForSaleController::class, 'offers'])->name('offers');
+        });
+        
+        Route::prefix('properties-for-lease')->name('properties-for-lease.')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\PropertiesForLeaseController::class, 'index'])->name('index');
+            Route::get('/active-leases', [App\Http\Controllers\Admin\PropertiesForLeaseController::class, 'activeLeases'])->name('active-leases');
+            Route::get('/lease-applications', [App\Http\Controllers\Admin\PropertiesForLeaseController::class, 'leaseApplications'])->name('lease-applications');
+            Route::get('/renewals', [App\Http\Controllers\Admin\PropertiesForLeaseController::class, 'renewals'])->name('renewals');
+        });
+        
+        Route::prefix('property-settings')->name('property-settings.')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\PropertySettingsController::class, 'index'])->name('index');
+            Route::get('/types', [App\Http\Controllers\Admin\PropertySettingsController::class, 'types'])->name('types');
+            Route::get('/amenities', [App\Http\Controllers\Admin\PropertySettingsController::class, 'amenities'])->name('amenities');
+            Route::get('/pricing', [App\Http\Controllers\Admin\PropertySettingsController::class, 'pricing'])->name('pricing');
+        });
         Route::resource('leases', LeaseController::class);
         Route::resource('leases-history', LeaseHistoryController::class);
         Route::resource('leases-termination-notice', LeaseTerminationNoticeController::class)

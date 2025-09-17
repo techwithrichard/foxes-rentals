@@ -95,27 +95,73 @@
                         </ul><!-- .nk-menu-sub -->
                     </li><!-- .nk-menu-item -->
 
-                    <!-- properties -->
-                    <li class="nk-menu-item has-sub {{ active(['admin.properties.*','admin.houses.*']) }}">
+                    <!-- Enhanced Properties Menu -->
+                    <li class="nk-menu-item has-sub {{ active(['admin.properties.*','admin.houses.*','admin.property-dashboard.*','admin.properties-for-rent.*','admin.properties-for-sale.*','admin.properties-for-lease.*']) }}">
                         <a href="#" class="nk-menu-link nk-menu-toggle">
                             <span class="nk-menu-icon"><em class="icon ni ni-building"></em></span>
                             <span class="nk-menu-text">{{ __('Properties')}}</span>
                         </a>
                         <ul class="nk-menu-sub">
-                            @can('view property')
-                                <li class="nk-menu-item {{ active('admin.properties.*') }}">
-                                    <a href="{{ route('admin.properties.index') }}" class="nk-menu-link"><span
-                                            class="nk-menu-text">{{ __('Buildings')}}</span></a>
-                                </li>
+                            <!-- Property Dashboard -->
+                            <li class="nk-menu-item {{ active('admin.property-dashboard.*') }}">
+                                <a href="{{ route('admin.property-dashboard.index') }}" class="nk-menu-link">
+                                    <span class="nk-menu-text">{{ __('📊 Dashboard')}}</span>
+                                </a>
+                            </li>
 
+                            <!-- All Properties -->
+                            <li class="nk-menu-item {{ active('admin.properties.*') }}">
+                                <a href="{{ route('admin.properties.index') }}" class="nk-menu-link">
+                                    <span class="nk-menu-text">{{ __('🏘️ All Properties')}}</span>
+                                </a>
+                            </li>
+
+                            <!-- For Rent -->
+                            <li class="nk-menu-item {{ active('admin.properties-for-rent.*') }}">
+                                <a href="{{ route('admin.properties-for-rent.index') }}" class="nk-menu-link">
+                                    <span class="nk-menu-text">{{ __('🏠 For Rent')}}</span>
+                                </a>
+                            </li>
+
+                            <!-- For Sale -->
+                            <li class="nk-menu-item {{ active('admin.properties-for-sale.*') }}">
+                                <a href="{{ route('admin.properties-for-sale.index') }}" class="nk-menu-link">
+                                    <span class="nk-menu-text">{{ __('💰 For Sale')}}</span>
+                                </a>
+                            </li>
+
+                            <!-- For Lease -->
+                            <li class="nk-menu-item {{ active('admin.properties-for-lease.*') }}">
+                                <a href="{{ route('admin.properties-for-lease.index') }}" class="nk-menu-link">
+                                    <span class="nk-menu-text">{{ __('📋 For Lease')}}</span>
+                                </a>
+                            </li>
+
+                            <!-- Create Property -->
+                            @can('create property')
+                                <li class="nk-menu-item {{ active('admin.properties.create') }}">
+                                    <a href="{{ route('admin.properties.create') }}" class="nk-menu-link">
+                                        <span class="nk-menu-text">{{ __('➕ Create Property')}}</span>
+                                    </a>
+                                </li>
                             @endcan
 
+                            <!-- Property Settings -->
+                            @can('view settings')
+                                <li class="nk-menu-item {{ active('admin.property-settings.*') }}">
+                                    <a href="{{ route('admin.property-settings.index') }}" class="nk-menu-link">
+                                        <span class="nk-menu-text">{{ __('⚙️ Settings')}}</span>
+                                    </a>
+                                </li>
+                            @endcan
+
+                            <!-- Houses (Legacy) -->
                             @can('view house')
                                 <li class="nk-menu-item {{ active('admin.houses.*') }}">
-                                    <a href="{{ route('admin.houses.index') }}" class="nk-menu-link"><span
-                                            class="nk-menu-text">{{ __('Houses')}}</span></a>
+                                    <a href="{{ route('admin.houses.index') }}" class="nk-menu-link">
+                                        <span class="nk-menu-text">{{ __('🏠 Houses')}}</span>
+                                    </a>
                                 </li>
-
                             @endcan
                         </ul><!-- .nk-menu-sub -->
                     </li><!-- .nk-menu-item -->
