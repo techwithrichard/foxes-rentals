@@ -42,8 +42,16 @@ class EnhancedRolesSeeder extends Seeder
 
         // Create comprehensive permissions
         $permissions = [
-            // System Management
+            // Portal Access
             'view_admin_portal',
+            'view_landlord_portal',
+            'view_tenant_portal',
+            'view_maintainer_portal',
+            'view_accountant_portal',
+            'view_property_manager_portal',
+            'view_agent_portal',
+            
+            // System Management
             'manage_system_settings',
             'view_system_logs',
             'manage_backups',
@@ -243,7 +251,7 @@ class EnhancedRolesSeeder extends Seeder
         // Property Manager
         $propertyManager = Role::findByName('property_manager');
         $propertyManager->givePermissionTo([
-            'view_admin_portal',
+            'view_property_manager_portal',
             'manage_properties', 'create_property', 'edit_property', 'view_property',
             'manage_rental_properties', 'create_rental_property', 'edit_rental_property', 'view_rental_property',
             'manage_sale_properties', 'create_sale_property', 'edit_sale_property', 'view_sale_property',
@@ -258,7 +266,7 @@ class EnhancedRolesSeeder extends Seeder
         // Finance Manager
         $financeManager = Role::findByName('finance_manager');
         $financeManager->givePermissionTo([
-            'view_admin_portal',
+            'view_accountant_portal',
             'manage_finances', 'view_financial_reports', 'create_payment', 'edit_payment', 'view_payment',
             'manage_invoices', 'create_invoice', 'edit_invoice', 'view_invoice',
             'manage_deposits', 'edit_deposit', 'view_deposit', 'refund_deposit',
@@ -272,7 +280,7 @@ class EnhancedRolesSeeder extends Seeder
         // Accountant
         $accountant = Role::findByName('accountant');
         $accountant->givePermissionTo([
-            'view_admin_portal',
+            'view_accountant_portal',
             'view_financial_reports', 'view_payment',
             'view_invoice', 'create_invoice', 'edit_invoice',
             'view_deposit', 'view_overpayment',
@@ -284,7 +292,7 @@ class EnhancedRolesSeeder extends Seeder
         // Leasing Agent
         $leasingAgent = Role::findByName('leasing_agent');
         $leasingAgent->givePermissionTo([
-            'view_admin_portal',
+            'view_agent_portal',
             'view_rental_property', 'view_lease_property',
             'manage_tenants', 'create_tenant', 'edit_tenant', 'view_tenant',
             'manage_leases', 'create_lease', 'edit_lease', 'view_lease',
@@ -295,7 +303,7 @@ class EnhancedRolesSeeder extends Seeder
         // Sales Agent
         $salesAgent = Role::findByName('sales_agent');
         $salesAgent->givePermissionTo([
-            'view_admin_portal',
+            'view_agent_portal',
             'view_sale_property', 'create_sale_property', 'edit_sale_property',
             'manage_sale_listings', 'create_sale_listing', 'edit_sale_listing', 'view_sale_listing',
             'view_landlord',
@@ -305,7 +313,7 @@ class EnhancedRolesSeeder extends Seeder
         // Maintainer
         $maintainer = Role::findByName('maintainer');
         $maintainer->givePermissionTo([
-            'view_admin_portal',
+            'view_maintainer_portal',
             'manage_maintenance', 'create_maintenance_request', 'edit_maintenance_request', 'view_maintenance_request',
             'assign_maintenance_task', 'update_maintenance_status', 'view_maintenance_history',
             'view_property', 'view_rental_property',
@@ -323,6 +331,7 @@ class EnhancedRolesSeeder extends Seeder
         // Landlord
         $landlord = Role::findByName('landlord');
         $landlord->givePermissionTo([
+            'view_landlord_portal',
             'view_property', 'view_rental_property', 'view_sale_property', 'view_lease_property',
             'view_tenant', 'view_lease',
             'view_payment', 'view_invoice',
@@ -332,6 +341,7 @@ class EnhancedRolesSeeder extends Seeder
         // Tenant
         $tenant = Role::findByName('tenant');
         $tenant->givePermissionTo([
+            'view_tenant_portal',
             'view_rental_property',
             'view_lease',
             'view_payment', 'create_payment',

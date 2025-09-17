@@ -7,10 +7,10 @@ use App\Http\Controllers\Admin\SalePropertyController;
 use App\Http\Controllers\Admin\LeasePropertyController;
 use App\Http\Controllers\Admin\RentalUnitController;
 use App\Http\Controllers\Admin\PropertyInquiryController;
-use App\Http\Controllers\Admin\PropertyApplicationController;
-use App\Http\Controllers\Admin\PropertyOfferController;
-use App\Http\Controllers\Admin\LeaseAgreementController;
-use App\Http\Controllers\Admin\MaintenanceRequestController;
+// use App\Http\Controllers\Admin\PropertyApplicationController;
+// use App\Http\Controllers\Admin\PropertyOfferController;
+// use App\Http\Controllers\Admin\LeaseAgreementController;
+// use App\Http\Controllers\Admin\MaintenanceRequestController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,7 +22,7 @@ use App\Http\Controllers\Admin\MaintenanceRequestController;
 |
 */
 
-Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(function () {
+Route::middleware(['auth', 'verified', 'role_or_permission:super_admin|admin'])->prefix('admin')->name('admin.')->group(function () {
     
     // Property Types Management
     Route::resource('property-types', PropertyTypeController::class);
@@ -90,42 +90,42 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
         ->name('property-inquiries.qualify');
 
     // Property Applications Management
-    Route::resource('property-applications', PropertyApplicationController::class);
-    Route::post('property-applications/{application}/approve', [PropertyApplicationController::class, 'approve'])
-        ->name('property-applications.approve');
-    Route::post('property-applications/{application}/reject', [PropertyApplicationController::class, 'reject'])
-        ->name('property-applications.reject');
+    // Route::resource('property-applications', PropertyApplicationController::class);
+    // Route::post('property-applications/{application}/approve', [PropertyApplicationController::class, 'approve'])
+    //     ->name('property-applications.approve');
+    // Route::post('property-applications/{application}/reject', [PropertyApplicationController::class, 'reject'])
+    //     ->name('property-applications.reject');
 
     // Property Offers Management
-    Route::resource('property-offers', PropertyOfferController::class);
-    Route::post('property-offers/{offer}/accept', [PropertyOfferController::class, 'accept'])
-        ->name('property-offers.accept');
-    Route::post('property-offers/{offer}/reject', [PropertyOfferController::class, 'reject'])
-        ->name('property-offers.reject');
-    Route::post('property-offers/{offer}/counter', [PropertyOfferController::class, 'counter'])
-        ->name('property-offers.counter');
+    // Route::resource('property-offers', PropertyOfferController::class);
+    // Route::post('property-offers/{offer}/accept', [PropertyOfferController::class, 'accept'])
+    //     ->name('property-offers.accept');
+    // Route::post('property-offers/{offer}/reject', [PropertyOfferController::class, 'reject'])
+    //     ->name('property-offers.reject');
+    // Route::post('property-offers/{offer}/counter', [PropertyOfferController::class, 'counter'])
+    //     ->name('property-offers.counter');
 
     // Lease Agreements Management
-    Route::resource('lease-agreements', LeaseAgreementController::class);
-    Route::post('lease-agreements/{agreement}/renew', [LeaseAgreementController::class, 'renew'])
-        ->name('lease-agreements.renew');
-    Route::post('lease-agreements/{agreement}/terminate', [LeaseAgreementController::class, 'terminate'])
-        ->name('lease-agreements.terminate');
+    // Route::resource('lease-agreements', LeaseAgreementController::class);
+    // Route::post('lease-agreements/{agreement}/renew', [LeaseAgreementController::class, 'renew'])
+    //     ->name('lease-agreements.renew');
+    // Route::post('lease-agreements/{agreement}/terminate', [LeaseAgreementController::class, 'terminate'])
+    //     ->name('lease-agreements.terminate');
 
     // Maintenance Requests Management
-    Route::prefix('maintenance')->name('maintenance.')->group(function () {
-        Route::get('/requests', [MaintenanceRequestController::class, 'index'])->name('requests');
-        Route::get('/schedule', [MaintenanceRequestController::class, 'schedule'])->name('schedule');
-        Route::get('/history', [MaintenanceRequestController::class, 'history'])->name('history');
-        Route::get('/requests/create', [MaintenanceRequestController::class, 'create'])->name('create');
-        Route::post('/requests', [MaintenanceRequestController::class, 'store'])->name('store');
-        Route::get('/requests/{request}', [MaintenanceRequestController::class, 'show'])->name('show');
-        Route::get('/requests/{request}/edit', [MaintenanceRequestController::class, 'edit'])->name('edit');
-        Route::put('/requests/{request}', [MaintenanceRequestController::class, 'update'])->name('update');
-        Route::delete('/requests/{request}', [MaintenanceRequestController::class, 'destroy'])->name('destroy');
-        Route::post('/requests/{request}/assign', [MaintenanceRequestController::class, 'assign'])->name('assign');
-        Route::post('/requests/{request}/complete', [MaintenanceRequestController::class, 'complete'])->name('complete');
-    });
+    // Route::prefix('maintenance')->name('maintenance.')->group(function () {
+    //     Route::get('/requests', [MaintenanceRequestController::class, 'index'])->name('requests');
+    //     Route::get('/schedule', [MaintenanceRequestController::class, 'schedule'])->name('schedule');
+    //     Route::get('/history', [MaintenanceRequestController::class, 'history'])->name('history');
+    //     Route::get('/requests/create', [MaintenanceRequestController::class, 'create'])->name('create');
+    //     Route::post('/requests', [MaintenanceRequestController::class, 'store'])->name('store');
+    //     Route::get('/requests/{request}', [MaintenanceRequestController::class, 'show'])->name('show');
+    //     Route::get('/requests/{request}/edit', [MaintenanceRequestController::class, 'edit'])->name('edit');
+    //     Route::put('/requests/{request}', [MaintenanceRequestController::class, 'update'])->name('update');
+    //     Route::delete('/requests/{request}', [MaintenanceRequestController::class, 'destroy'])->name('destroy');
+    //     Route::post('/requests/{request}/assign', [MaintenanceRequestController::class, 'assign'])->name('assign');
+    //     Route::post('/requests/{request}/complete', [MaintenanceRequestController::class, 'complete'])->name('complete');
+    // });
 
     // Enhanced User Management Routes
     Route::prefix('users-management')->name('users-management.')->group(function () {
@@ -143,8 +143,8 @@ Route::middleware(['auth', 'verified'])->prefix('admin')->name('admin.')->group(
 
     // User Activity Routes
     Route::prefix('user-activity')->name('user-activity.')->group(function () {
-        Route::get('/', [App\Http\Controllers\Admin\UserActivityController::class, 'index'])->name('index');
-        Route::get('/{user}', [App\Http\Controllers\Admin\UserActivityController::class, 'show'])->name('show');
+        Route::get('/', [App\Http\Controllers\Admin\ActivityLogController::class, 'index'])->name('index');
+        Route::get('/{user}', [App\Http\Controllers\Admin\ActivityLogController::class, 'show'])->name('show');
     });
 
     // Role Management Routes

@@ -36,7 +36,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth'])
     ->prefix('admin')
-    ->middleware(['auth', 'role_or_permission:admin|view_admin_portal'])
+    ->middleware(['auth', 'role_or_permission:super_admin|admin'])
     ->name('admin.')->group(function () {
         Route::get('/', [HomeController::class, 'index'])
             ->name('home');
@@ -107,6 +107,21 @@ Route::middleware(['auth'])
         Route::resource('backups', BackupController::class);
         Route::resource('users-management', UsersController::class);
         Route::resource('roles-management', RolesController::class);
+        
+        // Advanced User Management Routes
+        Route::prefix('users')->name('users.')->group(function () {
+            Route::get('advanced', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'index'])->name('advanced.index');
+            Route::get('advanced/create', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'create'])->name('advanced.create');
+            Route::post('advanced', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'store'])->name('advanced.store');
+            Route::get('advanced/{user}', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'show'])->name('advanced.show');
+            Route::get('advanced/{user}/edit', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'edit'])->name('advanced.edit');
+            Route::put('advanced/{user}', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'update'])->name('advanced.update');
+            Route::delete('advanced/{user}', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'destroy'])->name('advanced.destroy');
+            Route::post('advanced/{id}/restore', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'restore'])->name('advanced.restore');
+            Route::delete('advanced/{id}/force-delete', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'forceDelete'])->name('advanced.force-delete');
+            Route::post('advanced/bulk-action', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'bulkAction'])->name('advanced.bulk-action');
+            Route::get('advanced/export', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'export'])->name('advanced.export');
+        });
         // ActivityLog invokable controller route
         Route::get('activity-logs', ActivityLogController::class)->name('activity-log.index');
         Route::resource('overpayments', OverpaymentsController::class)
@@ -138,7 +153,42 @@ Route::middleware(['auth'])
             Route::get('settings/payment-methods', 'payment_methods')->name('settings.payment_methods');
             Route::get('settings/company-details', 'company_settings')->name('settings.company_details');
             Route::get('settings/expense-types', 'expense_types')->name('settings.expense_types');
+            
+            // Additional settings routes for sidebar compatibility
+            Route::get('settings/general', 'index')->name('settings.general');
+            Route::get('settings/property', 'property_types')->name('settings.property');
+            Route::get('settings/financial', 'payment_methods')->name('settings.financial');
+            Route::get('settings/system', 'appearance')->name('settings.system');
+        });
 
+        // Advanced Roles Management Routes
+        Route::prefix('settings')->name('settings.')->group(function () {
+            Route::get('roles', [App\Http\Controllers\Admin\AdvancedRolesController::class, 'index'])->name('roles.index');
+            Route::get('roles/create', [App\Http\Controllers\Admin\AdvancedRolesController::class, 'create'])->name('roles.create');
+            Route::post('roles', [App\Http\Controllers\Admin\AdvancedRolesController::class, 'store'])->name('roles.store');
+            Route::get('roles/{role}', [App\Http\Controllers\Admin\AdvancedRolesController::class, 'show'])->name('roles.show');
+            Route::get('roles/{role}/edit', [App\Http\Controllers\Admin\AdvancedRolesController::class, 'edit'])->name('roles.edit');
+            Route::put('roles/{role}', [App\Http\Controllers\Admin\AdvancedRolesController::class, 'update'])->name('roles.update');
+            Route::delete('roles/{role}', [App\Http\Controllers\Admin\AdvancedRolesController::class, 'destroy'])->name('roles.destroy');
+            Route::post('roles/{role}/toggle-status', [App\Http\Controllers\Admin\AdvancedRolesController::class, 'toggleStatus'])->name('roles.toggle-status');
+            Route::post('roles/{role}/duplicate', [App\Http\Controllers\Admin\AdvancedRolesController::class, 'duplicate'])->name('roles.duplicate');
+            Route::post('roles/bulk-action', [App\Http\Controllers\Admin\AdvancedRolesController::class, 'bulkAction'])->name('roles.bulk-action');
+            Route::get('roles/export', [App\Http\Controllers\Admin\AdvancedRolesController::class, 'export'])->name('roles.export');
+        });
+
+        // Advanced Permissions Management Routes
+        Route::prefix('settings')->name('settings.')->group(function () {
+            Route::get('permissions', [App\Http\Controllers\Admin\AdvancedPermissionsController::class, 'index'])->name('permissions.index');
+            Route::get('permissions/create', [App\Http\Controllers\Admin\AdvancedPermissionsController::class, 'create'])->name('permissions.create');
+            Route::post('permissions', [App\Http\Controllers\Admin\AdvancedPermissionsController::class, 'store'])->name('permissions.store');
+            Route::get('permissions/{permission}', [App\Http\Controllers\Admin\AdvancedPermissionsController::class, 'show'])->name('permissions.show');
+            Route::get('permissions/{permission}/edit', [App\Http\Controllers\Admin\AdvancedPermissionsController::class, 'edit'])->name('permissions.edit');
+            Route::put('permissions/{permission}', [App\Http\Controllers\Admin\AdvancedPermissionsController::class, 'update'])->name('permissions.update');
+            Route::delete('permissions/{permission}', [App\Http\Controllers\Admin\AdvancedPermissionsController::class, 'destroy'])->name('permissions.destroy');
+            Route::post('permissions/bulk-create', [App\Http\Controllers\Admin\AdvancedPermissionsController::class, 'bulkCreate'])->name('permissions.bulk-create');
+            Route::post('permissions/bulk-action', [App\Http\Controllers\Admin\AdvancedPermissionsController::class, 'bulkAction'])->name('permissions.bulk-action');
+            Route::get('permissions/export', [App\Http\Controllers\Admin\AdvancedPermissionsController::class, 'export'])->name('permissions.export');
+            Route::get('permissions/statistics', [App\Http\Controllers\Admin\AdvancedPermissionsController::class, 'statistics'])->name('permissions.statistics');
         });
 
 
@@ -151,6 +201,8 @@ Route::middleware(['auth'])
             Route::get('reports/company-expenses', 'companyExpenses')->name('reports.company_expenses');
             Route::get('reports/outstanding-payments', 'outstandingPayments')->name('reports.outstanding_payments');
             Route::get('reports/expiring-leases', 'expiringLeases')->name('reports.expiring_leases');
+            Route::get('reports/maintenance', 'maintenance')->name('reports.maintenance');
+            Route::get('reports/occupancy', 'occupancy')->name('reports.occupancy');
         });
 
         Route::controller(ProfileController::class)->group(function () {

@@ -45,8 +45,6 @@ class RolesController extends Controller
         ]);
         $permissions = $request->input('permission') ? $request->input('permission') : [];
         $role->givePermissionTo($permissions);
-        //give role permission to view_landlord_portal
-        $role->givePermissionTo('view_admin_portal');
 
         return redirect()
             ->route('admin.roles-management.index')

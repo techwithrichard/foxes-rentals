@@ -36,6 +36,11 @@ Route::get('/', function () {
     return redirect('/login');
 });
 
+// Test route
+Route::get('/test-route', function () {
+    return 'Test route works!';
+});
+
 // Frontend Property Routes
 Route::prefix('properties')->name('frontend.properties.')->group(function () {
     Route::get('/', [App\Http\Controllers\Frontend\PropertyController::class, 'index'])->name('index');
@@ -160,4 +165,14 @@ Route::get('/sendemail', function () {
 
 
 // Route::get('/send-test-email', [TestEmailController::class, 'send']);
+
+// Include portal routes
+require __DIR__ . '/portals.php';
+
+// Profile route for users without specific portals
+Route::middleware(['auth'])->group(function () {
+    Route::get('/profile', function () {
+        return view('profile', ['user' => auth()->user()]);
+    })->name('profile');
+});
 

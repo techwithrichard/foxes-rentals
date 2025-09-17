@@ -151,4 +151,22 @@ class ReportsController extends Controller
         return view('admin.reports.expiring-leases');
 
     }
+
+    public function maintenance()
+    {
+        abort_unless(auth()->user()->can('view maintenance reports'), 403);
+        
+        // For now, redirect to the maintenance requests page
+        // You can implement a dedicated maintenance reports view later
+        return redirect()->route('admin.maintenance.requests');
+    }
+
+    public function occupancy()
+    {
+        abort_unless(auth()->user()->can('view occupancy reports'), 403);
+        
+        // For now, redirect to the properties page
+        // You can implement a dedicated occupancy reports view later
+        return redirect()->route('admin.properties.index');
+    }
 }

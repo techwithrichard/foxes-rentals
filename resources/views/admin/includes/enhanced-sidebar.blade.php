@@ -32,7 +32,7 @@
 
                     <!-- User Management - First Priority -->
                     @can('manage users')
-                        <li class="nk-menu-item has-sub {{ active(['admin.users-management.*','admin.roles-management.*','admin.user-activity.*']) }}">
+                        <li class="nk-menu-item has-sub {{ active(['admin.users-management.*','admin.users.advanced.*','admin.roles-management.*','admin.user-activity.*']) }}">
                             <a href="#" class="nk-menu-link nk-menu-toggle">
                                 <span class="nk-menu-icon"><em class="icon ni ni-user-check"></em></span>
                                 <span class="nk-menu-text">{{ __('User Management')}}</span>
@@ -40,7 +40,12 @@
                             <ul class="nk-menu-sub">
                                 <li class="nk-menu-item {{ active(['admin.users-management.*']) }}">
                                     <a href="{{ route('admin.users-management.index') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">{{ __('All Users')}}</span>
+                                        <span class="nk-menu-text">{{ __('Basic Users')}}</span>
+                                    </a>
+                                </li>
+                                <li class="nk-menu-item {{ active(['admin.users.advanced.*']) }}">
+                                    <a href="{{ route('admin.users.advanced.index') }}" class="nk-menu-link">
+                                        <span class="nk-menu-text">{{ __('Advanced Users')}}</span>
                                     </a>
                                 </li>
                                 <li class="nk-menu-item {{ active(['admin.roles-management.*']) }}">
@@ -143,11 +148,11 @@
                                                 <span class="nk-menu-text">{{ __('Add Sale Property')}}</span>
                                             </a>
                                         </li>
-                                        <li class="nk-menu-item {{ active(['admin.property-offers.*']) }}">
+                                        {{-- <li class="nk-menu-item {{ active(['admin.property-offers.*']) }}">
                                             <a href="{{ route('admin.property-offers.index') }}" class="nk-menu-link">
                                                 <span class="nk-menu-text">{{ __('Property Offers')}}</span>
                                             </a>
-                                        </li>
+                                        </li> --}}
                                         <li class="nk-menu-item {{ active(['admin.sale-properties.featured']) }}">
                                             <a href="{{ route('admin.sale-properties.featured') }}" class="nk-menu-link">
                                                 <span class="nk-menu-text">{{ __('Featured Properties')}}</span>
@@ -180,11 +185,11 @@
                                                 <span class="nk-menu-text">{{ __('Add Lease Property')}}</span>
                                             </a>
                                         </li>
-                                        <li class="nk-menu-item {{ active(['admin.lease-agreements.*']) }}">
+                                        {{-- <li class="nk-menu-item {{ active(['admin.lease-agreements.*']) }}">
                                             <a href="{{ route('admin.lease-agreements.index') }}" class="nk-menu-link">
                                                 <span class="nk-menu-text">{{ __('Lease Agreements')}}</span>
                                             </a>
-                                        </li>
+                                        </li> --}}
                                         <li class="nk-menu-item {{ active(['admin.lease-properties.available']) }}">
                                             <a href="{{ route('admin.lease-properties.available') }}" class="nk-menu-link">
                                                 <span class="nk-menu-text">{{ __('Available Properties')}}</span>
@@ -304,7 +309,7 @@
                         </ul><!-- .nk-menu-sub -->
                     </li><!-- .nk-menu-item -->
 
-                    <!-- Maintenance Management -->
+                    {{-- <!-- Maintenance Management -->
                     @can('manage maintenance')
                         <li class="nk-menu-item has-sub {{ active(['admin.maintenance.*']) }}">
                             <a href="#" class="nk-menu-link nk-menu-toggle">
@@ -329,7 +334,7 @@
                                 </li>
                             </ul><!-- .nk-menu-sub -->
                         </li><!-- .nk-menu-item -->
-                    @endcan
+                    @endcan --}}
 
                     <!-- Accounting -->
                     <li class="nk-menu-item has-sub {{ active(['admin.rent-invoice.*', 'admin.custom-invoice.*', 'admin.vouchers.*', 'admin.expenses.*']) }}">
@@ -555,6 +560,20 @@
                                         <span class="nk-menu-text">{{ __('System Settings')}}</span>
                                     </a>
                                 </li>
+                                @can('manage_roles')
+                                    <li class="nk-menu-item {{ active(['admin.settings.roles.*']) }}">
+                                        <a href="{{ route('admin.settings.roles.index') }}" class="nk-menu-link">
+                                            <span class="nk-menu-text">{{ __('Roles Management')}}</span>
+                                        </a>
+                                    </li>
+                                @endcan
+                                @can('manage_permissions')
+                                    <li class="nk-menu-item {{ active(['admin.settings.permissions.*']) }}">
+                                        <a href="{{ route('admin.settings.permissions.index') }}" class="nk-menu-link">
+                                            <span class="nk-menu-text">{{ __('Permissions Management')}}</span>
+                                        </a>
+                                    </li>
+                                @endcan
                             </ul><!-- .nk-menu-sub -->
                         </li><!-- .nk-menu-item -->
                     @endcan
