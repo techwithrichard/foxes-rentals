@@ -227,6 +227,26 @@ Route::middleware(['auth'])
             Route::put('permissions/{permission}', [App\Http\Controllers\Admin\AdvancedPermissionsController::class, 'update'])->name('permissions.update');
             Route::delete('permissions/{permission}', [App\Http\Controllers\Admin\AdvancedPermissionsController::class, 'destroy'])->name('permissions.destroy');
             Route::post('permissions/bulk-create', [App\Http\Controllers\Admin\AdvancedPermissionsController::class, 'bulkCreate'])->name('permissions.bulk-create');
+        });
+
+        // Advanced Settings Management Routes
+        Route::prefix('settings')->name('settings.')->group(function () {
+            Route::get('advanced', [App\Http\Controllers\Admin\AdvancedSettingsController::class, 'index'])->name('advanced.index');
+            Route::get('advanced/{categorySlug}', [App\Http\Controllers\Admin\AdvancedSettingsController::class, 'category'])->name('advanced.category');
+            
+            // API Routes for settings management
+            Route::post('advanced/update-setting', [App\Http\Controllers\Admin\AdvancedSettingsController::class, 'updateSetting'])->name('advanced.update-setting');
+            Route::post('advanced/update-multiple', [App\Http\Controllers\Admin\AdvancedSettingsController::class, 'updateMultipleSettings'])->name('advanced.update-multiple');
+            Route::get('advanced/history', [App\Http\Controllers\Admin\AdvancedSettingsController::class, 'getHistory'])->name('advanced.history');
+            Route::get('advanced/export', [App\Http\Controllers\Admin\AdvancedSettingsController::class, 'exportSettings'])->name('advanced.export');
+            Route::post('advanced/import', [App\Http\Controllers\Admin\AdvancedSettingsController::class, 'importSettings'])->name('advanced.import');
+            Route::post('advanced/clear-cache', [App\Http\Controllers\Admin\AdvancedSettingsController::class, 'clearCache'])->name('advanced.clear-cache');
+            Route::get('advanced/get-setting', [App\Http\Controllers\Admin\AdvancedSettingsController::class, 'getSetting'])->name('advanced.get-setting');
+            
+            // CRUD Routes for settings management
+            Route::post('advanced/categories', [App\Http\Controllers\Admin\AdvancedSettingsController::class, 'createCategory'])->name('advanced.create-category');
+            Route::post('advanced/groups', [App\Http\Controllers\Admin\AdvancedSettingsController::class, 'createGroup'])->name('advanced.create-group');
+            Route::post('advanced/settings', [App\Http\Controllers\Admin\AdvancedSettingsController::class, 'createSetting'])->name('advanced.create-setting');
             Route::post('permissions/bulk-action', [App\Http\Controllers\Admin\AdvancedPermissionsController::class, 'bulkAction'])->name('permissions.bulk-action');
             Route::get('permissions/export', [App\Http\Controllers\Admin\AdvancedPermissionsController::class, 'export'])->name('permissions.export');
             Route::get('permissions/statistics', [App\Http\Controllers\Admin\AdvancedPermissionsController::class, 'statistics'])->name('permissions.statistics');

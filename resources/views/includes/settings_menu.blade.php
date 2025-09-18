@@ -60,6 +60,14 @@
                         <span>{{ __('Company Details')}}</span>
                     </a>
                 </li>
+                <li class="divider"></li>
+                <li class="{{ active('admin.settings.advanced.index') }}">
+                    <a href="{{ route('admin.settings.advanced.index') }}">
+                        <em class="icon ni ni-settings-fill"></em>
+                        <span>{{ __('Advanced Settings')}}</span>
+                        <span class="badge badge-primary ms-2">New</span>
+                    </a>
+                </li>
             </ul>
         </div><!-- .card-inner -->
     </div><!-- .card-inner-group -->
