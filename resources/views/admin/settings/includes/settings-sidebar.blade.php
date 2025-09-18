@@ -92,6 +92,17 @@
                         <span>{{ __('Property Settings') }}</span>
                     </a>
                 </li>
+                <li class="{{ active(['admin.settings.system-health.*']) }}">
+                    <a href="{{ route('admin.settings.system-health.index') }}">
+                        <em class="icon ni ni-heartbeat"></em>
+                        <span>{{ __('System Health') }}</span>
+                        @if(isset($systemHealth['overall_status']) && $systemHealth['overall_status']['status'] !== 'healthy')
+                            <span class="badge badge-sm badge-{{ $systemHealth['overall_status']['status'] === 'warning' ? 'warning' : 'danger' }}">
+                                {{ ucfirst($systemHealth['overall_status']['status']) }}
+                            </span>
+                        @endif
+                    </a>
+                </li>
                 <li class="{{ active(['admin.settings.financial']) }}">
                     <a href="{{ route('admin.settings.financial') }}">
                         <em class="icon ni ni-money"></em>

@@ -265,6 +265,30 @@ Route::middleware(['auth'])
             Route::get('users/{user}/activity-log', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'getActivityLog'])->name('users.activity-log');
         });
 
+        // System Health Monitoring Routes
+        Route::prefix('settings')->name('settings.')->group(function () {
+            // System Health Dashboard
+            Route::get('system-health', [App\Http\Controllers\Admin\SystemHealthController::class, 'index'])->name('system-health.index');
+            
+            // API Routes
+            Route::get('system-health/data', [App\Http\Controllers\Admin\SystemHealthController::class, 'getSystemHealth'])->name('system-health.data');
+            Route::get('system-health/performance', [App\Http\Controllers\Admin\SystemHealthController::class, 'getPerformanceMetrics'])->name('system-health.performance');
+            Route::get('system-health/alerts', [App\Http\Controllers\Admin\SystemHealthController::class, 'getAlerts'])->name('system-health.alerts');
+            Route::get('system-health/metrics', [App\Http\Controllers\Admin\SystemHealthController::class, 'getMetrics'])->name('system-health.metrics');
+            Route::get('system-health/statistics', [App\Http\Controllers\Admin\SystemHealthController::class, 'getStatistics'])->name('system-health.statistics');
+            
+            // Alert Management
+            Route::post('system-health/alerts/{alert}/acknowledge', [App\Http\Controllers\Admin\SystemHealthController::class, 'acknowledgeAlert'])->name('system-health.alerts.acknowledge');
+            Route::post('system-health/alerts/{alert}/resolve', [App\Http\Controllers\Admin\SystemHealthController::class, 'resolveAlert'])->name('system-health.alerts.resolve');
+            Route::post('system-health/alerts/{alert}/suppress', [App\Http\Controllers\Admin\SystemHealthController::class, 'suppressAlert'])->name('system-health.alerts.suppress');
+            Route::post('system-health/alerts/bulk-acknowledge', [App\Http\Controllers\Admin\SystemHealthController::class, 'bulkAcknowledgeAlerts'])->name('system-health.alerts.bulk-acknowledge');
+            Route::post('system-health/alerts/bulk-resolve', [App\Http\Controllers\Admin\SystemHealthController::class, 'bulkResolveAlerts'])->name('system-health.alerts.bulk-resolve');
+            
+            // System Optimization
+            Route::post('system-health/optimize', [App\Http\Controllers\Admin\SystemHealthController::class, 'runOptimization'])->name('system-health.optimize');
+            Route::post('system-health/clear-cache', [App\Http\Controllers\Admin\SystemHealthController::class, 'clearCache'])->name('system-health.clear-cache');
+        });
+
         // Property Settings Management Routes
         Route::prefix('settings')->name('settings.')->group(function () {
             // Property Settings Dashboard
