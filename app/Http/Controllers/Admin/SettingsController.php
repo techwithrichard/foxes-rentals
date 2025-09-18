@@ -27,11 +27,12 @@ class SettingsController extends Controller
         try {
             $categories = $this->settingsService->getAllSettings();
             $systemHealth = $this->settingsService->getSystemHealth();
+            $stats = $this->getSystemStats();
             
-            return view('admin.settings.dashboard', compact('categories', 'systemHealth'));
+            return view('admin.settings.modern-dashboard', compact('categories', 'systemHealth', 'stats'));
         } catch (\Exception $e) {
             Log::error('Error loading settings dashboard: ' . $e->getMessage());
-            return view('admin.settings.dashboard')->with('error', 'Failed to load settings dashboard.');
+            return view('admin.settings.modern-dashboard')->with('error', 'Failed to load settings dashboard.');
         }
     }
 
@@ -291,5 +292,32 @@ class SettingsController extends Controller
     public function expense_types()
     {
         return view('admin.settings.expense_types');
+    }
+
+    /**
+     * Get system statistics
+     */
+    private function getSystemStats(): array
+    {
+        try {
+            return [
+                'users' => \App\Models\User::count(),
+                'new_users_today' => \App\Models\User::whereDate('created_at', today())->count(),
+                'properties' => \App\Models\RentalProperty::count() + (\App\Models\SaleProperty::count() ?? 0),
+                'vacant_properties' => \App\Models\RentalProperty::where('status', 'vacant')->count(),
+                'api_keys' => \App\Models\ApiKey::count(),
+                'expired_keys' => \App\Models\ApiKey::where('expires_at', '<', now())->count(),
+            ];
+        } catch (\Exception $e) {
+            Log::error('Error getting system stats: ' . $e->getMessage());
+            return [
+                'users' => 0,
+                'new_users_today' => 0,
+                'properties' => 0,
+                'vacant_properties' => 0,
+                'api_keys' => 0,
+                'expired_keys' => 0,
+            ];
+        }
     }
 }
