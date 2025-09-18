@@ -103,6 +103,15 @@
                         @endif
                     </a>
                 </li>
+                <li class="{{ active(['admin.settings.analytics.*']) }}">
+                    <a href="{{ route('admin.settings.analytics.index') }}">
+                        <em class="icon ni ni-chart-bar"></em>
+                        <span>{{ __('Analytics & Reports') }}</span>
+                        @if(isset($systemHealth['reports_count']) && $systemHealth['reports_count'] > 0)
+                            <span class="badge badge-sm badge-primary">{{ $systemHealth['reports_count'] }}</span>
+                        @endif
+                    </a>
+                </li>
                 <li class="{{ active(['admin.settings.financial']) }}">
                     <a href="{{ route('admin.settings.financial') }}">
                         <em class="icon ni ni-money"></em>
