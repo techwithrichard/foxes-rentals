@@ -689,8 +689,8 @@
                                         <span class="nk-menu-text">{{ __('General Settings')}}</span>
                                     </a>
                                 </li>
-                                <li class="nk-menu-item {{ active('admin.settings.property') }}">
-                                    <a href="{{ route('admin.settings.property') }}" class="nk-menu-link">
+                                <li class="nk-menu-item {{ active('admin.settings.property.index') }}">
+                                    <a href="{{ route('admin.settings.property.index') }}" class="nk-menu-link">
                                         <span class="nk-menu-text">{{ __('Property Settings')}}</span>
                                     </a>
                                 </li>

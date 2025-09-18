@@ -197,9 +197,66 @@ Route::middleware(['auth'])
             
             // Additional settings routes for sidebar compatibility
             Route::get('settings/general', 'index')->name('settings.general');
-            Route::get('settings/property', 'property_types')->name('settings.property');
             Route::get('settings/financial', 'payment_methods')->name('settings.financial');
             Route::get('settings/system', 'appearance')->name('settings.system');
+            
+            // Enhanced Settings API Routes
+            Route::post('settings/update-setting', 'updateSetting')->name('settings.update-setting');
+            Route::post('settings/bulk-update', 'bulkUpdate')->name('settings.bulk-update');
+            Route::get('settings/get-setting', 'getSetting')->name('settings.get-setting');
+            Route::get('settings/history', 'getHistory')->name('settings.history');
+            Route::post('settings/clear-cache', 'clearCache')->name('settings.clear-cache');
+            Route::get('settings/export', 'exportSettings')->name('settings.export');
+            Route::post('settings/import', 'importSettings')->name('settings.import');
+        });
+
+        // API Keys Management Routes
+        Route::prefix('settings')->name('settings.')->group(function () {
+            Route::resource('api-keys', App\Http\Controllers\Admin\ApiKeysController::class);
+            Route::post('api-keys/{apiKey}/toggle-status', [App\Http\Controllers\Admin\ApiKeysController::class, 'toggleStatus'])->name('api-keys.toggle-status');
+            Route::post('api-keys/{apiKey}/test-connection', [App\Http\Controllers\Admin\ApiKeysController::class, 'testConnection'])->name('api-keys.test-connection');
+            Route::post('api-keys/{apiKey}/regenerate', [App\Http\Controllers\Admin\ApiKeysController::class, 'regenerate'])->name('api-keys.regenerate');
+            Route::post('api-keys/bulk-action', [App\Http\Controllers\Admin\ApiKeysController::class, 'bulkAction'])->name('api-keys.bulk-action');
+        });
+
+        // Property Settings Management Routes
+        Route::prefix('settings')->name('settings.')->group(function () {
+            // Property Settings Dashboard
+            Route::get('property', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'index'])->name('property.index');
+            
+            // Property Types Management
+            Route::get('property/types', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'propertyTypes'])->name('property.types');
+            Route::get('property/types/create', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'createPropertyType'])->name('property.types.create');
+            Route::post('property/types', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'storePropertyType'])->name('property.types.store');
+            Route::get('property/types/{propertyType}/edit', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'editPropertyType'])->name('property.types.edit');
+            Route::put('property/types/{propertyType}', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'updatePropertyType'])->name('property.types.update');
+            Route::delete('property/types/{propertyType}', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'destroyPropertyType'])->name('property.types.destroy');
+            
+            // Amenities Management
+            Route::get('property/amenities', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'amenities'])->name('property.amenities');
+            Route::get('property/amenities/create', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'createAmenity'])->name('property.amenities.create');
+            Route::post('property/amenities', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'storeAmenity'])->name('property.amenities.store');
+            Route::get('property/amenities/{amenity}/edit', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'editAmenity'])->name('property.amenities.edit');
+            Route::put('property/amenities/{amenity}', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'updateAmenity'])->name('property.amenities.update');
+            Route::delete('property/amenities/{amenity}', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'destroyAmenity'])->name('property.amenities.destroy');
+            
+            // Pricing Rules Management
+            Route::get('property/pricing', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'pricingRules'])->name('property.pricing');
+            Route::get('property/pricing/create', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'createPricingRule'])->name('property.pricing.create');
+            Route::post('property/pricing', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'storePricingRule'])->name('property.pricing.store');
+            
+            // Lease Templates Management
+            Route::get('property/lease-templates', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'leaseTemplates'])->name('property.lease-templates');
+            Route::get('property/lease-templates/create', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'createLeaseTemplate'])->name('property.lease-templates.create');
+            Route::post('property/lease-templates', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'storeLeaseTemplate'])->name('property.lease-templates.store');
+            
+            // Bulk Operations
+            Route::post('property/bulk-action', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'bulkAction'])->name('property.bulk-action');
+            
+            // API Routes
+            Route::get('property/statistics', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'getStatistics'])->name('property.statistics');
+            Route::get('property/export', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'exportSettings'])->name('property.export');
+            Route::post('property/import', [App\Http\Controllers\Admin\Settings\PropertySettingsController::class, 'importSettings'])->name('property.import');
         });
 
         // Advanced Roles Management Routes
@@ -250,6 +307,17 @@ Route::middleware(['auth'])
             Route::post('permissions/bulk-action', [App\Http\Controllers\Admin\AdvancedPermissionsController::class, 'bulkAction'])->name('permissions.bulk-action');
             Route::get('permissions/export', [App\Http\Controllers\Admin\AdvancedPermissionsController::class, 'export'])->name('permissions.export');
             Route::get('permissions/statistics', [App\Http\Controllers\Admin\AdvancedPermissionsController::class, 'statistics'])->name('permissions.statistics');
+
+            // User Settings Routes
+            Route::prefix('users')->name('users.')->group(function () {
+                Route::get('/', [App\Http\Controllers\Admin\UserSettingsController::class, 'index'])->name('index');
+                Route::get('roles', [App\Http\Controllers\Admin\UserSettingsController::class, 'roles'])->name('roles');
+                Route::get('permissions', [App\Http\Controllers\Admin\UserSettingsController::class, 'permissions'])->name('permissions');
+                Route::get('profiles', [App\Http\Controllers\Admin\UserSettingsController::class, 'profiles'])->name('profiles');
+                Route::get('security', [App\Http\Controllers\Admin\UserSettingsController::class, 'security'])->name('security');
+                Route::get('registration', [App\Http\Controllers\Admin\UserSettingsController::class, 'registration'])->name('registration');
+                Route::post('update-setting', [App\Http\Controllers\Admin\UserSettingsController::class, 'updateSetting'])->name('update-setting');
+            });
         });
 
 

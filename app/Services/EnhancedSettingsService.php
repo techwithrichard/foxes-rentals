@@ -282,4 +282,227 @@ class EnhancedSettingsService
                 ->toArray();
         });
     }
+
+    /**
+     * Get system health information
+     */
+    public function getSystemHealth(): array
+    {
+        return Cache::remember($this->cachePrefix . 'system_health', 300, function () { // 5 minutes cache
+            return [
+                'database' => $this->checkDatabaseHealth(),
+                'cache' => $this->checkCacheHealth(),
+                'storage' => $this->checkStorageHealth(),
+                'external_services' => $this->checkExternalServices(),
+                'last_checked' => now()->toISOString()
+            ];
+        });
+    }
+
+    /**
+     * Check database health
+     */
+    protected function checkDatabaseHealth(): array
+    {
+        try {
+            $startTime = microtime(true);
+            DB::select('SELECT 1');
+            $responseTime = round((microtime(true) - $startTime) * 1000, 2);
+
+            return [
+                'status' => 'healthy',
+                'response_time' => $responseTime . 'ms',
+                'message' => 'Database connection is working'
+            ];
+        } catch (\Exception $e) {
+            return [
+                'status' => 'unhealthy',
+                'response_time' => null,
+                'message' => 'Database connection failed: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Check cache health
+     */
+    protected function checkCacheHealth(): array
+    {
+        try {
+            $testKey = 'health_check_' . uniqid();
+            $testValue = 'test_value_' . time();
+            
+            $startTime = microtime(true);
+            Cache::put($testKey, $testValue, 60);
+            $retrievedValue = Cache::get($testKey);
+            Cache::forget($testKey);
+            $responseTime = round((microtime(true) - $startTime) * 1000, 2);
+
+            if ($retrievedValue === $testValue) {
+                return [
+                    'status' => 'healthy',
+                    'response_time' => $responseTime . 'ms',
+                    'message' => 'Cache system is working'
+                ];
+            } else {
+                return [
+                    'status' => 'unhealthy',
+                    'response_time' => $responseTime . 'ms',
+                    'message' => 'Cache read/write test failed'
+                ];
+            }
+        } catch (\Exception $e) {
+            return [
+                'status' => 'unhealthy',
+                'response_time' => null,
+                'message' => 'Cache system failed: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Check storage health
+     */
+    protected function checkStorageHealth(): array
+    {
+        try {
+            $testFile = 'health_check_' . uniqid() . '.txt';
+            $testContent = 'Storage health check at ' . now()->toISOString();
+            
+            $startTime = microtime(true);
+            \Storage::put($testFile, $testContent);
+            $retrievedContent = \Storage::get($testFile);
+            \Storage::delete($testFile);
+            $responseTime = round((microtime(true) - $startTime) * 1000, 2);
+
+            if ($retrievedContent === $testContent) {
+                return [
+                    'status' => 'healthy',
+                    'response_time' => $responseTime . 'ms',
+                    'message' => 'Storage system is working',
+                    'disk_space' => $this->getDiskSpaceInfo()
+                ];
+            } else {
+                return [
+                    'status' => 'unhealthy',
+                    'response_time' => $responseTime . 'ms',
+                    'message' => 'Storage read/write test failed'
+                ];
+            }
+        } catch (\Exception $e) {
+            return [
+                'status' => 'unhealthy',
+                'response_time' => null,
+                'message' => 'Storage system failed: ' . $e->getMessage()
+            ];
+        }
+    }
+
+    /**
+     * Check external services health
+     */
+    protected function checkExternalServices(): array
+    {
+        $services = [];
+        
+        // Check M-PESA service
+        try {
+            $mpesaKey = $this->getApiKeyForService('mpesa');
+            if ($mpesaKey) {
+                $services['mpesa'] = [
+                    'status' => 'configured',
+                    'message' => 'M-PESA API key is configured'
+                ];
+            } else {
+                $services['mpesa'] = [
+                    'status' => 'not_configured',
+                    'message' => 'M-PESA API key not found'
+                ];
+            }
+        } catch (\Exception $e) {
+            $services['mpesa'] = [
+                'status' => 'error',
+                'message' => 'M-PESA check failed: ' . $e->getMessage()
+            ];
+        }
+
+        // Check email service
+        try {
+            $mailDriver = config('mail.default');
+            $mailHost = config("mail.mailers.{$mailDriver}.host");
+            
+            if ($mailHost) {
+                $services['email'] = [
+                    'status' => 'configured',
+                    'message' => "Email service configured ({$mailDriver})"
+                ];
+            } else {
+                $services['email'] = [
+                    'status' => 'not_configured',
+                    'message' => 'Email service not configured'
+                ];
+            }
+        } catch (\Exception $e) {
+            $services['email'] = [
+                'status' => 'error',
+                'message' => 'Email service check failed: ' . $e->getMessage()
+            ];
+        }
+
+        return $services;
+    }
+
+    /**
+     * Get disk space information
+     */
+    protected function getDiskSpaceInfo(): array
+    {
+        try {
+            $totalBytes = disk_total_space(storage_path());
+            $freeBytes = disk_free_space(storage_path());
+            $usedBytes = $totalBytes - $freeBytes;
+
+            return [
+                'total' => $this->formatBytes($totalBytes),
+                'used' => $this->formatBytes($usedBytes),
+                'free' => $this->formatBytes($freeBytes),
+                'percentage_used' => round(($usedBytes / $totalBytes) * 100, 2)
+            ];
+        } catch (\Exception $e) {
+            return [
+                'total' => 'Unknown',
+                'used' => 'Unknown',
+                'free' => 'Unknown',
+                'percentage_used' => 0
+            ];
+        }
+    }
+
+    /**
+     * Format bytes to human readable format
+     */
+    protected function formatBytes(int $bytes): string
+    {
+        $units = ['B', 'KB', 'MB', 'GB', 'TB'];
+        
+        for ($i = 0; $bytes > 1024 && $i < count($units) - 1; $i++) {
+            $bytes /= 1024;
+        }
+        
+        return round($bytes, 2) . ' ' . $units[$i];
+    }
+
+    /**
+     * Get API key for service (integration with ApiKeyManagementService)
+     */
+    public function getApiKeyForService(string $serviceName, string $environment = null): ?string
+    {
+        try {
+            $apiKeyService = app(\App\Services\ApiKeyManagementService::class);
+            return $apiKeyService->getApiKeyForService($serviceName, $environment);
+        } catch (\Exception $e) {
+            Log::error("Error getting API key for service {$serviceName}: " . $e->getMessage());
+            return null;
+        }
+    }
 }

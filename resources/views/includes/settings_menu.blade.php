@@ -60,6 +60,12 @@
                         <span>{{ __('Company Details')}}</span>
                     </a>
                 </li>
+                <li class="{{ active('admin.settings.users') }}">
+                    <a href="{{ route('admin.settings.users') }}">
+                        <em class="icon ni ni-users"></em>
+                        <span>{{ __('User Settings')}}</span>
+                    </a>
+                </li>
                 <li class="divider"></li>
                 <li class="{{ active('admin.settings.advanced.index') }}">
                     <a href="{{ route('admin.settings.advanced.index') }}">
