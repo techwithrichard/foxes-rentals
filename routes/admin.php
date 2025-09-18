@@ -86,6 +86,31 @@ Route::middleware(['auth'])
             Route::post('/{propertyConsolidated}/toggle-published', [App\Http\Controllers\Admin\PropertyConsolidatedController::class, 'togglePublished'])->name('toggle-published');
         });
         
+        // Consolidated Payment Management Routes
+        Route::prefix('payments-consolidated')->name('payments-consolidated.')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\PaymentConsolidatedController::class, 'index'])->name('index');
+            Route::get('/create', [App\Http\Controllers\Admin\PaymentConsolidatedController::class, 'create'])->name('create');
+            Route::post('/', [App\Http\Controllers\Admin\PaymentConsolidatedController::class, 'store'])->name('store');
+            Route::get('/{payment}', [App\Http\Controllers\Admin\PaymentConsolidatedController::class, 'show'])->name('show');
+            Route::get('/{payment}/edit', [App\Http\Controllers\Admin\PaymentConsolidatedController::class, 'edit'])->name('edit');
+            Route::put('/{payment}', [App\Http\Controllers\Admin\PaymentConsolidatedController::class, 'update'])->name('update');
+            Route::delete('/{payment}', [App\Http\Controllers\Admin\PaymentConsolidatedController::class, 'destroy'])->name('destroy');
+            
+            // Payment Operations
+            Route::post('/{payment}/verify', [App\Http\Controllers\Admin\PaymentConsolidatedController::class, 'verify'])->name('verify');
+            Route::post('/{payment}/process', [App\Http\Controllers\Admin\PaymentConsolidatedController::class, 'process'])->name('process');
+            Route::post('/{payment}/refund', [App\Http\Controllers\Admin\PaymentConsolidatedController::class, 'refund'])->name('refund');
+            Route::get('/{payment}/status', [App\Http\Controllers\Admin\PaymentConsolidatedController::class, 'status'])->name('status');
+            
+            // API endpoints
+            Route::get('/statistics', [App\Http\Controllers\Admin\PaymentConsolidatedController::class, 'statistics'])->name('statistics');
+            Route::get('/payment-methods', [App\Http\Controllers\Admin\PaymentConsolidatedController::class, 'paymentMethods'])->name('payment-methods');
+            Route::get('/status/{status}', [App\Http\Controllers\Admin\PaymentConsolidatedController::class, 'getByStatus'])->name('by-status');
+            Route::get('/method/{method}', [App\Http\Controllers\Admin\PaymentConsolidatedController::class, 'getByMethod'])->name('by-method');
+            Route::get('/recent/list', [App\Http\Controllers\Admin\PaymentConsolidatedController::class, 'recent'])->name('recent');
+            Route::get('/requiring-attention/list', [App\Http\Controllers\Admin\PaymentConsolidatedController::class, 'requiringAttention'])->name('requiring-attention');
+        });
+        
         // Enhanced Property Management Routes
         Route::prefix('property-dashboard')->name('property-dashboard.')->group(function () {
             Route::get('/', [App\Http\Controllers\Admin\PropertyDashboardController::class, 'index'])->name('index');
@@ -287,6 +312,41 @@ Route::middleware(['auth'])
             // System Optimization
             Route::post('system-health/optimize', [App\Http\Controllers\Admin\SystemHealthController::class, 'runOptimization'])->name('system-health.optimize');
             Route::post('system-health/clear-cache', [App\Http\Controllers\Admin\SystemHealthController::class, 'clearCache'])->name('system-health.clear-cache');
+        });
+
+        // Analytics & Reporting Routes
+        Route::prefix('settings')->name('settings.')->group(function () {
+            // Analytics Dashboard
+            Route::get('analytics', [App\Http\Controllers\Admin\AnalyticsDashboardController::class, 'index'])->name('analytics.index');
+            
+            // Analytics Data API
+            Route::get('analytics/dashboard-data', [App\Http\Controllers\Admin\AnalyticsDashboardController::class, 'getDashboardData'])->name('analytics.dashboard-data');
+            Route::get('analytics/property', [App\Http\Controllers\Admin\AnalyticsDashboardController::class, 'getPropertyAnalytics'])->name('analytics.property');
+            Route::get('analytics/financial', [App\Http\Controllers\Admin\AnalyticsDashboardController::class, 'getFinancialAnalytics'])->name('analytics.financial');
+            Route::get('analytics/tenant', [App\Http\Controllers\Admin\AnalyticsDashboardController::class, 'getTenantAnalytics'])->name('analytics.tenant');
+            Route::get('analytics/maintenance', [App\Http\Controllers\Admin\AnalyticsDashboardController::class, 'getMaintenanceAnalytics'])->name('analytics.maintenance');
+            Route::get('analytics/trends', [App\Http\Controllers\Admin\AnalyticsDashboardController::class, 'getTrendsData'])->name('analytics.trends');
+            Route::get('analytics/comparative', [App\Http\Controllers\Admin\AnalyticsDashboardController::class, 'getComparativeAnalytics'])->name('analytics.comparative');
+            Route::get('analytics/predictive', [App\Http\Controllers\Admin\AnalyticsDashboardController::class, 'getPredictiveAnalytics'])->name('analytics.predictive');
+            
+            // Report Generation
+            Route::post('analytics/generate-report', [App\Http\Controllers\Admin\AnalyticsDashboardController::class, 'generateReport'])->name('analytics.generate-report');
+            Route::post('analytics/generate-custom-report/{template}', [App\Http\Controllers\Admin\AnalyticsDashboardController::class, 'generateCustomReport'])->name('analytics.generate-custom-report');
+            Route::get('analytics/download-report/{path}', [App\Http\Controllers\Admin\AnalyticsDashboardController::class, 'downloadReport'])->name('analytics.download-report');
+            
+            // Report Templates
+            Route::get('analytics/report-templates', [App\Http\Controllers\Admin\AnalyticsDashboardController::class, 'getReportTemplates'])->name('analytics.report-templates');
+            Route::post('analytics/report-templates', [App\Http\Controllers\Admin\AnalyticsDashboardController::class, 'createReportTemplate'])->name('analytics.create-report-template');
+            
+            // Scheduled Reports
+            Route::get('analytics/scheduled-reports', [App\Http\Controllers\Admin\AnalyticsDashboardController::class, 'getScheduledReports'])->name('analytics.scheduled-reports');
+            Route::post('analytics/scheduled-reports', [App\Http\Controllers\Admin\AnalyticsDashboardController::class, 'scheduleReport'])->name('analytics.schedule-report');
+            Route::put('analytics/scheduled-reports/{scheduledReport}', [App\Http\Controllers\Admin\AnalyticsDashboardController::class, 'updateScheduledReport'])->name('analytics.update-scheduled-report');
+            Route::delete('analytics/scheduled-reports/{scheduledReport}', [App\Http\Controllers\Admin\AnalyticsDashboardController::class, 'deleteScheduledReport'])->name('analytics.delete-scheduled-report');
+            Route::post('analytics/execute-scheduled-reports', [App\Http\Controllers\Admin\AnalyticsDashboardController::class, 'executeScheduledReports'])->name('analytics.execute-scheduled-reports');
+            
+            // Cache Management
+            Route::post('analytics/clear-cache', [App\Http\Controllers\Admin\AnalyticsDashboardController::class, 'clearCache'])->name('analytics.clear-cache');
         });
 
         // Property Settings Management Routes
