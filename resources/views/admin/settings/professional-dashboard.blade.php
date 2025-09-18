@@ -5,11 +5,11 @@
     <div class="container-fluid">
         <div class="nk-content-inner">
             <div class="nk-content-body">
-                <!-- Modern Settings Header -->
+                <!-- Professional Header -->
                 <div class="nk-block-head nk-block-head-lg">
                     <div class="nk-block-between">
                         <div class="nk-block-head-content">
-                            <h2 class="nk-block-title fw-normal">{{ __('System Settings') }}</h2>
+                            <h2 class="nk-block-title fw-normal">{{ __('System Configuration') }}</h2>
                             <div class="nk-block-des text-soft">
                                 <p>{{ __('Configure and manage your Foxes Rental Management System') }}</p>
                             </div>
@@ -30,7 +30,7 @@
                                         <li class="nk-block-tools-opt">
                                             <button type="button" class="btn btn-outline-success btn-sm" onclick="exportSettings()">
                                                 <em class="icon ni ni-download"></em>
-                                                <span>{{ __('Export') }}</span>
+                                                <span>{{ __('Export Config') }}</span>
                                             </button>
                                         </li>
                                         <li class="nk-block-tools-opt">
@@ -53,7 +53,7 @@
                             <div class="card card-bordered h-100">
                                 <div class="card-inner">
                                     <div class="d-flex align-items-center">
-                                        <div class="text-primary me-3">
+                                        <div class="text-success me-3">
                                             <em class="icon ni ni-shield-check" style="font-size: 2.5rem;"></em>
                                         </div>
                                         <div>
@@ -85,7 +85,7 @@
                             <div class="card card-bordered h-100">
                                 <div class="card-inner">
                                     <div class="d-flex align-items-center">
-                                        <div class="text-success me-3">
+                                        <div class="text-warning me-3">
                                             <em class="icon ni ni-building" style="font-size: 2.5rem;"></em>
                                         </div>
                                         <div>
@@ -101,7 +101,7 @@
                             <div class="card card-bordered h-100">
                                 <div class="card-inner">
                                     <div class="d-flex align-items-center">
-                                        <div class="text-warning me-3">
+                                        <div class="text-primary me-3">
                                             <em class="icon ni ni-key" style="font-size: 2.5rem;"></em>
                                         </div>
                                         <div>
@@ -116,36 +116,41 @@
                     </div>
                 </div>
 
-                <!-- Modern Settings Grid -->
+                <!-- Configuration Categories -->
                 <div class="nk-block">
                     <div class="row g-3">
-                        <!-- General Settings -->
+                        <!-- Application Configuration -->
                         <div class="col-xl-4 col-lg-6">
                             <div class="card card-bordered h-100">
                                 <div class="card-inner">
                                     <div class="d-flex align-items-center mb-3">
                                         <div class="text-primary me-3">
-                                            <em class="icon ni ni-setting" style="font-size: 2rem;"></em>
+                                            <em class="icon ni ni-app" style="font-size: 2rem;"></em>
                                         </div>
                                         <div>
-                                            <h6 class="mb-1">{{ __('General Settings') }}</h6>
-                                            <small class="text-muted">{{ __('Basic system configuration') }}</small>
+                                            <h6 class="mb-1">{{ __('Application') }}</h6>
+                                            <small class="text-muted">{{ __('Core system configuration') }}</small>
                                         </div>
                                     </div>
-                                    <div class="settings-list">
-                                        <a href="{{ route('admin.settings.general') }}" class="settings-item">
-                                            <em class="icon ni ni-app"></em>
-                                            <span>{{ __('Application Settings') }}</span>
+                                    <div class="config-list">
+                                        <a href="{{ route('admin.settings.general') }}" class="config-item">
+                                            <em class="icon ni ni-setting"></em>
+                                            <span>{{ __('General Settings') }}</span>
                                             <em class="icon ni ni-chevron-right"></em>
                                         </a>
-                                        <a href="{{ route('admin.settings.company') }}" class="settings-item">
+                                        <a href="{{ route('admin.settings.company') }}" class="config-item">
                                             <em class="icon ni ni-building"></em>
-                                            <span>{{ __('Company Details') }}</span>
+                                            <span>{{ __('Company Profile') }}</span>
                                             <em class="icon ni ni-chevron-right"></em>
                                         </a>
-                                        <a href="{{ route('admin.settings.appearance') }}" class="settings-item">
+                                        <a href="{{ route('admin.settings.appearance') }}" class="config-item">
                                             <em class="icon ni ni-palette"></em>
                                             <span>{{ __('Appearance & Theme') }}</span>
+                                            <em class="icon ni ni-chevron-right"></em>
+                                        </a>
+                                        <a href="{{ route('admin.settings.localization') }}" class="config-item">
+                                            <em class="icon ni ni-globe"></em>
+                                            <span>{{ __('Localization') }}</span>
                                             <em class="icon ni ni-chevron-right"></em>
                                         </a>
                                     </div>
@@ -166,20 +171,25 @@
                                             <small class="text-muted">{{ __('Configure property settings') }}</small>
                                         </div>
                                     </div>
-                                    <div class="settings-list">
-                                        <a href="{{ route('admin.settings.property-types') }}" class="settings-item">
+                                    <div class="config-list">
+                                        <a href="{{ route('admin.property-types.index') }}" class="config-item">
                                             <em class="icon ni ni-home"></em>
                                             <span>{{ __('Property Types') }}</span>
                                             <em class="icon ni ni-chevron-right"></em>
                                         </a>
-                                        <a href="{{ route('admin.settings.house-types') }}" class="settings-item">
+                                        <a href="{{ route('admin.house-types.index') }}" class="config-item">
                                             <em class="icon ni ni-home-alt"></em>
                                             <span>{{ __('House Types') }}</span>
                                             <em class="icon ni ni-chevron-right"></em>
                                         </a>
-                                        <a href="{{ route('admin.settings.amenities') }}" class="settings-item">
+                                        <a href="{{ route('admin.amenities.index') }}" class="config-item">
                                             <em class="icon ni ni-star"></em>
                                             <span>{{ __('Amenities') }}</span>
+                                            <em class="icon ni ni-chevron-right"></em>
+                                        </a>
+                                        <a href="{{ route('admin.pricing-rules.index') }}" class="config-item">
+                                            <em class="icon ni ni-money"></em>
+                                            <span>{{ __('Pricing Rules') }}</span>
                                             <em class="icon ni ni-chevron-right"></em>
                                         </a>
                                     </div>
@@ -187,7 +197,7 @@
                             </div>
                         </div>
 
-                        <!-- Financial Settings -->
+                        <!-- Financial Configuration -->
                         <div class="col-xl-4 col-lg-6">
                             <div class="card card-bordered h-100">
                                 <div class="card-inner">
@@ -196,24 +206,29 @@
                                             <em class="icon ni ni-money" style="font-size: 2rem;"></em>
                                         </div>
                                         <div>
-                                            <h6 class="mb-1">{{ __('Financial Settings') }}</h6>
+                                            <h6 class="mb-1">{{ __('Financial') }}</h6>
                                             <small class="text-muted">{{ __('Payment and billing configuration') }}</small>
                                         </div>
                                     </div>
-                                    <div class="settings-list">
-                                        <a href="{{ route('admin.settings.payment-methods') }}" class="settings-item">
+                                    <div class="config-list">
+                                        <a href="{{ route('admin.payment-methods.index') }}" class="config-item">
                                             <em class="icon ni ni-credit-card"></em>
                                             <span>{{ __('Payment Methods') }}</span>
                                             <em class="icon ni ni-chevron-right"></em>
                                         </a>
-                                        <a href="{{ route('admin.settings.expense-types') }}" class="settings-item">
+                                        <a href="{{ route('admin.expense-types.index') }}" class="config-item">
                                             <em class="icon ni ni-receipt"></em>
                                             <span>{{ __('Expense Types') }}</span>
                                             <em class="icon ni ni-chevron-right"></em>
                                         </a>
-                                        <a href="{{ route('admin.settings.currency') }}" class="settings-item">
+                                        <a href="{{ route('admin.currency.index') }}" class="config-item">
                                             <em class="icon ni ni-coins"></em>
                                             <span>{{ __('Currency Settings') }}</span>
+                                            <em class="icon ni ni-chevron-right"></em>
+                                        </a>
+                                        <a href="{{ route('admin.tax-settings.index') }}" class="config-item">
+                                            <em class="icon ni ni-calculator"></em>
+                                            <span>{{ __('Tax Settings') }}</span>
                                             <em class="icon ni ni-chevron-right"></em>
                                         </a>
                                     </div>
@@ -234,20 +249,25 @@
                                             <small class="text-muted">{{ __('Users, roles and permissions') }}</small>
                                         </div>
                                     </div>
-                                    <div class="settings-list">
-                                        <a href="{{ route('admin.settings.users.index') }}" class="settings-item">
+                                    <div class="config-list">
+                                        <a href="{{ route('admin.users-management.index') }}" class="config-item">
                                             <em class="icon ni ni-user"></em>
-                                            <span>{{ __('User Settings') }}</span>
+                                            <span>{{ __('Users') }}</span>
                                             <em class="icon ni ni-chevron-right"></em>
                                         </a>
-                                        <a href="{{ route('admin.settings.roles.index') }}" class="settings-item">
+                                        <a href="{{ route('admin.roles-management.index') }}" class="config-item">
                                             <em class="icon ni ni-shield-star"></em>
-                                            <span>{{ __('Roles & Permissions') }}</span>
+                                            <span>{{ __('Roles') }}</span>
                                             <em class="icon ni ni-chevron-right"></em>
                                         </a>
-                                        <a href="{{ route('admin.settings.security') }}" class="settings-item">
+                                        <a href="{{ route('admin.permissions.index') }}" class="config-item">
+                                            <em class="icon ni ni-shield-check"></em>
+                                            <span>{{ __('Permissions') }}</span>
+                                            <em class="icon ni ni-chevron-right"></em>
+                                        </a>
+                                        <a href="{{ route('admin.security.index') }}" class="config-item">
                                             <em class="icon ni ni-lock"></em>
-                                            <span>{{ __('Security Settings') }}</span>
+                                            <span>{{ __('Security') }}</span>
                                             <em class="icon ni ni-chevron-right"></em>
                                         </a>
                                     </div>
@@ -268,20 +288,25 @@
                                             <small class="text-muted">{{ __('APIs and system configuration') }}</small>
                                         </div>
                                     </div>
-                                    <div class="settings-list">
-                                        <a href="{{ route('admin.settings.api-keys.index') }}" class="settings-item">
+                                    <div class="config-list">
+                                        <a href="{{ route('admin.api-keys.index') }}" class="config-item">
                                             <em class="icon ni ni-key"></em>
                                             <span>{{ __('API Keys') }}</span>
                                             <em class="icon ni ni-chevron-right"></em>
                                         </a>
-                                        <a href="{{ route('admin.settings.integrations') }}" class="settings-item">
+                                        <a href="{{ route('admin.integrations.index') }}" class="config-item">
                                             <em class="icon ni ni-plug"></em>
                                             <span>{{ __('Integrations') }}</span>
                                             <em class="icon ni ni-chevron-right"></em>
                                         </a>
-                                        <a href="{{ route('admin.settings.backup') }}" class="settings-item">
+                                        <a href="{{ route('admin.backups.index') }}" class="config-item">
                                             <em class="icon ni ni-save"></em>
                                             <span>{{ __('Backup & Restore') }}</span>
+                                            <em class="icon ni ni-chevron-right"></em>
+                                        </a>
+                                        <a href="{{ route('admin.system-health.index') }}" class="config-item">
+                                            <em class="icon ni ni-heartbeat"></em>
+                                            <span>{{ __('System Health') }}</span>
                                             <em class="icon ni ni-chevron-right"></em>
                                         </a>
                                     </div>
@@ -289,33 +314,33 @@
                             </div>
                         </div>
 
-                        <!-- Analytics & Reports -->
+                        <!-- Communication -->
                         <div class="col-xl-4 col-lg-6">
                             <div class="card card-bordered h-100">
                                 <div class="card-inner">
                                     <div class="d-flex align-items-center mb-3">
                                         <div class="text-purple me-3">
-                                            <em class="icon ni ni-chart-bar" style="font-size: 2rem;"></em>
+                                            <em class="icon ni ni-message" style="font-size: 2rem;"></em>
                                         </div>
                                         <div>
-                                            <h6 class="mb-1">{{ __('Analytics & Reports') }}</h6>
-                                            <small class="text-muted">{{ __('Reports and system monitoring') }}</small>
+                                            <h6 class="mb-1">{{ __('Communication') }}</h6>
+                                            <small class="text-muted">{{ __('Email, SMS and notifications') }}</small>
                                         </div>
                                     </div>
-                                    <div class="settings-list">
-                                        <a href="{{ route('admin.settings.analytics.index') }}" class="settings-item">
-                                            <em class="icon ni ni-chart"></em>
-                                            <span>{{ __('Analytics Dashboard') }}</span>
+                                    <div class="config-list">
+                                        <a href="{{ route('admin.email-templates.index') }}" class="config-item">
+                                            <em class="icon ni ni-mail"></em>
+                                            <span>{{ __('Email Templates') }}</span>
                                             <em class="icon ni ni-chevron-right"></em>
                                         </a>
-                                        <a href="{{ route('admin.settings.reports') }}" class="settings-item">
-                                            <em class="icon ni ni-file-text"></em>
-                                            <span>{{ __('Report Templates') }}</span>
+                                        <a href="{{ route('admin.notifications.index') }}" class="config-item">
+                                            <em class="icon ni ni-bell"></em>
+                                            <span>{{ __('Notifications') }}</span>
                                             <em class="icon ni ni-chevron-right"></em>
                                         </a>
-                                        <a href="{{ route('admin.settings.system-health.index') }}" class="settings-item">
-                                            <em class="icon ni ni-heartbeat"></em>
-                                            <span>{{ __('System Health') }}</span>
+                                        <a href="{{ route('admin.sms-settings.index') }}" class="config-item">
+                                            <em class="icon ni ni-mobile"></em>
+                                            <span>{{ __('SMS Settings') }}</span>
                                             <em class="icon ni ni-chevron-right"></em>
                                         </a>
                                     </div>
@@ -329,7 +354,7 @@
                 <div class="nk-block">
                     <div class="card card-bordered">
                         <div class="card-header">
-                            <h6 class="card-title">{{ __('Recent Activity') }}</h6>
+                            <h6 class="card-title">{{ __('Recent Configuration Changes') }}</h6>
                         </div>
                         <div class="card-body">
                             <div class="table-responsive">
@@ -365,6 +390,17 @@
                                             <td>{{ now()->subMinutes(5)->diffForHumans() }}</td>
                                             <td><span class="badge badge-success">{{ __('Success') }}</span></td>
                                         </tr>
+                                        <tr>
+                                            <td>
+                                                <div class="d-flex align-items-center">
+                                                    <em class="icon ni ni-building text-success me-2"></em>
+                                                    <span>{{ __('Updated property types') }}</span>
+                                                </div>
+                                            </td>
+                                            <td>{{ auth()->user()->name }}</td>
+                                            <td>{{ now()->subMinutes(15)->diffForHumans() }}</td>
+                                            <td><span class="badge badge-success">{{ __('Success') }}</span></td>
+                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -378,7 +414,7 @@
 
 @push('styles')
 <style>
-.settings-item {
+.config-item {
     display: flex;
     align-items: center;
     padding: 0.75rem 0;
@@ -388,23 +424,23 @@
     transition: all 0.3s ease;
 }
 
-.settings-item:hover {
+.config-item:hover {
     color: #6576ff;
     background-color: #f8f9ff;
     padding-left: 0.5rem;
     border-radius: 0.375rem;
 }
 
-.settings-item:last-child {
+.config-item:last-child {
     border-bottom: none;
 }
 
-.settings-item em:first-child {
+.config-item em:first-child {
     margin-right: 0.75rem;
     font-size: 1.25rem;
 }
 
-.settings-item em:last-child {
+.config-item em:last-child {
     margin-left: auto;
     opacity: 0.5;
 }
@@ -431,7 +467,7 @@
         padding: 1rem;
     }
     
-    .settings-item {
+    .config-item {
         padding: 0.5rem 0;
     }
 }
@@ -442,6 +478,7 @@
 <script>
 function clearCache() {
     if (confirm('Are you sure you want to clear the system cache?')) {
+        showLoading('Clearing cache...');
         fetch('{{ route("admin.settings.clear-cache") }}', {
             method: 'POST',
             headers: {
@@ -451,13 +488,16 @@ function clearCache() {
         })
         .then(response => response.json())
         .then(data => {
+            hideLoading();
             if (data.success) {
                 showNotification('Cache cleared successfully!', 'success');
+                setTimeout(() => location.reload(), 1000);
             } else {
                 showNotification('Failed to clear cache: ' + data.message, 'danger');
             }
         })
         .catch(error => {
+            hideLoading();
             console.error('Error:', error);
             showNotification('An error occurred while clearing cache', 'danger');
         });
@@ -465,6 +505,7 @@ function clearCache() {
 }
 
 function exportSettings() {
+    showLoading('Exporting configuration...');
     fetch('{{ route("admin.settings.export") }}', {
         method: 'GET',
         headers: {
@@ -473,32 +514,56 @@ function exportSettings() {
     })
     .then(response => response.json())
     .then(data => {
+        hideLoading();
         if (data.success) {
             const blob = new Blob([JSON.stringify(data.settings, null, 2)], {type: 'application/json'});
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'foxes-settings-' + new Date().toISOString().split('T')[0] + '.json';
+            a.download = 'foxes-config-' + new Date().toISOString().split('T')[0] + '.json';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
-            showNotification('Settings exported successfully!', 'success');
+            showNotification('Configuration exported successfully!', 'success');
         } else {
-            showNotification('Failed to export settings: ' + data.message, 'danger');
+            showNotification('Failed to export configuration: ' + data.message, 'danger');
         }
     })
     .catch(error => {
+        hideLoading();
         console.error('Error:', error);
-        showNotification('An error occurred while exporting settings', 'danger');
+        showNotification('An error occurred while exporting configuration', 'danger');
     });
 }
 
 function refreshSystem() {
-    showNotification('Refreshing system data...', 'info');
+    showLoading('Refreshing system...');
     setTimeout(() => {
+        hideLoading();
         location.reload();
-    }, 1000);
+    }, 1500);
+}
+
+function showLoading(message) {
+    const loadingDiv = document.createElement('div');
+    loadingDiv.id = 'loading-overlay';
+    loadingDiv.className = 'position-fixed top-0 start-0 w-100 h-100 d-flex align-items-center justify-content-center';
+    loadingDiv.style.cssText = 'background: rgba(0,0,0,0.5); z-index: 9999;';
+    loadingDiv.innerHTML = `
+        <div class="text-center text-white">
+            <div class="spinner-border mb-3" role="status"></div>
+            <div>${message}</div>
+        </div>
+    `;
+    document.body.appendChild(loadingDiv);
+}
+
+function hideLoading() {
+    const loadingDiv = document.getElementById('loading-overlay');
+    if (loadingDiv) {
+        loadingDiv.remove();
+    }
 }
 
 function showNotification(message, type) {

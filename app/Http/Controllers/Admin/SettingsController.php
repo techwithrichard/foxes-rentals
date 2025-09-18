@@ -29,10 +29,10 @@ class SettingsController extends Controller
             $systemHealth = $this->settingsService->getSystemHealth();
             $stats = $this->getSystemStats();
             
-            return view('admin.settings.modern-dashboard', compact('categories', 'systemHealth', 'stats'));
+            return view('admin.settings.professional-dashboard', compact('categories', 'systemHealth', 'stats'));
         } catch (\Exception $e) {
             Log::error('Error loading settings dashboard: ' . $e->getMessage());
-            return view('admin.settings.modern-dashboard')->with('error', 'Failed to load settings dashboard.');
+            return view('admin.settings.professional-dashboard')->with('error', 'Failed to load settings dashboard.');
         }
     }
 
@@ -292,6 +292,82 @@ class SettingsController extends Controller
     public function expense_types()
     {
         return view('admin.settings.expense_types');
+    }
+
+    // Additional methods for professional settings
+    public function localization()
+    {
+        return view('admin.settings.localization');
+    }
+
+    public function currency()
+    {
+        return view('admin.settings.currency');
+    }
+
+    public function tax_settings()
+    {
+        return view('admin.settings.tax_settings');
+    }
+
+    public function permissions()
+    {
+        return view('admin.settings.permissions');
+    }
+
+    public function security()
+    {
+        return view('admin.settings.security');
+    }
+
+    public function api_keys()
+    {
+        return view('admin.settings.api_keys');
+    }
+
+    public function integrations()
+    {
+        return view('admin.settings.integrations');
+    }
+
+    public function backups()
+    {
+        return view('admin.settings.backups');
+    }
+
+    public function system_health()
+    {
+        return view('admin.settings.system_health');
+    }
+
+    public function email_templates()
+    {
+        return view('admin.settings.email_templates');
+    }
+
+    public function notifications()
+    {
+        return view('admin.settings.notifications');
+    }
+
+    public function sms_settings()
+    {
+        return view('admin.settings.sms_settings');
+    }
+
+    public function analytics()
+    {
+        return view('admin.settings.analytics');
+    }
+
+    public function report_templates()
+    {
+        return view('admin.settings.report_templates');
+    }
+
+    public function scheduled_reports()
+    {
+        return view('admin.settings.scheduled_reports');
     }
 
     /**

@@ -10,7 +10,7 @@
                             <div class="card-aside-wrap">
                             @livewire('settings.global-settings-component')
                             <!-- .card-inner -->
-                            @include('includes.settings_menu')
+                            @include('admin.settings.professional-menu')
                             <!-- card-aside -->
                             </div><!-- card-aside-wrap -->
                         </div><!-- .card -->
