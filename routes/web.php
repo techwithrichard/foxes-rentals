@@ -140,6 +140,7 @@ require __DIR__ . '/auth.php';
 require __DIR__ . '/landlord.php';
 require __DIR__ . '/tenant.php';
 require __DIR__ . '/admin.php';
+require __DIR__ . '/test.php';
 
 Route::group(['middleware' => ['web', WelcomesNewUsers::class,]], function () {
     Route::get('welcome/{user}', [MyWelcomeController::class, 'showWelcomeForm'])->name('welcome');

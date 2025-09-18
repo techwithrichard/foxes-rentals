@@ -219,6 +219,27 @@ Route::middleware(['auth'])
             Route::post('api-keys/bulk-action', [App\Http\Controllers\Admin\ApiKeysController::class, 'bulkAction'])->name('api-keys.bulk-action');
         });
 
+        // Advanced User Management Routes
+        Route::prefix('settings')->name('settings.')->group(function () {
+            // User Management
+            Route::get('users', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'index'])->name('users.index');
+            Route::get('users/create', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'create'])->name('users.create');
+            Route::post('users', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'store'])->name('users.store');
+            Route::get('users/{user}', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'show'])->name('users.show');
+            Route::get('users/{user}/edit', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'edit'])->name('users.edit');
+            Route::put('users/{user}', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'update'])->name('users.update');
+            Route::delete('users/{user}', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'destroy'])->name('users.destroy');
+            Route::post('users/{user}/toggle-status', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'toggleStatus'])->name('users.toggle-status');
+            Route::post('users/{user}/reset-password', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'resetPassword'])->name('users.reset-password');
+            Route::post('users/{id}/restore', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'restore'])->name('users.restore');
+            Route::delete('users/{id}/force-delete', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'forceDelete'])->name('users.force-delete');
+            Route::post('users/bulk-action', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'bulkAction'])->name('users.bulk-action');
+            Route::post('users/import', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'importUsers'])->name('users.import');
+            Route::get('users/export', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'exportUsers'])->name('users.export');
+            Route::get('users/statistics', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'getStatistics'])->name('users.statistics');
+            Route::get('users/{user}/activity-log', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'getActivityLog'])->name('users.activity-log');
+        });
+
         // Property Settings Management Routes
         Route::prefix('settings')->name('settings.')->group(function () {
             // Property Settings Dashboard

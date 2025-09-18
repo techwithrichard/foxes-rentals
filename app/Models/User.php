@@ -47,6 +47,8 @@ class User extends Authenticatable implements HasLocalePreference
         'emergency_email',
         'emergency_relationship',
         'address',
+        'is_active',
+        'last_login_at',
     ];
 
     /**
@@ -146,5 +148,111 @@ class User extends Authenticatable implements HasLocalePreference
     {
 
         return $this->preferred_user_locale;
+    }
+
+    /**
+     * Get the user's profile
+     */
+    public function profile(): HasOne
+    {
+        return $this->hasOne(UserProfile::class);
+    }
+
+    /**
+     * Get the user's preferences
+     */
+    public function preferences(): HasOne
+    {
+        return $this->hasOne(UserPreference::class);
+    }
+
+    /**
+     * Get the user's activities
+     */
+    public function activities(): HasMany
+    {
+        return $this->hasMany(UserActivity::class);
+    }
+
+    /**
+     * Check if user is active
+     */
+    public function isActive(): bool
+    {
+        return $this->is_active ?? true;
+    }
+
+    /**
+     * Get user's full display name
+     */
+    public function getDisplayNameAttribute(): string
+    {
+        return $this->profile ? $this->profile->display_name : $this->name;
+    }
+
+    /**
+     * Get user's profile completion percentage
+     */
+    public function getProfileCompletionAttribute(): int
+    {
+        return $this->profile ? $this->profile->completion_percentage : 0;
+    }
+
+    /**
+     * Get user's last activity
+     */
+    public function getLastActivityAttribute(): ?UserActivity
+    {
+        return $this->activities()->latest()->first();
+    }
+
+    /**
+     * Get user's activity count for a period
+     */
+    public function getActivityCount(int $days = 30): int
+    {
+        return $this->activities()->where('created_at', '>=', now()->subDays($days))->count();
+    }
+
+    /**
+     * Scope to get active users
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
+    }
+
+    /**
+     * Scope to get inactive users
+     */
+    public function scopeInactive($query)
+    {
+        return $query->where('is_active', false);
+    }
+
+    /**
+     * Scope to get users with profiles
+     */
+    public function scopeWithProfile($query)
+    {
+        return $query->has('profile');
+    }
+
+    /**
+     * Scope to get users with preferences
+     */
+    public function scopeWithPreferences($query)
+    {
+        return $query->has('preferences');
+    }
+
+    /**
+     * Scope to get recently active users
+     */
+    public function scopeRecentlyActive($query, int $days = 7)
+    {
+        return $query->whereHas('activities', function ($q) use ($days) {
+            $q->where('created_at', '>=', now()->subDays($days));
+        });
     }
 }
