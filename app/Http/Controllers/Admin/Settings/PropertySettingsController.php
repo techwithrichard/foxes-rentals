@@ -41,7 +41,22 @@ class PropertySettingsController extends Controller
             ));
         } catch (\Exception $e) {
             Log::error('Error loading property settings: ' . $e->getMessage());
-            return view('admin.settings.property.dashboard')->with('error', 'Failed to load property settings.');
+            
+            // Return with empty data to prevent undefined variable errors
+            $propertyTypes = collect();
+            $amenities = collect();
+            $pricingRules = collect();
+            $leaseTemplates = collect();
+            $statistics = [
+                'property_types' => ['total' => 0, 'active' => 0],
+                'amenities' => ['total' => 0, 'active' => 0, 'categories' => 0],
+                'pricing_rules' => ['total' => 0, 'active' => 0],
+                'lease_templates' => ['total' => 0, 'active' => 0]
+            ];
+            
+            return view('admin.settings.property.dashboard', compact(
+                'propertyTypes', 'amenities', 'pricingRules', 'leaseTemplates', 'statistics'
+            ))->with('error', 'Failed to load property settings: ' . $e->getMessage());
         }
     }
 

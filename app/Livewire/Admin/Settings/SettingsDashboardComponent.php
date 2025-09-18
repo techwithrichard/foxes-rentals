@@ -38,7 +38,7 @@ class SettingsDashboardComponent extends Component
                 'active_api_keys' => $apiKeyService->getApiKeyStatistics()['active_keys'] ?? 0,
                 'expired_api_keys' => $apiKeyService->getApiKeyStatistics()['expired_keys'] ?? 0,
                 'users_count' => \App\Models\User::count(),
-                'properties_count' => \App\Models\RentalProperty::count() + \App\Models\SaleProperty::count(),
+                'properties_count' => \App\Models\RentalProperty::count() + (\App\Models\SaleProperty::count() ?? 0),
                 'system_status' => $this->getOverallSystemStatus()
             ];
 

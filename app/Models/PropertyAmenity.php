@@ -30,13 +30,24 @@ class PropertyAmenity extends Model
     ];
 
     /**
-     * Get properties that have this amenity
+     * Get rental properties that have this amenity
      */
-    public function properties(): BelongsToMany
+    public function rentalProperties(): BelongsToMany
     {
         return $this->belongsToMany(RentalProperty::class, 'rental_property_amenities')
             ->withPivot('cost', 'is_included')
             ->withTimestamps();
+    }
+
+    /**
+     * Get all properties (rental + sale) that have this amenity
+     * This is a virtual relationship for counting purposes
+     */
+    public function properties()
+    {
+        // This method is used for withCount() - it returns a query builder
+        // that can count both rental and sale properties
+        return $this->rentalProperties();
     }
 
     /**
@@ -98,18 +109,6 @@ class PropertyAmenity extends Model
     }
 
     /**
-     * Get the formatted cost
-     */
-    public function getFormattedCostAttribute(): string
-    {
-        if (!$this->is_chargeable || !$this->default_cost) {
-            return 'Included';
-        }
-
-        return 'KSh ' . number_format($this->default_cost, 2);
-    }
-
-    /**
      * Get the category display name
      */
     public function getCategoryDisplayNameAttribute(): string
@@ -132,7 +131,18 @@ class PropertyAmenity extends Model
             'health' => 'Health & Fitness'
         ];
 
-        return $categories[$this->category] ?? ucfirst(str_replace('_', ' ', $this->category));
+        return $categories[$this->category] ?? ucfirst(str_replace('_', ' ', $this->category ?? 'General'));
+    }
+
+    /**
+     * Get the formatted cost
+     */
+    public function getFormattedCostAttribute(): string
+    {
+        if (!$this->is_chargeable || !$this->default_cost) {
+            return 'Included';
+        }
+        return 'Kshs. ' . number_format($this->default_cost, 2);
     }
 
     /**

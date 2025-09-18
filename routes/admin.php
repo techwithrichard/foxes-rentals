@@ -272,7 +272,6 @@ Route::middleware(['auth'])
         // Advanced User Management Routes
         Route::prefix('settings')->name('settings.')->group(function () {
             // User Management
-            Route::get('users', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'index'])->name('users.index');
             Route::get('users/create', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'create'])->name('users.create');
             Route::post('users', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'store'])->name('users.store');
             Route::get('users/{user}', [App\Http\Controllers\Admin\AdvancedUserManagementController::class, 'show'])->name('users.show');
@@ -439,6 +438,7 @@ Route::middleware(['auth'])
             Route::get('permissions/statistics', [App\Http\Controllers\Admin\AdvancedPermissionsController::class, 'statistics'])->name('permissions.statistics');
 
             // User Settings Routes
+            Route::get('users', [App\Http\Controllers\Admin\UserSettingsController::class, 'index'])->name('users');
             Route::prefix('users')->name('users.')->group(function () {
                 Route::get('/', [App\Http\Controllers\Admin\UserSettingsController::class, 'index'])->name('index');
                 Route::get('roles', [App\Http\Controllers\Admin\UserSettingsController::class, 'roles'])->name('roles');

@@ -163,7 +163,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="card-body">
-                                                    @forelse($propertyTypes->take(5) as $propertyType)
+                                                    @forelse(($propertyTypes ?? collect())->take(5) as $propertyType)
                                                         <div class="d-flex align-items-center justify-content-between mb-3">
                                                             <div class="d-flex align-items-center">
                                                                 <div class="me-3">
@@ -204,7 +204,7 @@
                                                     </a>
                                                 </div>
                                                 <div class="card-body">
-                                                    @forelse($amenities->take(5) as $amenity)
+                                                    @forelse(($amenities ?? collect())->take(5) as $amenity)
                                                         <div class="d-flex align-items-center justify-content-between mb-3">
                                                             <div class="d-flex align-items-center">
                                                                 <div class="me-3">
@@ -251,7 +251,7 @@
                                                     <h6 class="card-title">{{ __('Most Used Property Types') }}</h6>
                                                 </div>
                                                 <div class="card-body">
-                                                    @forelse($statistics['usage_analytics']['most_used_property_types'] as $type)
+                                                    @forelse(($statistics['usage_analytics']['most_used_property_types'] ?? []) as $type)
                                                         <div class="d-flex align-items-center justify-content-between mb-3">
                                                             <div>
                                                                 <h6 class="mb-1">{{ $type['name'] }}</h6>
@@ -278,7 +278,7 @@
                                                     <h6 class="card-title">{{ __('Most Used Amenities') }}</h6>
                                                 </div>
                                                 <div class="card-body">
-                                                    @forelse($statistics['usage_analytics']['most_used_amenities'] as $amenity)
+                                                    @forelse(($statistics['usage_analytics']['most_used_amenities'] ?? []) as $amenity)
                                                         <div class="d-flex align-items-center justify-content-between mb-3">
                                                             <div>
                                                                 <h6 class="mb-1">{{ $amenity['name'] }}</h6>

@@ -10,6 +10,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Request;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class EnhancedSettingsService
 {
@@ -370,9 +372,9 @@ class EnhancedSettingsService
             $testContent = 'Storage health check at ' . now()->toISOString();
             
             $startTime = microtime(true);
-            \Storage::put($testFile, $testContent);
-            $retrievedContent = \Storage::get($testFile);
-            \Storage::delete($testFile);
+            Storage::put($testFile, $testContent);
+            $retrievedContent = Storage::get($testFile);
+            Storage::delete($testFile);
             $responseTime = round((microtime(true) - $startTime) * 1000, 2);
 
             if ($retrievedContent === $testContent) {
