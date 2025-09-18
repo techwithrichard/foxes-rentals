@@ -61,6 +61,31 @@ Route::middleware(['auth'])
         Route::resource('properties', PropertyController::class);
         Route::resource('houses', HouseController::class);
         
+        // Consolidated Property Management Routes
+        Route::prefix('properties-consolidated')->name('properties-consolidated.')->group(function () {
+            Route::get('/', [App\Http\Controllers\Admin\PropertyConsolidatedController::class, 'index'])->name('index');
+            Route::get('/create', [App\Http\Controllers\Admin\PropertyConsolidatedController::class, 'create'])->name('create');
+            Route::post('/', [App\Http\Controllers\Admin\PropertyConsolidatedController::class, 'store'])->name('store');
+            Route::get('/{propertyConsolidated}', [App\Http\Controllers\Admin\PropertyConsolidatedController::class, 'show'])->name('show');
+            Route::get('/{propertyConsolidated}/edit', [App\Http\Controllers\Admin\PropertyConsolidatedController::class, 'edit'])->name('edit');
+            Route::put('/{propertyConsolidated}', [App\Http\Controllers\Admin\PropertyConsolidatedController::class, 'update'])->name('update');
+            Route::delete('/{propertyConsolidated}', [App\Http\Controllers\Admin\PropertyConsolidatedController::class, 'destroy'])->name('destroy');
+            
+            // API endpoints
+            Route::get('/type/{type}', [App\Http\Controllers\Admin\PropertyConsolidatedController::class, 'getByType'])->name('by-type');
+            Route::get('/available/list', [App\Http\Controllers\Admin\PropertyConsolidatedController::class, 'getAvailable'])->name('available');
+            Route::get('/vacant/list', [App\Http\Controllers\Admin\PropertyConsolidatedController::class, 'getVacant'])->name('vacant');
+            Route::get('/featured/list', [App\Http\Controllers\Admin\PropertyConsolidatedController::class, 'getFeatured'])->name('featured');
+            Route::get('/statistics', [App\Http\Controllers\Admin\PropertyConsolidatedController::class, 'statistics'])->name('statistics');
+            
+            // Toggle endpoints
+            Route::post('/{propertyConsolidated}/toggle-status', [App\Http\Controllers\Admin\PropertyConsolidatedController::class, 'toggleStatus'])->name('toggle-status');
+            Route::post('/{propertyConsolidated}/toggle-availability', [App\Http\Controllers\Admin\PropertyConsolidatedController::class, 'toggleAvailability'])->name('toggle-availability');
+            Route::post('/{propertyConsolidated}/toggle-vacancy', [App\Http\Controllers\Admin\PropertyConsolidatedController::class, 'toggleVacancy'])->name('toggle-vacancy');
+            Route::post('/{propertyConsolidated}/toggle-featured', [App\Http\Controllers\Admin\PropertyConsolidatedController::class, 'toggleFeatured'])->name('toggle-featured');
+            Route::post('/{propertyConsolidated}/toggle-published', [App\Http\Controllers\Admin\PropertyConsolidatedController::class, 'togglePublished'])->name('toggle-published');
+        });
+        
         // Enhanced Property Management Routes
         Route::prefix('property-dashboard')->name('property-dashboard.')->group(function () {
             Route::get('/', [App\Http\Controllers\Admin\PropertyDashboardController::class, 'index'])->name('index');
