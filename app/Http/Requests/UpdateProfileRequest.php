@@ -115,3 +115,4 @@ class UpdateProfileRequest extends FormRequest
         ]);
     }
 }
+

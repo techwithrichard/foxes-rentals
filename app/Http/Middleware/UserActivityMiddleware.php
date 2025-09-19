@@ -316,3 +316,4 @@ class UserActivityMiddleware
         return $data;
     }
 }
+

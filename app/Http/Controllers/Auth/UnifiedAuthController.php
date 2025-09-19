@@ -400,3 +400,4 @@ class UnifiedAuthController extends Controller
         return Str::transliterate(Str::lower($request->input('email')).'|'.$request->ip());
     }
 }
+

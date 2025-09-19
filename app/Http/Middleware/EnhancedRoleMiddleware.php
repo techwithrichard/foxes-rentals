@@ -93,3 +93,4 @@ class EnhancedRoleMiddleware
         return redirect()->back()->with('error', 'Access denied. You do not have permission to access this resource.');
     }
 }
+

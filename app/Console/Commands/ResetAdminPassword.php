@@ -46,3 +46,4 @@ class ResetAdminPassword extends Command
         return 0;
     }
 }
+

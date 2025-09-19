@@ -5,7 +5,7 @@ namespace App\Services;
 use App\Models\User;
 use App\Models\RentalProperty;
 use App\Models\SaleProperty;
-use App\Models\LeaseAgreement;
+use App\Models\Lease;
 use App\Models\MaintenanceRequest;
 use App\Models\PropertyApplication;
 use Illuminate\Support\Facades\Cache;
@@ -51,7 +51,7 @@ class AdvancedAnalyticsService
             'occupied_properties' => $this->getOccupiedPropertiesCount(),
             'vacant_properties' => $this->getVacantPropertiesCount(),
             'total_tenants' => User::role('tenant')->count(),
-            'active_leases' => LeaseAgreement::where('status', 'active')->count(),
+            'active_leases' => Lease::where('status', 'active')->count(),
             'pending_applications' => PropertyApplication::where('status', 'pending')->count(),
             'total_revenue' => $this->getTotalRevenue(),
             'monthly_revenue' => $this->getMonthlyRevenue(),

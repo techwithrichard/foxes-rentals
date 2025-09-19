@@ -90,3 +90,4 @@ class SimpleAdminSeeder extends Seeder
         $this->command->info('   You can do this in the user profile section.');
     }
 }
+

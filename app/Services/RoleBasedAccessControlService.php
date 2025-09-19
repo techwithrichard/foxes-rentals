@@ -484,3 +484,4 @@ class RoleBasedAccessControlService
         return $routes;
     }
 }
+

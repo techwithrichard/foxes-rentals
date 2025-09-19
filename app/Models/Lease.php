@@ -24,6 +24,7 @@ class Lease extends Model
         'start_date' => 'date',
         'end_date' => 'date',
         'next_billing_date' => 'date',
+        'status' => 'string',
     ];
 
 

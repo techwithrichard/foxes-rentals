@@ -153,6 +153,7 @@ Route::middleware(['auth', 'role_or_permission:super_admin|admin'])
         // ========================================
         Route::prefix('analytics')->name('analytics.')->group(function () {
             Route::get('/', [SettingsController::class, 'analytics'])->name('index');
+            Route::get('/dashboard', [SettingsController::class, 'analytics'])->name('dashboard');
         });
         
         Route::prefix('report-templates')->name('report-templates.')->group(function () {

@@ -52,3 +52,4 @@ class PasswordHistory extends Model
         return $query->whereBetween('created_at', [$startDate, $endDate]);
     }
 }
+

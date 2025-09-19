@@ -358,3 +358,4 @@ class UserManagementTest extends TestCase
         $this->assertArrayHasKey('never_changed', $statistics);
     }
 }
+

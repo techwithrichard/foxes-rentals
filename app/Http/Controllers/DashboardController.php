@@ -72,7 +72,7 @@ class DashboardController extends Controller
             'password_security' => $this->getPasswordSecurityInfo(),
         ];
 
-        return view('dashboard.admin', $data);
+        return view('admin.home.index', $data);
     }
 
     /**
@@ -89,7 +89,7 @@ class DashboardController extends Controller
             'assigned_tasks' => $this->getAssignedTasks(),
         ];
 
-        return view('dashboard.staff', $data);
+        return view('admin.home.index', $data);
     }
 
     /**
@@ -106,7 +106,7 @@ class DashboardController extends Controller
             'recent_payments' => $this->getRecentPayments(),
         ];
 
-        return view('dashboard.landlord', $data);
+        return view('landlord.home.index', $data);
     }
 
     /**
@@ -124,7 +124,7 @@ class DashboardController extends Controller
             'maintenance_requests' => $this->getMaintenanceRequests(),
         ];
 
-        return view('dashboard.tenant', $data);
+        return view('tenant.home.index', $data);
     }
 
     /**

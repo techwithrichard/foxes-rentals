@@ -216,3 +216,4 @@ class UserInvitation extends Model
         return $query->where('invited_by', $userId);
     }
 }
+

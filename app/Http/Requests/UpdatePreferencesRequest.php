@@ -70,3 +70,4 @@ class UpdatePreferencesRequest extends FormRequest
         ];
     }
 }
+

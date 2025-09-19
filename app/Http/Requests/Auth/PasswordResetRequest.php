@@ -85,3 +85,4 @@ class PasswordResetRequest extends FormRequest
         ]);
     }
 }
+

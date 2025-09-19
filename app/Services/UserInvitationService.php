@@ -332,3 +332,4 @@ class UserInvitationService
         return $invitation !== null;
     }
 }
+

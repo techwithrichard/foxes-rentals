@@ -52,3 +52,4 @@ class ChangePasswordRequest extends FormRequest
         ];
     }
 }
+
