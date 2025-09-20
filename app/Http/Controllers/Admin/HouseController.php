@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Enums\PropertyStatusEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\HouseRequest;
 use App\Models\House;
 use App\Models\Property;
 use Illuminate\Http\Request;
@@ -76,9 +77,44 @@ class HouseController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(HouseRequest $request)
     {
-        //
+        // Validation is handled by HouseRequest
+        $validated = $request->validated();
+
+        try {
+            DB::beginTransaction();
+
+            // Create the house
+            $house = House::create([
+                'name' => $validated['name'],
+                'description' => $validated['description'],
+                'property_id' => $validated['property_id'],
+                'rent' => $validated['rent'],
+                'deposit' => $validated['deposit'],
+                'landlord_id' => $validated['landlord_id'],
+                'status' => $validated['status'],
+                'is_vacant' => $validated['is_vacant'] ?? true,
+                'bedrooms' => $validated['bedrooms'],
+                'bathrooms' => $validated['bathrooms'],
+                'size' => $validated['size'],
+                'house_type_id' => $validated['house_type_id'],
+            ]);
+
+            DB::commit();
+
+            return redirect()
+                ->route('admin.house.show', $house)
+                ->with('success', __('House created successfully'));
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', __('Failed to create house: ') . $e->getMessage());
+        }
     }
 
 

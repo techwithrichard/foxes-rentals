@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PropertyRequest;
 use App\Models\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -73,9 +74,53 @@ class PropertyController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(PropertyRequest $request)
     {
-        //
+        // Validation is handled by PropertyRequest
+        $validated = $request->validated();
+
+        try {
+            DB::beginTransaction();
+
+            // Create the property
+            $property = Property::create([
+                'name' => $validated['name'],
+                'description' => $validated['description'],
+                'type' => $validated['type'],
+                'rent' => $validated['rent'],
+                'deposit' => $validated['deposit'],
+                'landlord_id' => $validated['landlord_id'],
+                'commission' => $validated['commission'] ?? 0,
+                'status' => $validated['status'],
+                'is_vacant' => $validated['is_vacant'] ?? true,
+                'electricity_id' => $validated['electricity_id'],
+            ]);
+
+            // Create address if provided
+            if (isset($validated['address']) && !empty(array_filter($validated['address']))) {
+                $property->address()->create([
+                    'street' => $validated['address']['street'] ?? null,
+                    'city' => $validated['address']['city'] ?? null,
+                    'state' => $validated['address']['state'] ?? null,
+                    'postal_code' => $validated['address']['postal_code'] ?? null,
+                    'country' => $validated['address']['country'] ?? null,
+                ]);
+            }
+
+            DB::commit();
+
+            return redirect()
+                ->route('admin.property.show', $property)
+                ->with('success', __('Property created successfully'));
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', __('Failed to create property: ') . $e->getMessage());
+        }
     }
 
 
@@ -90,8 +135,76 @@ class PropertyController extends Controller
     public function edit($id)
     {
         abort_unless(auth()->user()->can('edit property'), 403);
+        $property = Property::with('address', 'landlord')->findOrFail($id);
+        return view('admin.property.edit', compact('property'));
+    }
+
+    /**
+     * Update the specified resource in storage.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param int $id
+     * @return \Illuminate\Http\Response
+     */
+    public function update(PropertyRequest $request, $id)
+    {
         $property = Property::findOrFail($id);
-        return view('admin.property.edit', compact('id'));
+
+        // Validation is handled by PropertyRequest
+        $validated = $request->validated();
+
+        try {
+            DB::beginTransaction();
+
+            // Update the property
+            $property->update([
+                'name' => $validated['name'],
+                'description' => $validated['description'],
+                'type' => $validated['type'],
+                'rent' => $validated['rent'],
+                'deposit' => $validated['deposit'],
+                'landlord_id' => $validated['landlord_id'],
+                'commission' => $validated['commission'] ?? 0,
+                'status' => $validated['status'],
+                'is_vacant' => $validated['is_vacant'] ?? true,
+                'electricity_id' => $validated['electricity_id'],
+            ]);
+
+            // Update or create address
+            if (isset($validated['address']) && !empty(array_filter($validated['address']))) {
+                if ($property->address) {
+                    $property->address->update([
+                        'street' => $validated['address']['street'] ?? null,
+                        'city' => $validated['address']['city'] ?? null,
+                        'state' => $validated['address']['state'] ?? null,
+                        'postal_code' => $validated['address']['postal_code'] ?? null,
+                        'country' => $validated['address']['country'] ?? null,
+                    ]);
+                } else {
+                    $property->address()->create([
+                        'street' => $validated['address']['street'] ?? null,
+                        'city' => $validated['address']['city'] ?? null,
+                        'state' => $validated['address']['state'] ?? null,
+                        'postal_code' => $validated['address']['postal_code'] ?? null,
+                        'country' => $validated['address']['country'] ?? null,
+                    ]);
+                }
+            }
+
+            DB::commit();
+
+            return redirect()
+                ->route('admin.property.show', $property)
+                ->with('success', __('Property updated successfully'));
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', __('Failed to update property: ') . $e->getMessage());
+        }
     }
 
 

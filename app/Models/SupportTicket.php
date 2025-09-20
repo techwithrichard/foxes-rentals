@@ -12,7 +12,19 @@ class SupportTicket extends Model
 {
     use HasUuids;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'ticket_number',
+        'user_id',
+        'subject',
+        'description',
+        'status',
+        'priority',
+        'category',
+        'assigned_to',
+        'resolved_at',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
     //field ticket_id should auto increment automatically when SupportTicket is being created
 
 

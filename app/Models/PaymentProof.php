@@ -9,7 +9,17 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class PaymentProof extends Model
 {
-    protected $guarded = [];
+    protected $fillable = [
+        'payment_id',
+        'file_name',
+        'file_path',
+        'file_size',
+        'status',
+        'verified_by',
+        'verified_at',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     protected $casts = [
         'status' => PaymentProofStatusEnum::class,

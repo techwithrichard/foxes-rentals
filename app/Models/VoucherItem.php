@@ -10,7 +10,15 @@ class VoucherItem extends Model
 {
     use HasUuids;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'voucher_id',
+        'description',
+        'amount',
+        'quantity',
+        'unit_price',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     public function voucher(): BelongsTo
     {

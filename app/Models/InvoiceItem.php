@@ -11,7 +11,16 @@ class InvoiceItem extends Model
 {
     use HasUuids;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'invoice_id',
+        'description',
+        'quantity',
+        'unit_price',
+        'amount',
+        'tax_rate',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     public function invoice(): BelongsTo
     {

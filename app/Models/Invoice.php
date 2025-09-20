@@ -14,7 +14,26 @@ class Invoice extends Model
 {
     use HasUuids;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'invoice_id',
+        'tenant_id',
+        'property_id',
+        'house_id',
+        'landlord_id',
+        'amount',
+        'bills_amount',
+        'paid_amount',
+        'balance_due',
+        'commission',
+        'status',
+        'due_date',
+        'invoicable_type',
+        'invoicable_id',
+        'bills',
+        'notes',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at'];
 
     protected $casts = [
         'invoicable_type' => InvoicableTypeEnum::class,

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Enums\HouseStatusEnum;
 use App\Enums\PropertyStatusEnum;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\LeaseRequest;
 use App\Models\Lease;
 use App\Models\Property;
 use Illuminate\Http\Request;
@@ -82,9 +83,57 @@ class LeaseController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(LeaseRequest $request)
     {
-        //
+        // Validation is handled by LeaseRequest
+        $validated = $request->validated();
+
+        try {
+            DB::beginTransaction();
+
+            // Calculate next billing date
+            $nextBillingDate = \Carbon\Carbon::parse($validated['start_date'])
+                ->addMonths($validated['rent_cycle'])
+                ->day($validated['invoice_generation_day']);
+
+            // Create the lease
+            $lease = Lease::create([
+                'lease_id' => $validated['lease_id'],
+                'start_date' => $validated['start_date'],
+                'end_date' => $validated['end_date'],
+                'property_id' => $validated['property_id'],
+                'house_id' => $validated['house_id'],
+                'tenant_id' => $validated['tenant_id'],
+                'rent' => $validated['rent'],
+                'rent_cycle' => $validated['rent_cycle'],
+                'invoice_generation_day' => $validated['invoice_generation_day'],
+                'next_billing_date' => $nextBillingDate,
+                'termination_date_notice' => $validated['termination_date_notice'] ?? 30,
+                'status' => $validated['status'],
+            ]);
+
+            // Update property vacancy status if house is assigned
+            if ($validated['house_id']) {
+                $house = \App\Models\House::find($validated['house_id']);
+                if ($house) {
+                    $house->update(['is_vacant' => false]);
+                }
+            }
+
+            DB::commit();
+
+            return redirect()
+                ->route('admin.lease.show', $lease)
+                ->with('success', __('Lease created successfully'));
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            
+            return redirect()
+                ->back()
+                ->withInput()
+                ->with('error', __('Failed to create lease: ') . $e->getMessage());
+        }
     }
 
 

@@ -11,7 +11,18 @@ class StkRequest extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'phone_number',
+        'amount',
+        'account_reference',
+        'transaction_desc',
+        'merchant_request_id',
+        'checkout_request_id',
+        'response_code',
+        'status',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     protected $casts = [
         'detailed_status' => MpesaStatusEnum::class,

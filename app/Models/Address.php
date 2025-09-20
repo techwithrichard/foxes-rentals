@@ -11,7 +11,19 @@ class Address extends Model
 {
     use HasUuids;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'addressable_type',
+        'addressable_id',
+        'street',
+        'city',
+        'state',
+        'postal_code',
+        'country',
+        'latitude',
+        'longitude',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     public function addressable(): MorphTo
     {

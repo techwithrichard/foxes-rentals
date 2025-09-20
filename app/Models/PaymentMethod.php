@@ -10,5 +10,13 @@ class PaymentMethod extends Model
 {
     use HasUuids;
 
-   protected $guarded = [];
+   protected $fillable = [
+        'name',
+        'type',
+        'is_active',
+        'configuration',
+        'description',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 }

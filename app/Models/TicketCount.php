@@ -10,7 +10,14 @@ class TicketCount extends Model
 {
     use HasUuids;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'user_id',
+        'open_tickets',
+        'closed_tickets',
+        'total_tickets',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
     protected $casts = [
         'day' => 'date',
     ];

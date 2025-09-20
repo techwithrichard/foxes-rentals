@@ -14,7 +14,17 @@ class Overpayment extends Model
 
     use HasUuids, LogsActivity;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'tenant_id',
+        'amount',
+        'payment_id',
+        'invoice_id',
+        'status',
+        'notes',
+        'refunded_at',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     public function getActivitylogOptions(): LogOptions
     {

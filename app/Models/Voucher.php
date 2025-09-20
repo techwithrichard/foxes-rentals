@@ -11,7 +11,19 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Voucher extends Model
 {
     use HasUuids;
-    protected $guarded = [];
+    protected $fillable = [
+        'voucher_number',
+        'landlord_id',
+        'property_id',
+        'house_id',
+        'amount',
+        'status',
+        'description',
+        'date',
+        'reference_number',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     protected $casts = [
         'voucher_date' => 'date',

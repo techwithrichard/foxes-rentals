@@ -11,7 +11,16 @@ class LeaseBill extends Model
 {
     use HasUuids;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'lease_id',
+        'name',
+        'amount',
+        'description',
+        'due_date',
+        'status',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     public function lease(): BelongsTo
     {

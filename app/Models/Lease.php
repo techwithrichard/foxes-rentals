@@ -18,7 +18,22 @@ class Lease extends Model
     use HasUuids, LogsActivity;
 
 
-    protected $guarded = [];
+    protected $fillable = [
+        'lease_id',
+        'start_date',
+        'property_id',
+        'house_id',
+        'tenant_id',
+        'rent',
+        'termination_date_notice',
+        'end_date',
+        'rent_cycle',
+        'invoice_generation_day',
+        'next_billing_date',
+        'status',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     protected $casts = [
         'start_date' => 'date',

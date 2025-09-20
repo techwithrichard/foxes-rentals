@@ -10,5 +10,13 @@ class InvoiceBill extends Model
 {
     use HasUuids;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'invoice_id',
+        'bill_name',
+        'amount',
+        'description',
+        'due_date',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 }

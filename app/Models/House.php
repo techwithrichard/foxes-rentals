@@ -19,7 +19,20 @@ class House extends Model
 
     use HasFactory;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'description',
+        'property_id',
+        'rent',
+        'deposit',
+        'is_vacant',
+        'status',
+        'electricity_id',
+        'water_id',
+        'notes',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     public function getActivitylogOptions(): LogOptions
     {

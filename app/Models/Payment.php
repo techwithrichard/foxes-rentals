@@ -15,7 +15,24 @@ class Payment extends Model
     use HasUuids;
     use LogsActivity;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'invoice_id',
+        'amount',
+        'payment_method',
+        'reference_number',
+        'paid_at',
+        'verified_at',
+        'status',
+        'notes',
+        'proof_document',
+        'proof_status',
+        'landlord_id',
+        'property_id',
+        'house_id',
+        'tenant_id',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at'];
 
     protected $casts = [
         'paid_at' => 'date',

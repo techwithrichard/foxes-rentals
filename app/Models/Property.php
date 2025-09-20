@@ -21,7 +21,21 @@ class Property extends Model
         'is_multi_unit' => 'boolean',
     ];
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'description',
+        'type',
+        'is_multi_unit',
+        'rent',
+        'deposit',
+        'is_vacant',
+        'status',
+        'landlord_id',
+        'commission',
+        'electricity_id',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     public function getActivitylogOptions(): LogOptions
     {

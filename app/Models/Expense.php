@@ -13,7 +13,19 @@ class Expense extends Model
 {
     use HasUuids, LogsActivity;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'property_id',
+        'house_id',
+        'expense_type_id',
+        'amount',
+        'description',
+        'date',
+        'status',
+        'receipt_path',
+        'notes',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     protected $casts = [
         'amount' => 'decimal:2',

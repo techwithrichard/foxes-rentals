@@ -10,5 +10,13 @@ class HouseType extends Model
 {
     use HasUuids;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'name',
+        'description',
+        'bedrooms',
+        'bathrooms',
+        'features',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 }

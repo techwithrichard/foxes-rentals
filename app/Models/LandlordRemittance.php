@@ -13,7 +13,17 @@ class LandlordRemittance extends Model
 {
     use HasUuids, LogsActivity;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'landlord_id',
+        'property_id',
+        'amount',
+        'commission',
+        'status',
+        'date',
+        'reference_number',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     protected $casts = [
         'paid_on' => 'date',

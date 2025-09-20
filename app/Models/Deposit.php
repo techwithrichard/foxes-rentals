@@ -12,7 +12,16 @@ class Deposit extends Model
 {
     use HasUuids, LogsActivity;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'lease_id',
+        'amount',
+        'status',
+        'deposit_type',
+        'notes',
+        'refunded_at',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     protected $casts = [
         'refund_date' => 'date',

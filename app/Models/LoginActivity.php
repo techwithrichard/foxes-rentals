@@ -11,7 +11,16 @@ class LoginActivity extends Model
 {
     use HasUuids;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'user_id',
+        'ip_address',
+        'user_agent',
+        'login_at',
+        'logout_at',
+        'status',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     protected $casts = [
         'login_at' => 'datetime:Y-m-d H:i:s',

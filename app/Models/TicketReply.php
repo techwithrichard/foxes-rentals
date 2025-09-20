@@ -12,7 +12,15 @@ class TicketReply extends Model
 {
     use HasUuids;
 
-    protected $guarded = [];
+    protected $fillable = [
+        'ticket_id',
+        'user_id',
+        'message',
+        'is_internal',
+        'attachments',
+    ];
+
+    protected $guarded = ['id', 'created_at', 'updated_at', 'deleted_at'];
 
     public function ticket(): BelongsTo
     {
