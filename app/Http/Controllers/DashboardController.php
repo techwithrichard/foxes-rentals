@@ -30,31 +30,216 @@ class DashboardController extends Controller
     }
 
     /**
-     * Show main dashboard based on user role
+     * Show unified dashboard with role-based content filtering
      */
     public function index()
     {
         $user = Auth::user();
         
-        // Redirect based on role
-        if ($user->hasRole('super_admin') || $user->hasRole('admin')) {
-            return $this->adminDashboard();
+        // Collect all relevant data based on user's roles and permissions
+        $data = [
+            'user' => $user,
+            'user_roles' => $user->getRoleNames(),
+            'permissions' => $user->getAllPermissions()->pluck('name'),
+            'dashboard_sections' => $this->getDashboardSections($user),
+            'statistics' => $this->getRoleBasedStatistics($user),
+            'recent_activities' => $this->getRecentActivities(10),
+            'system_alerts' => $this->getSystemAlerts(),
+            'quick_actions' => $this->getQuickActions($user),
+        ];
+
+        return view('dashboard.unified', $data);
+    }
+
+    /**
+     * Get dashboard sections based on user roles and permissions
+     */
+    protected function getDashboardSections($user)
+    {
+        $sections = [];
+
+        // Admin/Staff sections
+        if ($user->hasAnyRole(['super_admin', 'admin', 'manager', 'agent'])) {
+            $sections['admin'] = [
+                'title' => 'System Administration',
+                'icon' => 'ni ni-setting',
+                'widgets' => $this->getAdminWidgets($user),
+                'visible' => true
+            ];
         }
 
-        if ($user->hasRole('manager') || $user->hasRole('agent')) {
-            return $this->staffDashboard();
-        }
-
+        // Landlord sections
         if ($user->hasRole('landlord')) {
-            return $this->landlordDashboard();
+            $sections['landlord'] = [
+                'title' => 'Property Management',
+                'icon' => 'ni ni-home',
+                'widgets' => $this->getLandlordWidgets($user),
+                'visible' => true
+            ];
         }
 
+        // Tenant sections
         if ($user->hasRole('tenant')) {
-            return $this->tenantDashboard();
+            $sections['tenant'] = [
+                'title' => 'My Lease',
+                'icon' => 'ni ni-user',
+                'widgets' => $this->getTenantWidgets($user),
+                'visible' => true
+            ];
         }
 
-        // Default dashboard for users without specific roles
-        return $this->defaultDashboard();
+        return $sections;
+    }
+
+    /**
+     * Get role-based statistics
+     */
+    protected function getRoleBasedStatistics($user)
+    {
+        $stats = [];
+
+        // Admin statistics
+        if ($user->hasAnyRole(['super_admin', 'admin'])) {
+            $stats = array_merge($stats, $this->getAdminStatistics());
+        }
+
+        // Staff statistics (subset of admin)
+        if ($user->hasAnyRole(['manager', 'agent'])) {
+            $stats = array_merge($stats, $this->getStaffStatistics());
+        }
+
+        // Landlord statistics
+        if ($user->hasRole('landlord')) {
+            $stats = array_merge($stats, $this->getLandlordStatistics());
+        }
+
+        // Tenant statistics
+        if ($user->hasRole('tenant')) {
+            $stats = array_merge($stats, $this->getTenantStatistics());
+        }
+
+        return $stats;
+    }
+
+    /**
+     * Get quick actions based on user permissions
+     */
+    protected function getQuickActions($user)
+    {
+        $actions = [];
+
+        if ($user->can('create property')) {
+            $actions[] = [
+                'title' => 'Add Property',
+                'url' => route('admin.property.create'),
+                'icon' => 'ni ni-plus',
+                'color' => 'primary'
+            ];
+        }
+
+        if ($user->can('create lease')) {
+            $actions[] = [
+                'title' => 'Create Lease',
+                'url' => route('admin.lease.create'),
+                'icon' => 'ni ni-file-text',
+                'color' => 'success'
+            ];
+        }
+
+        if ($user->can('view reports')) {
+            $actions[] = [
+                'title' => 'View Reports',
+                'url' => route('admin.reports.index'),
+                'icon' => 'ni ni-chart',
+                'color' => 'info'
+            ];
+        }
+
+        return $actions;
+    }
+
+    /**
+     * Get admin widgets based on permissions
+     */
+    protected function getAdminWidgets($user)
+    {
+        $widgets = [];
+
+        if ($user->can('view property')) {
+            $widgets[] = [
+                'component' => 'admin.properties-statistics-widget',
+                'size' => 4
+            ];
+        }
+
+        if ($user->can('view house')) {
+            $widgets[] = [
+                'component' => 'admin.houses-statistics-widget',
+                'size' => 4
+            ];
+        }
+
+        if ($user->can('view lease')) {
+            $widgets[] = [
+                'component' => 'admin.leases-statistics-widget',
+                'size' => 4
+            ];
+        }
+
+        return $widgets;
+    }
+
+    /**
+     * Get landlord widgets
+     */
+    protected function getLandlordWidgets($user)
+    {
+        return [
+            [
+                'component' => 'landlord.properties-overview-widget',
+                'size' => 6,
+                'data' => ['properties' => $this->getLandlordProperties()]
+            ],
+            [
+                'component' => 'landlord.recent-payments-widget',
+                'size' => 6,
+                'data' => ['payments' => $this->getRecentPayments()]
+            ]
+        ];
+    }
+
+    /**
+     * Get tenant widgets
+     */
+    protected function getTenantWidgets($user)
+    {
+        return [
+            [
+                'component' => 'tenant.lease-info-widget',
+                'size' => 6,
+                'data' => ['lease_info' => $this->getTenantLeaseInfo()]
+            ],
+            [
+                'component' => 'tenant.upcoming-payments-widget',
+                'size' => 6,
+                'data' => ['payments' => $this->getUpcomingPayments()]
+            ]
+        ];
+    }
+
+    /**
+     * Get tenant-specific statistics
+     */
+    protected function getTenantStatistics()
+    {
+        $user = Auth::user();
+        $lease = $user->leases()->where('status', 'active')->first();
+        
+        return [
+            'lease_status' => $lease ? $lease->status : 'none',
+            'outstanding_balance' => $this->getTenantOutstandingBalance(),
+            'payment_history_count' => $this->getTenantPaymentHistory()->count(),
+        ];
     }
 
     /**
