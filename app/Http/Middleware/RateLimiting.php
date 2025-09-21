@@ -11,40 +11,45 @@ class RateLimiting
 {
     /**
      * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
      */
     public function handle(Request $request, Closure $next, string $key = 'default', int $maxAttempts = 60, int $decayMinutes = 1): Response
     {
         $key = $this->resolveRequestSignature($request, $key);
 
         if (RateLimiter::tooManyAttempts($key, $maxAttempts)) {
-            $seconds = RateLimiter::availableIn($key);
+            $retryAfter = RateLimiter::availableIn($key);
             
             return response()->json([
                 'success' => false,
-                'message' => 'Too many requests. Please try again in ' . $seconds . ' seconds.',
-                'retry_after' => $seconds
-            ], 429);
+                'message' => 'Too many requests. Please try again later.',
+                'retry_after' => $retryAfter,
+                'limit' => $maxAttempts,
+                'remaining' => 0
+            ], 429)->header('Retry-After', $retryAfter);
         }
 
         RateLimiter::hit($key, $decayMinutes * 60);
 
-        return $next($request);
+        $response = $next($request);
+
+        $response->headers->set('X-RateLimit-Limit', $maxAttempts);
+        $response->headers->set('X-RateLimit-Remaining', RateLimiter::remaining($key, $maxAttempts));
+        $response->headers->set('X-RateLimit-Reset', RateLimiter::availableIn($key));
+
+        return $response;
     }
 
     /**
-     * Resolve request signature for rate limiting
+     * Resolve request signature.
      */
     protected function resolveRequestSignature(Request $request, string $key): string
     {
         $user = $request->user();
-        $ip = $request->ip();
         
         if ($user) {
             return $key . '|' . $user->id;
         }
-        
-        return $key . '|' . $ip;
+
+        return $key . '|' . $request->ip();
     }
 }

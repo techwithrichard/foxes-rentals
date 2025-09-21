@@ -11,6 +11,12 @@ use Yajra\DataTables\DataTables;
 
 class ReportsController extends Controller
 {
+    public function index()
+    {
+        abort_unless(auth()->user()->can('view reports'), 403);
+        return view('admin.reports.index');
+    }
+
     public function landlordIncome()
     {
         abort_unless(auth()->user()->can('view landlord income report'), 403);
