@@ -98,11 +98,42 @@
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group">
-                                            <label class="form-label">{{ __('Property Type') }}</label>
+                                            <label class="form-label">{{ __('Property Type') }} <span class="text-danger">*</span></label>
                                             <div class="form-control-wrap">
                                                 <select class="form-select" name="property_type_id" required>
                                                     <option value="">{{ __('Select Property Type') }}</option>
-                                                    <!-- Property types will be loaded dynamically -->
+                                                    @foreach(\App\Models\PropertyType::active()->orderBy('category')->orderBy('sort_order')->get() as $propertyType)
+                                                        <option value="{{ $propertyType->id }}">
+                                                            @switch($propertyType->category)
+                                                                @case('residential')
+                                                                    🏠 {{ $propertyType->name }}
+                                                                    @break
+                                                                @case('office')
+                                                                    🏢 {{ $propertyType->name }}
+                                                                    @break
+                                                                @case('retail')
+                                                                    🛍️ {{ $propertyType->name }}
+                                                                    @break
+                                                                @case('industrial')
+                                                                    🏭 {{ $propertyType->name }}
+                                                                    @break
+                                                                @case('hospitality')
+                                                                    🏨 {{ $propertyType->name }}
+                                                                    @break
+                                                                @case('healthcare')
+                                                                    🏥 {{ $propertyType->name }}
+                                                                    @break
+                                                                @case('mixed-use')
+                                                                    🏘️ {{ $propertyType->name }}
+                                                                    @break
+                                                                @case('land')
+                                                                    🌿 {{ $propertyType->name }}
+                                                                    @break
+                                                                @default
+                                                                    {{ $propertyType->name }}
+                                                            @endswitch
+                                                        </option>
+                                                    @endforeach
                                                 </select>
                                             </div>
                                         </div>

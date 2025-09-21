@@ -15,7 +15,7 @@ class PropertyType extends Model
     protected $fillable = [
         'name',
         'description',
-        'category', // 'residential', 'commercial', 'industrial', 'land'
+        'category', // 'residential', 'office', 'retail', 'industrial', 'hospitality', 'healthcare', 'mixed-use', 'land'
         'is_active',
         'sort_order',
         'icon',
@@ -27,10 +27,8 @@ class PropertyType extends Model
         'sort_order' => 'integer',
     ];
 
-    public function properties(): HasMany
-    {
-        return $this->hasMany(Property::class);
-    }
+    // Note: The old Property model doesn't have property_type_id column
+    // Only the new property models (RentalProperty, SaleProperty, LeaseProperty) have this relationship
 
     public function rentalProperties(): HasMany
     {

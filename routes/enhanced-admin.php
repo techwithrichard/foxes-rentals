@@ -28,6 +28,8 @@ Route::middleware(['auth', 'verified', 'role_or_permission:super_admin|admin'])-
     Route::resource('property-types', PropertyTypeController::class);
     Route::post('property-types/{propertyType}/toggle-status', [PropertyTypeController::class, 'toggleStatus'])
         ->name('property-types.toggle-status');
+    Route::post('property-types/bulk-action', [PropertyTypeController::class, 'bulkAction'])
+        ->name('property-types.bulk-action');
 
     // Rental Properties Management
     Route::prefix('rental-properties')->name('rental-properties.')->group(function () {

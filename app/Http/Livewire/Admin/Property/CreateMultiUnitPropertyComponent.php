@@ -103,7 +103,7 @@ class CreateMultiUnitPropertyComponent extends Component
     {
 
         $types = HouseType::pluck('name');
-        $propertyTypes = PropertyType::orderBy('name')->pluck('name', 'name');
+        $propertyTypes = PropertyType::active()->orderBy('category')->orderBy('sort_order')->get();
         $landlords = User::role('landlord')->select('id', 'name', 'email')->get();
 
         return view('livewire.admin.property.create-multi-unit-property-component',

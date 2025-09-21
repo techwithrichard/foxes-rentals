@@ -211,7 +211,13 @@
                             </div>
                             
                             <!-- Recent Properties -->
-                            @if(($propertyType->properties_count ?? 0) > 0)
+                            @php
+                                $totalProperties = ($propertyType->rental_properties_count ?? 0) + 
+                                                   ($propertyType->sale_properties_count ?? 0) + 
+                                                   ($propertyType->lease_properties_count ?? 0);
+                            @endphp
+                            
+                            @if($totalProperties > 0)
                             <div class="row g-4 mt-4">
                                 <div class="col-12">
                                     <div class="card">
@@ -228,13 +234,22 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        @forelse($propertyType->properties->take(5) as $property)
+                                                        @php
+                                                            $recentProperties = collect()
+                                                                ->merge($propertyType->rentalProperties->take(2))
+                                                                ->merge($propertyType->saleProperties->take(2))
+                                                                ->merge($propertyType->leaseProperties->take(2))
+                                                                ->sortByDesc('created_at')
+                                                                ->take(5);
+                                                        @endphp
+                                                        
+                                                        @forelse($recentProperties as $property)
                                                             <tr>
                                                                 <td>
                                                                     <strong>{{ $property->name ?? 'N/A' }}</strong>
                                                                 </td>
                                                                 <td>
-                                                                    <span class="badge badge-info">{{ ucfirst($property->type ?? 'N/A') }}</span>
+                                                                    <span class="badge badge-info">{{ ucfirst(class_basename($property)) }}</span>
                                                                 </td>
                                                                 <td>
                                                                     <span class="badge badge-{{ $property->status == 'active' ? 'success' : 'secondary' }}">

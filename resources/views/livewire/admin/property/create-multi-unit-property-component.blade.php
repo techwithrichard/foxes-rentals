@@ -41,10 +41,39 @@
                                         <select class="form-control @error('type') is-invalid @enderror"
                                                 id="propertyType" wire:model="property_type"
                                                 data-placeholder="{{ __('Select property type')}}">
-                                            <option selected
-                                                    value="{{ \App\Enums\PropertyStatusEnum::MULTI_UNIT->value }}">
-                                                Multi-Unit
-                                            </option>
+                                            <option value="">{{ __('Select Property Type') }}</option>
+                                            @foreach($propertyTypes as $propertyType)
+                                                <option value="{{ $propertyType->name }}">
+                                                    @switch($propertyType->category)
+                                                        @case('residential')
+                                                            🏠 {{ $propertyType->name }}
+                                                            @break
+                                                        @case('office')
+                                                            🏢 {{ $propertyType->name }}
+                                                            @break
+                                                        @case('retail')
+                                                            🛍️ {{ $propertyType->name }}
+                                                            @break
+                                                        @case('industrial')
+                                                            🏭 {{ $propertyType->name }}
+                                                            @break
+                                                        @case('hospitality')
+                                                            🏨 {{ $propertyType->name }}
+                                                            @break
+                                                        @case('healthcare')
+                                                            🏥 {{ $propertyType->name }}
+                                                            @break
+                                                        @case('mixed-use')
+                                                            🏘️ {{ $propertyType->name }}
+                                                            @break
+                                                        @case('land')
+                                                            🌿 {{ $propertyType->name }}
+                                                            @break
+                                                        @default
+                                                            {{ $propertyType->name }}
+                                                    @endswitch
+                                                </option>
+                                            @endforeach
                                         </select>
                                     </div>
                                 </div>

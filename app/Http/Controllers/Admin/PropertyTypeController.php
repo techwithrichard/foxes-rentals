@@ -13,7 +13,7 @@ class PropertyTypeController extends Controller
     {
         $this->authorize('manage property types');
         
-        $propertyTypes = PropertyType::withCount(['properties', 'rentalProperties', 'saleProperties', 'leaseProperties'])
+        $propertyTypes = PropertyType::withCount(['rentalProperties', 'saleProperties', 'leaseProperties'])
             ->orderBy('sort_order')
             ->paginate(20);
 
@@ -34,7 +34,7 @@ class PropertyTypeController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:property_types',
             'description' => 'nullable|string|max:1000',
-            'category' => 'required|in:residential,commercial,industrial,land,mixed-use',
+            'category' => 'required|in:residential,office,retail,industrial,hospitality,healthcare,mixed-use,land',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0',
             'icon' => 'nullable|string|max:100',
@@ -51,7 +51,7 @@ class PropertyTypeController extends Controller
     {
         $this->authorize('manage property types');
         
-        $propertyType->load(['properties', 'rentalProperties', 'saleProperties', 'leaseProperties']);
+        $propertyType->load(['rentalProperties', 'saleProperties', 'leaseProperties']);
         
         return view('admin.property-types.show', compact('propertyType'));
     }
@@ -70,7 +70,7 @@ class PropertyTypeController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255', Rule::unique('property_types')->ignore($propertyType->id)],
             'description' => 'nullable|string|max:1000',
-            'category' => 'required|in:residential,commercial,industrial,land,mixed-use',
+            'category' => 'required|in:residential,office,retail,industrial,hospitality,healthcare,mixed-use,land',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0',
             'icon' => 'nullable|string|max:100',
@@ -87,7 +87,11 @@ class PropertyTypeController extends Controller
     {
         $this->authorize('manage property types');
         
-        if ($propertyType->properties()->count() > 0) {
+        $totalProperties = $propertyType->rentalProperties()->count() + 
+                           $propertyType->saleProperties()->count() + 
+                           $propertyType->leaseProperties()->count();
+                           
+        if ($totalProperties > 0) {
             return redirect()->back()
                 ->with('error', 'Cannot delete property type with associated properties.');
         }
@@ -106,5 +110,66 @@ class PropertyTypeController extends Controller
 
         return redirect()->back()
             ->with('success', 'Property type status updated successfully.');
+    }
+
+    public function bulkAction(Request $request)
+    {
+        $this->authorize('manage property types');
+        
+        $validated = $request->validate([
+            'action' => 'required|in:activate,deactivate,delete',
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'required|uuid|exists:property_types,id',
+        ]);
+
+        $action = $validated['action'];
+        $ids = $validated['ids'];
+        $count = count($ids);
+
+        try {
+            switch ($action) {
+                case 'activate':
+                    PropertyType::whereIn('id', $ids)->update(['is_active' => true]);
+                    $message = "Successfully activated {$count} property type(s).";
+                    break;
+                    
+                case 'deactivate':
+                    PropertyType::whereIn('id', $ids)->update(['is_active' => false]);
+                    $message = "Successfully deactivated {$count} property type(s).";
+                    break;
+                    
+                case 'delete':
+                    // Check if any property types have associated properties
+                    $propertyTypesWithProperties = PropertyType::whereIn('id', $ids)
+                        ->where(function($query) {
+                            $query->whereHas('rentalProperties')
+                                  ->orWhereHas('saleProperties')
+                                  ->orWhereHas('leaseProperties');
+                        })
+                        ->count();
+                    
+                    if ($propertyTypesWithProperties > 0) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'Cannot delete property types with associated properties.'
+                        ]);
+                    }
+                    
+                    PropertyType::whereIn('id', $ids)->delete();
+                    $message = "Successfully deleted {$count} property type(s).";
+                    break;
+            }
+
+            return response()->json([
+                'success' => true,
+                'message' => $message
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'An error occurred while performing bulk action: ' . $e->getMessage()
+            ]);
+        }
     }
 }

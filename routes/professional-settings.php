@@ -50,6 +50,8 @@ Route::middleware(['auth', 'role_or_permission:super_admin|admin'])
             Route::get('/{propertyType}/edit', [PropertyTypeController::class, 'edit'])->name('edit');
             Route::put('/{propertyType}', [PropertyTypeController::class, 'update'])->name('update');
             Route::delete('/{propertyType}', [PropertyTypeController::class, 'destroy'])->name('destroy');
+            Route::post('/{propertyType}/toggle-status', [PropertyTypeController::class, 'toggleStatus'])->name('toggle-status');
+            Route::post('/bulk-action', [PropertyTypeController::class, 'bulkAction'])->name('bulk-action');
         });
         
         Route::prefix('house-types')->name('house-types.')->group(function () {

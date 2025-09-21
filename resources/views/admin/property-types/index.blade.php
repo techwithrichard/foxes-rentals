@@ -183,16 +183,16 @@
                                                         </td>
                                                         <td>
                                                             <div class="d-flex gap-2">
-                                                                @if($propertyType->rental_properties_count > 0)
+                                                                @if(($propertyType->rental_properties_count ?? 0) > 0)
                                                                     <span class="badge badge-info">{{ $propertyType->rental_properties_count }} rental</span>
                                                                 @endif
-                                                                @if($propertyType->sale_properties_count > 0)
+                                                                @if(($propertyType->sale_properties_count ?? 0) > 0)
                                                                     <span class="badge badge-success">{{ $propertyType->sale_properties_count }} sale</span>
                                                                 @endif
-                                                                @if($propertyType->lease_properties_count > 0)
+                                                                @if(($propertyType->lease_properties_count ?? 0) > 0)
                                                                     <span class="badge badge-warning">{{ $propertyType->lease_properties_count }} lease</span>
                                                                 @endif
-                                                                @if($propertyType->rental_properties_count == 0 && $propertyType->sale_properties_count == 0 && $propertyType->lease_properties_count == 0)
+                                                                @if(($propertyType->rental_properties_count ?? 0) == 0 && ($propertyType->sale_properties_count ?? 0) == 0 && ($propertyType->lease_properties_count ?? 0) == 0)
                                                                     <span class="text-muted">{{ __('No properties') }}</span>
                                                                 @endif
                                                             </div>

@@ -41,6 +41,7 @@ Route::get('/test-route', function () {
     return 'Test route works!';
 });
 
+
 // Frontend Property Routes
 Route::prefix('properties')->name('frontend.properties.')->group(function () {
     Route::get('/', [App\Http\Controllers\Frontend\PropertyController::class, 'index'])->name('index');
@@ -176,4 +177,7 @@ Route::middleware(['auth'])->group(function () {
         return view('profile', ['user' => auth()->user()]);
     })->name('general.profile');
 });
+
+// Test expert property types system (temporary - remove in production)
+// Route::get('/test-expert-property-types', function () { /* ... */ });
 

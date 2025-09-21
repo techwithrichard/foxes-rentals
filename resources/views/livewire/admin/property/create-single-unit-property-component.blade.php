@@ -42,8 +42,37 @@
                                                 id="propertyType" wire:model="type"
                                                 data-placeholder="{{ __('Select property type')}}">
                                             <option label="Select type"></option>
-                                            @foreach($propertyTypes as $item=>$index)
-                                                <option value="{{ $index }}">{{ $index }}</option>
+                                            @foreach($propertyTypes as $propertyType)
+                                                <option value="{{ $propertyType->name }}">
+                                                    @switch($propertyType->category)
+                                                        @case('residential')
+                                                            🏠 {{ $propertyType->name }}
+                                                            @break
+                                                        @case('office')
+                                                            🏢 {{ $propertyType->name }}
+                                                            @break
+                                                        @case('retail')
+                                                            🛍️ {{ $propertyType->name }}
+                                                            @break
+                                                        @case('industrial')
+                                                            🏭 {{ $propertyType->name }}
+                                                            @break
+                                                        @case('hospitality')
+                                                            🏨 {{ $propertyType->name }}
+                                                            @break
+                                                        @case('healthcare')
+                                                            🏥 {{ $propertyType->name }}
+                                                            @break
+                                                        @case('mixed-use')
+                                                            🏘️ {{ $propertyType->name }}
+                                                            @break
+                                                        @case('land')
+                                                            🌿 {{ $propertyType->name }}
+                                                            @break
+                                                        @default
+                                                            {{ $propertyType->name }}
+                                                    @endswitch
+                                                </option>
                                             @endforeach
                                         </select>
                                     </div>
