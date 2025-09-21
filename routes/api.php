@@ -19,6 +19,19 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+// Property Management API Routes
+Route::middleware(['auth:sanctum'])
+    ->prefix('properties')
+    ->name('api.properties.')
+    ->group(function () {
+        Route::get('/', [App\Http\Controllers\Api\PropertyApiController::class, 'index'])->name('index');
+        Route::post('/', [App\Http\Controllers\Api\PropertyApiController::class, 'store'])->name('store');
+        Route::get('/statistics', [App\Http\Controllers\Api\PropertyApiController::class, 'statistics'])->name('statistics');
+        Route::get('/{id}', [App\Http\Controllers\Api\PropertyApiController::class, 'show'])->name('show');
+        Route::put('/{id}', [App\Http\Controllers\Api\PropertyApiController::class, 'update'])->name('update');
+        Route::delete('/{id}', [App\Http\Controllers\Api\PropertyApiController::class, 'destroy'])->name('destroy');
+    });
+
 // User Management API Routes
 Route::middleware(['auth:sanctum', 'role_or_permission:super_admin|admin'])
     ->prefix('users')

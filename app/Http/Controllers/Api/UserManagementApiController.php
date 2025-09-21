@@ -11,6 +11,7 @@ use App\Services\PermissionManagementService;
 use App\Services\UserActivityService;
 use App\Services\PasswordSecurityService;
 use App\Services\UserInvitationService;
+use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Auth;
@@ -18,6 +19,7 @@ use Illuminate\Support\Facades\Validator;
 
 class UserManagementApiController extends Controller
 {
+    use ApiResponse;
     protected UserManagementService $userService;
     protected RoleBasedAccessControlService $rbacService;
     protected PermissionManagementService $permissionService;
@@ -54,16 +56,7 @@ class UserManagementApiController extends Controller
 
         $users = $this->userService->getAllUsers($filters, $perPage);
 
-        return response()->json([
-            'success' => true,
-            'data' => $users->items(),
-            'meta' => [
-                'current_page' => $users->currentPage(),
-                'last_page' => $users->lastPage(),
-                'per_page' => $users->perPage(),
-                'total' => $users->total(),
-            ],
-        ]);
+        return $this->paginatedResponse($users, 'Users retrieved successfully');
     }
 
     /**
@@ -76,16 +69,10 @@ class UserManagementApiController extends Controller
         $user = $this->userService->getUserById($id);
 
         if (!$user) {
-            return response()->json([
-                'success' => false,
-                'message' => 'User not found',
-            ], 404);
+            return $this->notFoundResponse('User not found');
         }
 
-        return response()->json([
-            'success' => true,
-            'data' => $user,
-        ]);
+        return $this->successResponse($user, 'User retrieved successfully');
     }
 
     /**
