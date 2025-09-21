@@ -110,7 +110,7 @@ class PropertyController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('admin.property.show', $property)
+                ->route('admin.properties.show', $property)
                 ->with('success', __('Property created successfully'));
 
         } catch (\Exception $e) {
@@ -194,7 +194,7 @@ class PropertyController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('admin.property.show', $property)
+                ->route('admin.properties.show', $property)
                 ->with('success', __('Property updated successfully'));
 
         } catch (\Exception $e) {

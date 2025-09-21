@@ -97,3 +97,72 @@ Route::prefix('public')
             ]);
         })->name('info');
     });
+
+// Mobile API Routes
+Route::prefix('mobile')
+    ->name('api.mobile.')
+    ->group(function () {
+        // Authentication
+        Route::post('/auth/login', function () {
+            return response()->json(['message' => 'Mobile login endpoint']);
+        })->name('auth.login');
+        
+        Route::post('/auth/logout', function () {
+            return response()->json(['message' => 'Mobile logout endpoint']);
+        })->name('auth.logout');
+        
+        // Protected mobile routes
+        Route::middleware('auth:sanctum')->group(function () {
+            // Dashboard
+            Route::get('/dashboard', function () {
+                return response()->json(['message' => 'Mobile dashboard endpoint']);
+            })->name('dashboard');
+            
+            // Properties
+            Route::get('/properties', function () {
+                return response()->json(['message' => 'Mobile properties endpoint']);
+            })->name('properties.index');
+            
+            Route::get('/properties/{id}', function ($id) {
+                return response()->json(['message' => "Mobile property {$id} endpoint"]);
+            })->name('properties.show');
+            
+            // Payments
+            Route::get('/payments', function () {
+                return response()->json(['message' => 'Mobile payments endpoint']);
+            })->name('payments.index');
+            
+            Route::post('/payments', function () {
+                return response()->json(['message' => 'Mobile payment creation endpoint']);
+            })->name('payments.store');
+            
+            // Profile
+            Route::get('/profile', function () {
+                return response()->json(['message' => 'Mobile profile endpoint']);
+            })->name('profile.show');
+            
+            Route::put('/profile', function () {
+                return response()->json(['message' => 'Mobile profile update endpoint']);
+            })->name('profile.update');
+            
+            // Notifications
+            Route::get('/notifications', function () {
+                return response()->json(['message' => 'Mobile notifications endpoint']);
+            })->name('notifications.index');
+        });
+        
+        // App settings
+        Route::get('/settings', function () {
+            return response()->json([
+                'app_version' => '1.0.0',
+                'min_android_version' => '7.0',
+                'min_ios_version' => '12.0',
+                'features' => [
+                    'property_search' => true,
+                    'payment_processing' => true,
+                    'document_upload' => true,
+                    'push_notifications' => true
+                ]
+            ]);
+        })->name('settings');
+    });

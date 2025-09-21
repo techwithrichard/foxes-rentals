@@ -131,7 +131,7 @@ class DashboardController extends Controller
         if ($user->can('create property')) {
             $actions[] = [
                 'title' => 'Add Property',
-                'url' => route('admin.property.create'),
+                'url' => route('admin.properties.create'),
                 'icon' => 'ni ni-plus',
                 'color' => 'primary'
             ];
@@ -140,7 +140,7 @@ class DashboardController extends Controller
         if ($user->can('create lease')) {
             $actions[] = [
                 'title' => 'Create Lease',
-                'url' => route('admin.lease.create'),
+                'url' => route('admin.leases.create'),
                 'icon' => 'ni ni-file-text',
                 'color' => 'success'
             ];

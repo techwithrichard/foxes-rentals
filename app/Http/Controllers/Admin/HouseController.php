@@ -104,7 +104,7 @@ class HouseController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('admin.house.show', $house)
+                ->route('admin.houses.show', $house)
                 ->with('success', __('House created successfully'));
 
         } catch (\Exception $e) {

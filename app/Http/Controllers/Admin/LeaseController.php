@@ -123,7 +123,7 @@ class LeaseController extends Controller
             DB::commit();
 
             return redirect()
-                ->route('admin.lease.show', $lease)
+                ->route('admin.leases.show', $lease)
                 ->with('success', __('Lease created successfully'));
 
         } catch (\Exception $e) {
