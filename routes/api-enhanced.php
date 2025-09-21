@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\PropertyApiController;
 use App\Http\Controllers\Api\TenantPortalController;
+use App\Http\Controllers\Api\MaintenanceApiController;
+use App\Http\Controllers\Api\CommunicationApiController;
+use App\Http\Controllers\Api\WorkflowApiController;
+use App\Http\Controllers\Api\BusinessIntelligenceApiController;
 
 /*
 |--------------------------------------------------------------------------
@@ -60,6 +64,76 @@ Route::middleware(['auth:sanctum'])->group(function () {
             ->name('api.tenant-portal.financial-summary');
         Route::put('/profile/{tenantId}', [TenantPortalController::class, 'updateProfile'])
             ->name('api.tenant-portal.update-profile');
+    });
+
+    // Maintenance Management Routes
+    Route::prefix('maintenance')->group(function () {
+        Route::post('/schedule-preventive/{propertyId}', [MaintenanceApiController::class, 'schedulePreventiveMaintenance'])
+            ->name('api.maintenance.schedule-preventive');
+        Route::post('/assign-vendor/{requestId}', [MaintenanceApiController::class, 'assignVendor'])
+            ->name('api.maintenance.assign-vendor');
+        Route::get('/costs/{propertyId}', [MaintenanceApiController::class, 'getMaintenanceCosts'])
+            ->name('api.maintenance.costs');
+        Route::get('/reports/{propertyId}', [MaintenanceApiController::class, 'generateReports'])
+            ->name('api.maintenance.reports');
+        Route::get('/vendor-performance/{propertyId}', [MaintenanceApiController::class, 'getVendorPerformance'])
+            ->name('api.maintenance.vendor-performance');
+        Route::get('/trends/{propertyId}', [MaintenanceApiController::class, 'getMaintenanceTrends'])
+            ->name('api.maintenance.trends');
+        Route::get('/upcoming/{propertyId}', [MaintenanceApiController::class, 'getUpcomingMaintenance'])
+            ->name('api.maintenance.upcoming');
+        Route::get('/efficiency/{propertyId}', [MaintenanceApiController::class, 'getEfficiencyMetrics'])
+            ->name('api.maintenance.efficiency');
+    });
+
+    // Communication Routes
+    Route::prefix('communication')->group(function () {
+        Route::post('/send-notification', [CommunicationApiController::class, 'sendNotification'])
+            ->name('api.communication.send-notification');
+        Route::post('/payment-reminders', [CommunicationApiController::class, 'sendPaymentReminders'])
+            ->name('api.communication.payment-reminders');
+        Route::post('/lease-renewal-notifications', [CommunicationApiController::class, 'sendLeaseRenewalNotifications'])
+            ->name('api.communication.lease-renewal-notifications');
+        Route::post('/maintenance-updates/{maintenanceRequestId}', [CommunicationApiController::class, 'sendMaintenanceUpdates'])
+            ->name('api.communication.maintenance-updates');
+        Route::post('/property-announcement/{propertyId}', [CommunicationApiController::class, 'sendPropertyAnnouncement'])
+            ->name('api.communication.property-announcement');
+        Route::get('/analytics', [CommunicationApiController::class, 'getCommunicationAnalytics'])
+            ->name('api.communication.analytics');
+    });
+
+    // Workflow Automation Routes
+    Route::prefix('workflow')->group(function () {
+        Route::post('/lease-renewal/{leaseId}', [WorkflowApiController::class, 'processLeaseRenewal'])
+            ->name('api.workflow.lease-renewal');
+        Route::post('/payment-reminders', [WorkflowApiController::class, 'handlePaymentReminders'])
+            ->name('api.workflow.payment-reminders');
+        Route::post('/maintenance-requests', [WorkflowApiController::class, 'processMaintenanceRequests'])
+            ->name('api.workflow.maintenance-requests');
+        Route::post('/monthly-reports', [WorkflowApiController::class, 'generateMonthlyReports'])
+            ->name('api.workflow.monthly-reports');
+    });
+
+    // Business Intelligence Routes
+    Route::prefix('business-intelligence')->group(function () {
+        Route::get('/dashboard', [BusinessIntelligenceApiController::class, 'getDashboardData'])
+            ->name('api.bi.dashboard');
+        Route::get('/overview', [BusinessIntelligenceApiController::class, 'getOverviewMetrics'])
+            ->name('api.bi.overview');
+        Route::get('/financial-performance', [BusinessIntelligenceApiController::class, 'getFinancialPerformance'])
+            ->name('api.bi.financial-performance');
+        Route::get('/property-performance', [BusinessIntelligenceApiController::class, 'getPropertyPerformance'])
+            ->name('api.bi.property-performance');
+        Route::get('/tenant-analytics', [BusinessIntelligenceApiController::class, 'getTenantAnalytics'])
+            ->name('api.bi.tenant-analytics');
+        Route::get('/maintenance-insights', [BusinessIntelligenceApiController::class, 'getMaintenanceInsights'])
+            ->name('api.bi.maintenance-insights');
+        Route::get('/market-analysis', [BusinessIntelligenceApiController::class, 'getMarketAnalysis'])
+            ->name('api.bi.market-analysis');
+        Route::get('/predictive-analytics', [BusinessIntelligenceApiController::class, 'getPredictiveAnalytics'])
+            ->name('api.bi.predictive-analytics');
+        Route::get('/recommendations', [BusinessIntelligenceApiController::class, 'getRecommendations'])
+            ->name('api.bi.recommendations');
     });
 
     // Security and Audit Routes
