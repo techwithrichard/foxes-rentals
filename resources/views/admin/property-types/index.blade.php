@@ -39,7 +39,20 @@
 
                                 <!-- Filters -->
                                 <div class="row g-3 mb-4">
-                                    <div class="col-md-4">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label class="form-label">{{ __('Category') }}</label>
+                                            <select class="form-select" id="filter-category" onchange="filterPropertyTypes()">
+                                                <option value="">{{ __('All Categories') }}</option>
+                                                <option value="residential">🏠 {{ __('Residential') }}</option>
+                                                <option value="commercial">🏢 {{ __('Commercial') }}</option>
+                                                <option value="industrial">🏭 {{ __('Industrial') }}</option>
+                                                <option value="land">🌿 {{ __('Land') }}</option>
+                                                <option value="mixed-use">🏘️ {{ __('Mixed-Use') }}</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
                                         <div class="form-group">
                                             <label class="form-label">{{ __('Status') }}</label>
                                             <select class="form-select" id="filter-status" onchange="filterPropertyTypes()">
@@ -55,7 +68,7 @@
                                             <input type="text" class="form-control" id="search-input" placeholder="{{ __('Search property types...') }}" onkeyup="filterPropertyTypes()">
                                         </div>
                                     </div>
-                                    <div class="col-md-4">
+                                    <div class="col-md-2">
                                         <div class="form-group">
                                             <label class="form-label">&nbsp;</label>
                                             <div class="btn-group w-100" role="group">
@@ -106,6 +119,7 @@
                                                         <input type="checkbox" id="select-all" onchange="toggleSelectAll()">
                                                     </th>
                                                     <th>{{ __('Name') }}</th>
+                                                    <th>{{ __('Category') }}</th>
                                                     <th>{{ __('Description') }}</th>
                                                     <th>{{ __('Properties') }}</th>
                                                     <th>{{ __('Status') }}</th>
@@ -116,7 +130,9 @@
                                             </thead>
                                             <tbody id="property-types-table-body">
                                                 @forelse($propertyTypes as $propertyType)
-                                                    <tr data-type-id="{{ $propertyType->id }}" data-status="{{ $propertyType->is_active ? 'active' : 'inactive' }}">
+                                                    <tr data-type-id="{{ $propertyType->id }}" 
+                                                        data-status="{{ $propertyType->is_active ? 'active' : 'inactive' }}"
+                                                        data-category="{{ $propertyType->category }}">
                                                         <td>
                                                             <input type="checkbox" class="property-type-checkbox" value="{{ $propertyType->id }}" onchange="updateBulkActions()">
                                                         </td>
@@ -124,18 +140,39 @@
                                                             <div class="d-flex align-items-center">
                                                                 <div class="me-3">
                                                                     @if($propertyType->icon)
-                                                                        <em class="icon ni {{ $propertyType->icon }}"></em>
+                                                                        <em class="icon ni {{ $propertyType->icon }}" 
+                                                                            style="color: {{ $propertyType->color }};"></em>
                                                                     @else
                                                                         <em class="icon ni ni-building"></em>
                                                                     @endif
                                                                 </div>
                                                                 <div>
                                                                     <strong>{{ $propertyType->name }}</strong>
-                                                                    @if($propertyType->features && count($propertyType->features) > 0)
-                                                                        <br><small class="text-muted">{{ count($propertyType->features) }} features</small>
-                                                                    @endif
                                                                 </div>
                                                             </div>
+                                                        </td>
+                                                        <td>
+                                                            <span class="badge badge-{{ $propertyType->category == 'residential' ? 'success' : ($propertyType->category == 'commercial' ? 'primary' : ($propertyType->category == 'industrial' ? 'warning' : ($propertyType->category == 'land' ? 'info' : 'secondary'))) }}">
+                                                                @switch($propertyType->category)
+                                                                    @case('residential')
+                                                                        🏠 {{ __('Residential') }}
+                                                                        @break
+                                                                    @case('commercial')
+                                                                        🏢 {{ __('Commercial') }}
+                                                                        @break
+                                                                    @case('industrial')
+                                                                        🏭 {{ __('Industrial') }}
+                                                                        @break
+                                                                    @case('land')
+                                                                        🌿 {{ __('Land') }}
+                                                                        @break
+                                                                    @case('mixed-use')
+                                                                        🏘️ {{ __('Mixed-Use') }}
+                                                                        @break
+                                                                    @default
+                                                                        {{ ucfirst($propertyType->category) }}
+                                                                @endswitch
+                                                            </span>
                                                         </td>
                                                         <td>
                                                             @if($propertyType->description)
@@ -152,7 +189,10 @@
                                                                 @if($propertyType->sale_properties_count > 0)
                                                                     <span class="badge badge-success">{{ $propertyType->sale_properties_count }} sale</span>
                                                                 @endif
-                                                                @if($propertyType->rental_properties_count == 0 && $propertyType->sale_properties_count == 0)
+                                                                @if($propertyType->lease_properties_count > 0)
+                                                                    <span class="badge badge-warning">{{ $propertyType->lease_properties_count }} lease</span>
+                                                                @endif
+                                                                @if($propertyType->rental_properties_count == 0 && $propertyType->sale_properties_count == 0 && $propertyType->lease_properties_count == 0)
                                                                     <span class="text-muted">{{ __('No properties') }}</span>
                                                                 @endif
                                                             </div>
@@ -172,6 +212,9 @@
                                                         </td>
                                                         <td>
                                                             <div class="btn-group" role="group">
+                                                                <a href="{{ route('admin.property-types.show', $propertyType) }}" class="btn btn-sm btn-outline-info" title="{{ __('View') }}">
+                                                                    <em class="icon ni ni-eye"></em>
+                                                                </a>
                                                                 <a href="{{ route('admin.property-types.edit', $propertyType) }}" class="btn btn-sm btn-outline-secondary" title="{{ __('Edit') }}">
                                                                     <em class="icon ni ni-edit"></em>
                                                                 </a>
@@ -188,7 +231,7 @@
                                                     </tr>
                                                 @empty
                                                     <tr>
-                                                        <td colspan="8" class="text-center py-4">
+                                                        <td colspan="9" class="text-center py-4">
                                                             <div class="text-muted">
                                                                 <em class="icon ni ni-building" style="font-size: 3rem;"></em>
                                                                 <h6 class="mt-3">{{ __('No Property Types Found') }}</h6>
@@ -204,9 +247,15 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                    
+                                    <!-- Pagination -->
+                                    @if($propertyTypes->hasPages())
+                                        <div class="mt-4">
+                                            {{ $propertyTypes->links() }}
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
-                            @include('admin.settings.includes.settings-sidebar')
                         </div>
                     </div>
                 </div>
@@ -220,23 +269,27 @@
 let selectedPropertyTypes = new Set();
 
 function filterPropertyTypes() {
+    const category = document.getElementById('filter-category').value.toLowerCase();
     const status = document.getElementById('filter-status').value.toLowerCase();
     const search = document.getElementById('search-input').value.toLowerCase();
     const rows = document.querySelectorAll('#property-types-table-body tr[data-type-id]');
     
     rows.forEach(row => {
+        const rowCategory = row.getAttribute('data-category');
         const rowStatus = row.getAttribute('data-status');
         const name = row.querySelector('td:nth-child(2)').textContent.toLowerCase();
-        const description = row.querySelector('td:nth-child(3)').textContent.toLowerCase();
+        const description = row.querySelector('td:nth-child(4)').textContent.toLowerCase();
         
+        const categoryMatch = !category || rowCategory === category;
         const statusMatch = !status || rowStatus === status;
         const searchMatch = !search || name.includes(search) || description.includes(search);
         
-        row.style.display = (statusMatch && searchMatch) ? '' : 'none';
+        row.style.display = (categoryMatch && statusMatch && searchMatch) ? '' : 'none';
     });
 }
 
 function clearFilters() {
+    document.getElementById('filter-category').value = '';
     document.getElementById('filter-status').value = '';
     document.getElementById('search-input').value = '';
     filterPropertyTypes();
@@ -287,7 +340,7 @@ function bulkAction(action) {
         return;
     }
     
-    fetch('{{ route("admin.settings.property.bulk-action") }}', {
+    fetch('{{ route("admin.property-types.bulk-action") }}', {
         method: 'POST',
         headers: {
             'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
@@ -295,7 +348,6 @@ function bulkAction(action) {
         },
         body: JSON.stringify({
             action: action,
-            type: 'property_types',
             ids: Array.from(selectedPropertyTypes)
         })
     })

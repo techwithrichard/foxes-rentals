@@ -35,8 +35,8 @@ Route::middleware(['auth', 'role:tenant'])->prefix('tenant')->name('tenant.')->g
     Route::get('/payments', [TenantPortalController::class, 'payments'])->name('payments');
     Route::get('/property', [TenantPortalController::class, 'property'])->name('property');
     Route::get('/maintenance', [TenantPortalController::class, 'maintenance'])->name('maintenance');
-    Route::get('/profile', [TenantPortalController::class, 'profile'])->name('profile');
-    Route::put('/profile', [TenantPortalController::class, 'updateProfile'])->name('profile.update');
+    Route::get('/profile', [TenantPortalController::class, 'profile'])->name('portal.profile');
+    Route::put('/profile', [TenantPortalController::class, 'updateProfile'])->name('portal.profile.update');
 });
 
 // Maintainer Portal Routes

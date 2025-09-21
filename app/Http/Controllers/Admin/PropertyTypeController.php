@@ -34,7 +34,7 @@ class PropertyTypeController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:property_types',
             'description' => 'nullable|string|max:1000',
-            'category' => 'required|in:residential,commercial,industrial,land',
+            'category' => 'required|in:residential,commercial,industrial,land,mixed-use',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0',
             'icon' => 'nullable|string|max:100',
@@ -70,7 +70,7 @@ class PropertyTypeController extends Controller
         $validated = $request->validate([
             'name' => ['required', 'string', 'max:255', Rule::unique('property_types')->ignore($propertyType->id)],
             'description' => 'nullable|string|max:1000',
-            'category' => 'required|in:residential,commercial,industrial,land',
+            'category' => 'required|in:residential,commercial,industrial,land,mixed-use',
             'is_active' => 'boolean',
             'sort_order' => 'integer|min:0',
             'icon' => 'nullable|string|max:100',

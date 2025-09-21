@@ -29,10 +29,8 @@ class DatabaseSeeder extends Seeder
         DB::table('house_types')->delete();
         DB::table('property_types')->delete();
 
-
-        PropertyType::create(['name' => 'House']);
-        PropertyType::create(['name' => 'Bungalow']);
-        PropertyType::create(['name' => 'Apartment']);
+        // Use comprehensive property types seeder
+        $this->call(ComprehensivePropertyTypesSeeder::class);
 
         HouseType::create(['name' => 'Detached']);
         HouseType::create(['name' => 'Semi-Detached']);

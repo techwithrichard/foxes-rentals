@@ -541,19 +541,19 @@
                                 <span class="nk-menu-text">{{ __('Maintenance')}}</span>
                             </a>
                             <ul class="nk-menu-sub">
-                                <li class="nk-menu-item {{ active(['admin.maintenance.requests']) }}">
-                                    <a href="{{ route('admin.maintenance.requests') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">{{ __('Maintenance Requests')}}</span>
+                                <li class="nk-menu-item {{ active(['admin.properties.index']) }}">
+                                    <a href="{{ route('admin.properties.index') }}" class="nk-menu-link">
+                                        <span class="nk-menu-text">{{ __('Properties')}}</span>
                                     </a>
                                 </li>
-                                <li class="nk-menu-item {{ active(['admin.maintenance.schedule']) }}">
-                                    <a href="{{ route('admin.maintenance.schedule') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">{{ __('Maintenance Schedule')}}</span>
+                                <li class="nk-menu-item {{ active(['admin.reports.maintenance']) }}">
+                                    <a href="{{ route('admin.reports.maintenance') }}" class="nk-menu-link">
+                                        <span class="nk-menu-text">{{ __('Maintenance Reports')}}</span>
                                     </a>
                                 </li>
-                                <li class="nk-menu-item {{ active(['admin.maintenance.history']) }}">
-                                    <a href="{{ route('admin.maintenance.history') }}" class="nk-menu-link">
-                                        <span class="nk-menu-text">{{ __('Maintenance History')}}</span>
+                                <li class="nk-menu-item {{ active(['admin.reports.occupancy']) }}">
+                                    <a href="{{ route('admin.reports.occupancy') }}" class="nk-menu-link">
+                                        <span class="nk-menu-text">{{ __('Occupancy Reports')}}</span>
                                     </a>
                                 </li>
                             </ul><!-- .nk-menu-sub -->

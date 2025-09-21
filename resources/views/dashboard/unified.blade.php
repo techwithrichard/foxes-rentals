@@ -51,7 +51,15 @@
                                     <div class="row g-gs">
                                         @foreach($section['widgets'] as $widget)
                                             <div class="col-md-{{ $widget['size'] ?? 4 }}">
-                                                @include($widget['component'], $widget['data'] ?? [])
+                                                @if(str_starts_with($widget['component'], 'admin.'))
+                                                    <x-{{ $widget['component'] }} />
+                                                @elseif(str_starts_with($widget['component'], 'landlord.'))
+                                                    <x-{{ $widget['component'] }} />
+                                                @elseif(str_starts_with($widget['component'], 'tenant.'))
+                                                    <x-{{ $widget['component'] }} />
+                                                @else
+                                                    @include($widget['component'], $widget['data'] ?? [])
+                                                @endif
                                             </div>
                                         @endforeach
                                     </div>

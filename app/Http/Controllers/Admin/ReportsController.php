@@ -162,9 +162,9 @@ class ReportsController extends Controller
     {
         abort_unless(auth()->user()->can('view maintenance reports'), 403);
         
-        // For now, redirect to the maintenance requests page
+        // For now, redirect to the properties page since maintenance requests aren't implemented yet
         // You can implement a dedicated maintenance reports view later
-        return redirect()->route('admin.maintenance.requests');
+        return redirect()->route('admin.properties.index');
     }
 
     public function occupancy()

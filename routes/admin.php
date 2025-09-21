@@ -456,6 +456,7 @@ Route::middleware(['auth'])
 
         //reports
         Route::controller(ReportsController::class)->group(function () {
+            Route::get('reports', 'index')->name('reports.index');
             Route::get('reports/landlord-income', 'landlordIncome')->name('reports.landlord_income');
             Route::get('reports/property-income', 'propertyIncome')->name('reports.property_income');
             Route::get('reports/company-income', 'companyIncome')->name('reports.company_income');

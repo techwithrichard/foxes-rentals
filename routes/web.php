@@ -174,6 +174,6 @@ require __DIR__ . '/portals.php';
 Route::middleware(['auth'])->group(function () {
     Route::get('/profile', function () {
         return view('profile', ['user' => auth()->user()]);
-    })->name('profile');
+    })->name('general.profile');
 });
 

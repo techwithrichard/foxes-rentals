@@ -14,15 +14,21 @@ class PropertiesStatisticsWidget extends Component
 
     public function __construct()
     {
-        $counts = Property::selectRaw('count(*) as count, is_multi_unit')
-            ->groupBy('is_multi_unit')
-            ->get()
-            ->keyBy('is_multi_unit');
+        try {
+            $counts = Property::selectRaw('count(*) as count, is_multi_unit')
+                ->groupBy('is_multi_unit')
+                ->get()
+                ->keyBy('is_multi_unit');
 
-        $this->total_single_units_count = $counts[false]['count'] ?? 0;
-        $this->total_multi_units_count = $counts[true]['count'] ?? 0;
-        $this->total_properties_count = $this->total_single_units_count + $this->total_multi_units_count;
-
+            $this->total_single_units_count = $counts->get(false)['count'] ?? 0;
+            $this->total_multi_units_count = $counts->get(true)['count'] ?? 0;
+            $this->total_properties_count = $this->total_single_units_count + $this->total_multi_units_count;
+        } catch (\Exception $e) {
+            // Fallback values if there's any error
+            $this->total_single_units_count = 0;
+            $this->total_multi_units_count = 0;
+            $this->total_properties_count = 0;
+        }
     }
 
     /**

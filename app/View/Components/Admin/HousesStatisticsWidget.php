@@ -28,9 +28,9 @@ class HousesStatisticsWidget extends Component
             ->get()
             ->keyBy('status');
 
-        $this->total_occupied_houses_count = $counts[HouseStatusEnum::OCCUPIED->value]['count'] ?? 0;
-        $this->total_vacant_houses_count = $counts[HouseStatusEnum::VACANT->value]['count'] ?? 0;
-        $this->total_under_maintenance_houses_count = $counts[HouseStatusEnum::UNDER_MAINTENANCE->value]['count'] ?? 0;
+        $this->total_occupied_houses_count = $counts->get(HouseStatusEnum::OCCUPIED->value)['count'] ?? 0;
+        $this->total_vacant_houses_count = $counts->get(HouseStatusEnum::VACANT->value)['count'] ?? 0;
+        $this->total_under_maintenance_houses_count = $counts->get(HouseStatusEnum::UNDER_MAINTENANCE->value)['count'] ?? 0;
 
 
 
